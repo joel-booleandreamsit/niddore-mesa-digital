@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@directus/sdk':
+        specifier: ^20.1.0
+        version: 20.1.0
       '@hookform/resolvers':
         specifier: ^3.10.0
         version: 3.10.0(react-hook-form@7.60.0(react@19.0.0))
@@ -203,6 +206,10 @@ packages:
 
   '@date-fns/tz@1.2.0':
     resolution: {integrity: sha512-LBrd7MiJZ9McsOgxqWX7AaxrDjcFVjWH/tIKJd7pnR7McaslGYOP1QmmiBXdJH/H/yLCT+rcQ7FaPBUxRGUtrg==}
+
+  '@directus/sdk@20.1.0':
+    resolution: {integrity: sha512-EV2bwfiOXc1QFYAIqfGgyZ7JcKgHF43UVEYivUpMjOLiihI9tpmNfcz/qmOXju7LCZrBmSwTOHMRtOXPdZWiLQ==}
+    engines: {node: '>=22'}
 
   '@emnapi/runtime@1.5.0':
     resolution: {integrity: sha512-97/BJ3iXHww3djw6hYIfErCZFee7qCtrneuLa20UXFCOTCfBM2cvQHjWJ2EG0s0MtdNwInarqCTz35i4wWXHsQ==}
@@ -1762,6 +1769,8 @@ snapshots:
   '@babel/runtime@7.28.4': {}
 
   '@date-fns/tz@1.2.0': {}
+
+  '@directus/sdk@20.1.0': {}
 
   '@emnapi/runtime@1.5.0':
     dependencies:
