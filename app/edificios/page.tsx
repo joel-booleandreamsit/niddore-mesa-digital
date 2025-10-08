@@ -1,6 +1,8 @@
 import { BackButton } from "@/components/back-button"
 import { PageHeader } from "@/components/page-header"
 import fetchEdificios, { assetUrl } from "@/lib/directus"
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 
 export default async function EdificiosPage() {
 	const data = await fetchEdificios()
@@ -13,8 +15,9 @@ export default async function EdificiosPage() {
 			<div className="max-w-7xl mx-auto px-8 md:px-16 pb-16">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
 					{data.map((edificio) => (
-						<div
+						<Link
 							key={edificio.id}
+							href={`/edificios/${edificio.id}`}
 							className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300"
 						>
 							<div className="aspect-[3/2] overflow-hidden">
@@ -26,7 +29,7 @@ export default async function EdificiosPage() {
 							</div>
 							<div className="p-8 md:p-10 space-y-4">
 								<div className="flex items-baseline justify-between gap-4">
-									<h3 className="font-serif text-3xl md:text-4xl text-foreground text-balance">{edificio.nome}</h3>
+									<h3 className="font-serif text-3xl md:text-4xl text-foreground text-balance group-hover:text-primary transition-colors">{edificio.nome}</h3>
 									<span className="text-xl md:text-2xl text-primary font-medium whitespace-nowrap">
 										{edificio.ano_construcao ?? ""}
 									</span>
@@ -39,8 +42,12 @@ export default async function EdificiosPage() {
 										{edificio.descricao}
 									</p>
 								) : null}
+								<div className="flex items-center gap-2 text-primary pt-2">
+									<span className="text-base md:text-lg">Ver detalhes</span>
+									<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+								</div>
 							</div>
-						</div>
+						</Link>
 					))}
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import { createDirectus, rest, authentication, staticToken, readItems } from '@directus/sdk'
+import { createDirectus, rest, staticToken, readItems, readItem } from '@directus/sdk'
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL!
 const DIRECTUS_TOKEN = process.env.DIRECTUS_STATIC_TOKEN
@@ -20,6 +20,14 @@ export default function fetchEdificios() {
 		readItems('Edificios', {
 			fields: ['id', 'nome', 'localizacao', 'ano_construcao', 'descricao', 'imagem'],
 			sort: ['nome'],
+		})
+	)
+}
+
+export function fetchEdificioById(id: string | number) {
+	return directus.request(
+		readItem('Edificios', id, {
+			fields: ['id', 'nome', 'localizacao', 'ano_construcao', 'descricao', 'imagem'],
 		})
 	)
 }
