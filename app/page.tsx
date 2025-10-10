@@ -1,36 +1,62 @@
 "use client"
 
 import Link from "next/link"
+import { useEffect, useState } from "react"
+
+function getCookie(name: string) {
+  if (typeof document === "undefined") return null
+  const match = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"))
+  return match ? decodeURIComponent(match[1]) : null
+}
+
+function setCookie(name: string, value: string, maxAgeSeconds = 60 * 60 * 24 * 365) {
+  if (typeof document === "undefined") return
+  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAgeSeconds}`
+}
 
 export default function HomePage() {
+  const [lang, setLang] = useState<"pt" | "en">("pt")
+
+  // Initialize language from cookie
+  useEffect(() => {
+    const saved = getCookie("lang")
+    if (saved === "pt" || saved === "en") setLang(saved)
+  }, [])
+
+  // Helper to change language and persist cookie
+  function changeLang(next: "pt" | "en") {
+    setLang(next)
+    setCookie("lang", next)   
+  }
+
   const sections = [
     {
-      title: "Edifícios",
-      description: "Instalações ao longo da história",
+      title: lang === "pt" ? "Edifícios" : "Buildings",
+      description: lang === "pt" ? "Instalações ao longo da história" : "Facilities throughout history",
       href: "/edificios",
       image: "/images/edificios.jpg",
     },
     {
-      title: "Cursos",
-      description: "Disciplinas lecionadas",
+      title: lang === "pt" ? "Cursos" : "Courses",
+      description: lang === "pt" ? "Disciplinas lecionadas" : "Subjects taught",
       href: "/cursos",
       image: "/images/cursos.jpg",
     },
     {
-      title: "Materiais",
-      description: "Materiais utilizados na escola",
+      title: lang === "pt" ? "Materiais" : "Materials",
+      description: lang === "pt" ? "Materiais utilizados na escola" : "Materials used in school",
       href: "/materiais",
       image: "/images/materiais.jpg",
     },
     {
-      title: "Publicações",
-      description: "Publicações da escola",
+      title: lang === "pt" ? "Publicações" : "Publications",
+      description: lang === "pt" ? "Publicações da escola" : "School publications",
       href: "/publicacoes",
       image: "/images/publicacoes.jpg",
     },
     {
-      title: "Galeria de Fotos",
-      description: "Memórias visuais da escola",
+      title: lang === "pt" ? "Galeria de Fotos" : "Photo Gallery",
+      description: lang === "pt" ? "Memórias visuais da escola" : "Visual memories of the school",
       href: "/galeria",
       image: "/images/galeria.jpg",
     },
@@ -38,15 +64,29 @@ export default function HomePage() {
 
   return (
     <main className="h-screen bg-background overflow-hidden flex flex-col">
+      {/* Language Toggle */}
+      <div className="absolute top-4 right-4 z-10 flex gap-2">
+        <button
+          onClick={() => changeLang("pt")}
+          className={`px-3 py-2 rounded-md border ${lang === "pt" ? "bg-primary text-primary-foreground border-primary" : "bg-card text-foreground border-border"}`}
+          aria-label="Português"
+        >PT</button>
+        <button
+          onClick={() => changeLang("en")}
+          className={`px-3 py-2 rounded-md border ${lang === "en" ? "bg-primary text-primary-foreground border-primary" : "bg-card text-foreground border-border"}`}
+          aria-label="English"
+        >EN</button>
+      </div>
+
       {/* Hero Section - Compact */}
       <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
         <div className="text-center space-y-4">
           <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
             Domingos Rebelo
           </h1>
-          <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">Escola Secundária</p>
+          <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{lang === "pt" ? "Escola Secundária" : "Secondary School"}</p>
           <p className="text-xl md:text-2xl text-muted-foreground/80 text-balance">
-            Descubra a história e o legado cultural
+            {lang === "pt" ? "Descubra a história e o legado cultural" : "Discover the history and cultural legacy"}
           </p>
         </div>
       </div>
@@ -79,7 +119,7 @@ export default function HomePage() {
                   </p>
 
                   <div className="flex items-center gap-3 text-base md:text-lg text-primary/80 group-hover:text-primary transition-colors duration-300 pt-2">
-                    <span>Toque para explorar</span>
+                    <span>{lang === "pt" ? "Toque para explorar" : "Tap to explore"}</span>
                     <svg
                       className="w-6 h-6 transform group-hover:translate-x-2 transition-transform duration-300"
                       fill="none"
@@ -121,7 +161,7 @@ export default function HomePage() {
                   </p>
 
                   <div className="flex items-center gap-3 text-base md:text-lg text-primary/80 group-hover:text-primary transition-colors duration-300 pt-2">
-                    <span>Toque para explorar</span>
+                    <span>{lang === "pt" ? "Toque para explorar" : "Tap to explore"}</span>
                     <svg
                       className="w-6 h-6 transform group-hover:translate-x-2 transition-transform duration-300"
                       fill="none"
