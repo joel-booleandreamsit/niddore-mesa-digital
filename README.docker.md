@@ -2,6 +2,21 @@
 
 This document describes how to run the Niddore Mesa Digital application in production using Docker Compose.
 
+## Environment Setup
+
+Before running the application, you need to set up environment variables:
+
+1. **Copy the example environment file**:
+   ```bash
+   cp .env.example .env.production
+   ```
+
+2. **Update the values in `.env.production`**:
+   - Set `DIRECTUS_SECRET` to a secure random string
+   - Set `DIRECTUS_ADMIN_EMAIL` and `DIRECTUS_ADMIN_PASSWORD` for admin access
+   - Set `DIRECTUS_STATIC_TOKEN` (get this from Directus admin after first run)
+   - Adjust LibreTranslate settings as needed
+
 ## Services
 
 The docker-compose.yml includes three services:
@@ -12,17 +27,27 @@ The docker-compose.yml includes three services:
 
 ## First Time Setup
 
-1. **Get Directus Token**:
-   - Start only Directus: `docker-compose up directus -d`
-   - Access http://localhost:8055
-   - Login with admin@niddore.com / SmjkHJCr97iEETt3jY5aHkjQ
-   - Go to Settings > Access Tokens
-   - Create a new token with full permissions
-   - Update `.env.production` with the token
+1. **Set up environment variables**:
+   ```bash
+   cp .env.example .env.production
+   # Edit .env.production with your values
+   ```
 
-2. **Start All Services**:
+2. **Start all services**:
    ```bash
    docker-compose up -d --build
+   ```
+
+3. **Get Directus Token**:
+   - Access http://localhost:8055
+   - Login with your admin credentials
+   - Go to Settings > Access Tokens
+   - Create a new token with full permissions
+   - Update `DIRECTUS_STATIC_TOKEN` in `.env.production`
+
+4. **Restart the app**:
+   ```bash
+   docker-compose restart niddore-app
    ```
 
 ## Usage
@@ -60,11 +85,23 @@ docker-compose down -v
 
 ## Environment Variables
 
-Create `.env.production` with:
-```
-DIRECTUS_URL=http://directus:8055
-DIRECTUS_STATIC_TOKEN=your_actual_token_here
-```
+All configuration is done through environment variables in `.env.production`:
+
+- `DIRECTUS_SECRET`: Secret key for Directus
+- `DIRECTUS_ADMIN_EMAIL`: Admin email for Directus
+- `DIRECTUS_ADMIN_PASSWORD`: Admin password for Directus
+- `DIRECTUS_STATIC_TOKEN`: Static token for API access
+- `LIBRETRANSLATE_LANGUAGES`: Comma-separated list of languages
+- `LIBRETRANSLATE_DISABLE_UI`: Whether to disable LibreTranslate UI
+- `LIBRETRANSLATE_MEMORY_LIMIT`: Memory limit for LibreTranslate
+- `LIBRETRANSLATE_MEMORY_RESERVATION`: Memory reservation for LibreTranslate
+
+## Security Notes
+
+- Never commit `.env.production` to version control
+- Use strong, unique passwords and secrets
+- Rotate secrets regularly in production
+- Consider using Docker secrets for production deployments
 
 ## Network Architecture
 

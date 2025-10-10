@@ -8,9 +8,9 @@ services:
       - directus_uploads:/directus/uploads
       - directus_extensions:/directus/extensions
     environment:
-      SECRET: "Rhibo7ZRHQJt4UUUCcgnyuU5MTogZhp7ikFhtAV4ojAyZj9WmQaknfjJSTndVhDP"
-      ADMIN_EMAIL: "admin@niddore.com"
-      ADMIN_PASSWORD: "SmjkHJCr97iEETt3jY5aHkjQ"
+      SECRET: ${DIRECTUS_SECRET}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
       DB_CLIENT: "sqlite3"
       DB_FILENAME: "/directus/database/data.db"
       WEBSOCKETS_ENABLED: "true"
@@ -23,14 +23,14 @@ services:
     ports:
       - "5000:5000"
     environment:
-      - LT_LOAD_ONLY=pt,en
-      - LT_DISABLE_WEB_UI=false
+      - LT_LOAD_ONLY=${LIBRETRANSLATE_LANGUAGES:-pt,en}
+      - LT_DISABLE_WEB_UI=${LIBRETRANSLATE_DISABLE_UI:-false}
     deploy:
       resources:
         limits:
-          memory: 1G
+          memory: ${LIBRETRANSLATE_MEMORY_LIMIT:-1G}
         reservations:
-          memory: 512M
+          memory: ${LIBRETRANSLATE_MEMORY_RESERVATION:-512M}
     restart: unless-stopped
     networks:
       - niddore-network
