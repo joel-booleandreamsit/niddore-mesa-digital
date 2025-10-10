@@ -3,18 +3,28 @@ import { PageHeader } from "@/components/page-header"
 import fetchEdificios, { assetUrl } from "@/lib/directus"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
+import { t, getLang } from "@/lib/i18n"
 
 export default async function EdificiosPage() {
-	const data = await fetchEdificios()
+    const lang = await getLang()
+    const labels = t(lang)
+    const data = await fetchEdificios(lang)
+
+        // Use translations from Directus if available, otherwise fallback to original
+        const translatedData = data.map((item: any) => ({
+            ...item,
+            nome: item.translations?.[0]?.nome || 'Nome não disponível',
+            descricao: item.translations?.[0]?.descricao || 'Descrição não disponível',
+        }))
 
 	return (
 		<main className="min-h-screen bg-background">
 			<BackButton />
-			<PageHeader title="Edifícios" description="As instalações da escola ao longo da sua história" />
+            <PageHeader title={labels.buildings} description={labels.buildingsDesc} />
 
 			<div className="max-w-7xl mx-auto px-8 md:px-16 pb-16">
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-					{data.map((edificio) => (
+					{translatedData.map((edificio: any) => (
 						<Link
 							key={edificio.id}
 							href={`/edificios/${edificio.id}`}
@@ -42,8 +52,8 @@ export default async function EdificiosPage() {
 										{edificio.descricao}
 									</p>
 								) : null}
-								<div className="flex items-center gap-2 text-primary pt-2">
-									<span className="text-base md:text-lg">Ver detalhes</span>
+                                <div className="flex items-center gap-2 text-primary pt-2">
+                                    <span className="text-base md:text-lg">{labels.viewDetails}</span>
 									<ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
 								</div>
 							</div>

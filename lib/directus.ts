@@ -15,19 +15,37 @@ export function assetUrl(id?: string | null, search = '') {
 	return `${DIRECTUS_URL.replace(/\/$/, '')}/assets/${id}${qs}`
 }
 
-export default function fetchEdificios() {
-	return directus.request(
-		readItems('Edificios', {
-			fields: ['id', 'nome', 'localizacao', 'ano_construcao', 'descricao', 'imagem'],
-			sort: ['nome'],
-		})
-	)
+export default function fetchEdificios(lang: string = 'pt') {
+  return directus.request(
+    readItems('Edificios', {
+      fields: ['*', { translations: ['*']}],
+      sort: ['nome'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
 }
 
-export function fetchEdificioById(id: string | number) {
+export function fetchEdificioById(id: string | number, lang: string = 'pt') {
 	return directus.request(
 		readItem('Edificios', id, {
-			fields: ['id', 'nome', 'localizacao', 'ano_construcao', 'descricao', 'imagem'],
+			fields: ['*', 'translations.*'],
+			deep: {
+				translations: {
+					_filter: {
+						languages_code: {
+							_eq: lang
+						}
+					}
+				}
+			}
 		})
 	)
 }
