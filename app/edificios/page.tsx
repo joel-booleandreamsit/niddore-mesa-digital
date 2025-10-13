@@ -5,6 +5,8 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { t, getLang } from "@/lib/i18n"
 
+export const dynamic = 'force-dynamic'
+
 export default async function EdificiosPage() {
     const lang = await getLang()
     const labels = t(lang)

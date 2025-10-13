@@ -3,6 +3,8 @@ import { fetchEdificioById, assetUrl } from "@/lib/directus"
 import { notFound } from "next/navigation"
 import { t, getLang } from "@/lib/i18n"
 
+export const dynamic = 'force-dynamic'
+
 export default async function EdificioDetalhePage({ params }: { params: { id: string } }) {
   try {
     const lang = await getLang()

@@ -1,0 +1,59 @@
+services:
+  directus:
+    image: directus/directus:11.12
+    ports:
+      - "8055:8055"
+    volumes:
+      - ${HOME_DIR:-~}/.directus/database:/directus/database
+      - ${HOME_DIR:-~}/.directus/uploads:/directus/uploads
+      - ${HOME_DIR:-~}/.directus/extensions:/directus/extensions
+    environment:
+      SECRET: ${DIRECTUS_SECRET}
+      ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${DIRECTUS_ADMIN_PASSWORD}
+      DB_CLIENT: "sqlite3"
+      DB_FILENAME: "/directus/database/data.db"
+      WEBSOCKETS_ENABLED: "true"
+    restart: unless-stopped
+    networks:
+      - niddore-network
+
+  libretranslate:
+    image: libretranslate/libretranslate:v1.7.3
+    ports:
+      - "5000:5000"
+    environment:
+      - LT_LOAD_ONLY=${LIBRETRANSLATE_LANGUAGES:-pt,en}
+      - LT_DISABLE_WEB_UI=${LIBRETRANSLATE_DISABLE_UI:-false}
+    deploy:
+      resources:
+        limits:
+          memory: ${LIBRETRANSLATE_MEMORY_LIMIT:-1G}
+        reservations:
+          memory: ${LIBRETRANSLATE_MEMORY_RESERVATION:-512M}
+    restart: unless-stopped
+    networks:
+      - niddore-network
+
+  niddore-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DIRECTUS_URL=http://directus:8055
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DIRECTUS_URL=http://directus:8055
+      - DIRECTUS_STATIC_TOKEN=${DIRECTUS_STATIC_TOKEN}
+    depends_on:
+      - directus
+    restart: unless-stopped
+    networks:
+      - niddore-network
+
+
+networks:
+  niddore-network:
+    driver: bridge
