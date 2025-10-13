@@ -155,7 +155,7 @@ install_project() {
     # Build and start services
     log_info "Building Docker images and starting services..."
     
-    if docker compose up -d --build; then
+    if docker compose --env-file .env.production up -d --build; then
         log_success "Services started successfully!"
     else
         log_error "Failed to start services"
@@ -206,7 +206,7 @@ run_project() {
 
     # Start services
     log_info "Starting services..."
-    if docker compose up -d; then
+    if docker compose --env-file .env.production up -d; then
         log_success "Services started successfully!"
         echo
         log_info "Access URLs:"
@@ -223,7 +223,7 @@ run_project() {
 stop_project() {
     log_info "Stopping the project..."
     
-    if docker compose down; then
+    if docker compose --env-file .env.production down; then
         log_success "Project stopped successfully!"
     else
         log_error "Failed to stop project"
@@ -236,7 +236,7 @@ show_status() {
     log_info "Project status:"
     echo
     
-    if docker compose ps; then
+    if docker compose --env-file .env.production ps; then
         echo
         log_info "Access URLs:"
         echo "  • Next.js App: http://localhost:3000"
@@ -251,7 +251,7 @@ show_status() {
 # Show logs
 show_logs() {
     log_info "Showing project logs (Press Ctrl+C to exit):"
-    docker compose logs -f
+    docker compose --env-file .env.production logs -f
 }
 
 # Rebuild the project
@@ -271,7 +271,7 @@ rebuild_project() {
     # Rebuild and start services
     log_info "Rebuilding Docker images and restarting services..."
     
-    if docker compose up -d --build; then
+    if docker compose --env-file .env.production up -d --build; then
         log_success "Project rebuilt and started successfully!"
         echo
         log_info "Access URLs:"

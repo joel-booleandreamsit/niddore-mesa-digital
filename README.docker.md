@@ -96,33 +96,39 @@ The `install.sh` script provides easy project management:
 - **Error handling**: Clear error messages and exit codes
 - **Status checking**: Verifies services are running correctly
 - **Colored output**: Easy-to-read status messages
+- **Environment file handling**: Uses `.env.production` for all Docker Compose commands
+- **Existing file protection**: Prompts before overwriting existing `.env.production`
 
 ## Manual Usage
 
+When using Docker Compose commands manually, you need to specify the environment file:
+
 ### Start Services
 ```bash
-docker compose up -d
+docker compose --env-file .env.production up -d
 ```
 
 ### Rebuild After Changes
 ```bash
-docker compose up -d --build
+docker compose --env-file .env.production up -d --build
 ```
 
 ### View Logs
 ```bash
-docker compose logs -f
+docker compose --env-file .env.production logs -f
 ```
 
 ### Stop All Services
 ```bash
-docker compose down
+docker compose --env-file .env.production down
 ```
 
 ### Stop and Remove Volumes
 ```bash
-docker compose down -v
+docker compose --env-file .env.production down -v
 ```
+
+**Note**: Docker Compose only automatically loads `.env` files, not `.env.production`. The `--env-file` flag is required to use the production environment variables.
 
 ## Access URLs
 
