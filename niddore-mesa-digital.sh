@@ -189,8 +189,8 @@ install_project() {
     # Copy install directory contents to Directus directories
     if [ -d "install" ]; then
         log_info "Copying install directory contents to Directus directories..."
-        if [ -d "install/data" ] && [ "$(ls -A install/data)" ]; then
-            cp -r install/data/* "$home_dir/.directus/database/"
+        if [ -d "install/database" ] && [ "$(ls -A install/database)" ]; then
+            cp -r install/database/* "$home_dir/.directus/database/"
             log_success "Copied data files from install directory"
         fi
         if [ -d "install/uploads" ] && [ "$(ls -A install/uploads)" ]; then
