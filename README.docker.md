@@ -25,7 +25,30 @@ The docker-compose.yml includes three services:
 - **directus**: CMS backend (port 8055)
 - **libretranslate**: Translation service (port 5000)
 
-## First Time Setup
+## Quick Start (Recommended)
+
+Use the installation script for easy setup:
+
+```bash
+# First time installation
+./install.sh install
+
+# Start the project (after installation)
+./install.sh run
+
+# Stop the project
+./install.sh stop
+
+# View logs
+./install.sh logs
+
+# Show help
+./install.sh help
+```
+
+## Manual Setup
+
+### First Time Setup
 
 1. **Set up environment variables**:
    ```bash
@@ -50,7 +73,31 @@ The docker-compose.yml includes three services:
    docker-compose restart niddore-app
    ```
 
-## Usage
+## Installation Script Commands
+
+The `install.sh` script provides easy project management:
+
+| Command | Description |
+|---------|-------------|
+| `./install.sh install` | First-time installation with interactive setup |
+| `./install.sh run` | Start the project (if already installed) |
+| `./install.sh stop` | Stop all services |
+| `./install.sh restart` | Restart the project |
+| `./install.sh status` | Show project status and URLs |
+| `./install.sh logs` | View real-time logs |
+| `./install.sh rebuild` | Rebuild and restart the project |
+| `./install.sh help` | Show help message |
+
+### Installation Script Features
+
+- **Interactive setup**: Prompts for all required environment variables
+- **Auto-generated secrets**: Creates secure random secrets if not provided
+- **Validation**: Checks for Docker installation and project files
+- **Error handling**: Clear error messages and exit codes
+- **Status checking**: Verifies services are running correctly
+- **Colored output**: Easy-to-read status messages
+
+## Manual Usage
 
 ### Start Services
 ```bash
