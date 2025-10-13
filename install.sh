@@ -37,8 +37,8 @@ check_docker() {
         exit 1
     fi
 
-    if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
-        log_error "Docker Compose is not installed. Please install Docker Compose first."
+    if ! docker compose version &> /dev/null; then
+        log_error "Docker Compose is not available. Please install Docker Compose first."
         log_info "Visit: https://docs.docker.com/compose/install/"
         exit 1
     fi
@@ -155,7 +155,7 @@ install_project() {
     # Build and start services
     log_info "Building Docker images and starting services..."
     
-    if docker-compose up -d --build; then
+    if docker compose up -d --build; then
         log_success "Services started successfully!"
     else
         log_error "Failed to start services"
@@ -168,7 +168,7 @@ install_project() {
 
     # Check service status
     log_info "Checking service status..."
-    if docker-compose ps | grep -q "Up"; then
+    if docker compose ps | grep -q "Up"; then
         log_success "Services are running!"
         echo
         log_info "Access URLs:"
@@ -185,7 +185,7 @@ install_project() {
         echo "  6. Restart the app: $0 run"
     else
         log_error "Some services failed to start"
-        log_info "Check logs with: docker-compose logs"
+        log_info "Check logs with: docker compose logs"
         exit 1
     fi
 }
@@ -206,7 +206,7 @@ run_project() {
 
     # Start services
     log_info "Starting services..."
-    if docker-compose up -d; then
+    if docker compose up -d; then
         log_success "Services started successfully!"
         echo
         log_info "Access URLs:"
@@ -223,7 +223,7 @@ run_project() {
 stop_project() {
     log_info "Stopping the project..."
     
-    if docker-compose down; then
+    if docker compose down; then
         log_success "Project stopped successfully!"
     else
         log_error "Failed to stop project"
@@ -236,7 +236,7 @@ show_status() {
     log_info "Project status:"
     echo
     
-    if docker-compose ps; then
+    if docker compose ps; then
         echo
         log_info "Access URLs:"
         echo "  • Next.js App: http://localhost:3000"
@@ -251,7 +251,7 @@ show_status() {
 # Show logs
 show_logs() {
     log_info "Showing project logs (Press Ctrl+C to exit):"
-    docker-compose logs -f
+    docker compose logs -f
 }
 
 # Rebuild the project
@@ -271,7 +271,7 @@ rebuild_project() {
     # Rebuild and start services
     log_info "Rebuilding Docker images and restarting services..."
     
-    if docker-compose up -d --build; then
+    if docker compose up -d --build; then
         log_success "Project rebuilt and started successfully!"
         echo
         log_info "Access URLs:"

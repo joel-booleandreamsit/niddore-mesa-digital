@@ -58,7 +58,7 @@ Use the installation script for easy setup:
 
 2. **Start all services**:
    ```bash
-   docker-compose up -d --build
+   docker compose up -d --build
    ```
 
 3. **Get Directus Token**:
@@ -70,7 +70,7 @@ Use the installation script for easy setup:
 
 4. **Restart the app**:
    ```bash
-   docker-compose restart niddore-app
+   docker compose restart niddore-app
    ```
 
 ## Installation Script Commands
@@ -101,27 +101,27 @@ The `install.sh` script provides easy project management:
 
 ### Start Services
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Rebuild After Changes
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
 
 ### View Logs
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 ### Stop All Services
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### Stop and Remove Volumes
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 
 ## Access URLs
@@ -167,20 +167,20 @@ Directus data is persisted in Docker volumes:
 
 ### Check Service Status
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 ### View Service Logs
 ```bash
-docker-compose logs [service-name]
+docker compose logs [service-name]
 ```
 
 ### Restart a Service
 ```bash
-docker-compose restart [service-name]
+docker compose restart [service-name]
 ```
 
 ### Rebuild a Service
 ```bash
-docker-compose up -d --build [service-name]
+docker compose up -d --build [service-name]
 ```
