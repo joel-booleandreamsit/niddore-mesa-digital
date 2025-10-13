@@ -10,6 +10,14 @@
 This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
 Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
 
+## Environment Files
+
+- `.env.local` - Local development (gitignored)
+- `.env.production` - Docker/production (gitignored)
+- `.env.example` - Template file (committed)
+
+For local development, copy `.env.example` to `.env.local` and update values.
+
 ## Deployment
 
 Your project is live at:

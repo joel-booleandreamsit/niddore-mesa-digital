@@ -4,9 +4,9 @@ services:
     ports:
       - "8055:8055"
     volumes:
-      - directus_data:/directus/database
-      - directus_uploads:/directus/uploads
-      - directus_extensions:/directus/extensions
+      - ${HOME_DIR:-~}/.directus/database:/directus/database
+      - ${HOME_DIR:-~}/.directus/uploads:/directus/uploads
+      - ${HOME_DIR:-~}/.directus/extensions:/directus/extensions
     environment:
       SECRET: ${DIRECTUS_SECRET}
       ADMIN_EMAIL: ${DIRECTUS_ADMIN_EMAIL}
@@ -39,6 +39,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - DIRECTUS_URL=http://directus:8055
     ports:
       - "3000:3000"
     environment:
@@ -51,10 +53,6 @@ services:
     networks:
       - niddore-network
 
-volumes:
-  directus_data:
-  directus_uploads:
-  directus_extensions:
 
 networks:
   niddore-network:

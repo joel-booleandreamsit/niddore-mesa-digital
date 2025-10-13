@@ -37,7 +37,7 @@ check_docker() {
         exit 1
     fi
 
-    if ! docker compose version &> /dev/null; then
+    if ! sudo docker compose version &> /dev/null; then
         log_error "Docker Compose is not available. Please install Docker Compose first."
         log_info "Visit: https://docs.docker.com/compose/install/"
         exit 1
@@ -46,9 +46,9 @@ check_docker() {
     log_success "Docker and Docker Compose are available"
 }
 
-# Check if .env.production exists
+# Check if .env exists
 check_env_file() {
-    if [ -f ".env.production" ]; then
+    if [ -f ".env" ]; then
         return 0
     else
         return 1
@@ -65,12 +65,12 @@ prompt_env_vars() {
     log_info "Setting up environment variables..."
     echo
 
-    # Check if .env.production already exists
-    if [ -f ".env.production" ]; then
-        log_warning ".env.production already exists!"
+    # Check if .env already exists
+    if [ -f ".env" ]; then
+        log_warning ".env already exists!"
         read -p "Do you want to overwrite it? (y/N): " overwrite
         if [[ ! $overwrite =~ ^[Yy]$ ]]; then
-            log_info "Keeping existing .env.production file"
+            log_info "Keeping existing .env file"
             return 0
         fi
     fi
@@ -114,8 +114,19 @@ prompt_env_vars() {
     read -p "Memory reservation [512M]: " memory_reservation
     memory_reservation=${memory_reservation:-512M}
 
-    # Create .env.production file
-    cat > .env.production << EOF
+    # Home Directory Configuration
+    echo
+    echo "=== Home Directory Configuration ==="
+    
+    read -p "Home directory path [$(eval echo ~)]: " home_dir
+    home_dir=${home_dir:-$(eval echo ~)}
+    
+    # Expand tilde to full path if needed
+    home_dir=$(eval echo "$home_dir")
+
+
+    # Create .env file
+    cat > .env << EOF
 # Directus Configuration
 DIRECTUS_SECRET=$directus_secret
 DIRECTUS_ADMIN_EMAIL=$admin_email
@@ -130,9 +141,12 @@ LIBRETRANSLATE_MEMORY_RESERVATION=$memory_reservation
 
 # Next.js App Configuration
 DIRECTUS_URL=http://directus:8055
+
+# Home Directory Configuration
+HOME_DIR=$home_dir
 EOF
 
-    log_success "Created .env.production file"
+    log_success "Created .env file"
 }
 
 # Install the project
@@ -152,10 +166,49 @@ install_project() {
     # Set up environment variables
     prompt_env_vars
 
+    # Get home directory from .env file or use default
+    if [ -f ".env" ]; then
+        home_dir=$(grep "^HOME_DIR=" .env | cut -d'=' -f2)
+    fi
+    if [ -z "$home_dir" ]; then
+        home_dir=$(eval echo ~)
+        log_info "Using default home directory: $home_dir"
+    else
+        log_info "Using home directory from .env: $home_dir"
+    fi
+
+    # Create Directus directories
+    log_info "Checking Directus directories..."
+    if [ ! -d "$home_dir/.directus" ]; then
+        mkdir -p "$home_dir/.directus"/{database,uploads,extensions}
+        log_success "Created Directus directories in $home_dir/.directus/"
+    else
+        log_info "Directus directories already exist in $home_dir/.directus/"
+    fi
+
+    # Copy install directory contents to Directus directories
+    if [ -d "install" ]; then
+        log_info "Copying install directory contents to Directus directories..."
+        if [ -d "install/data" ] && [ "$(ls -A install/data)" ]; then
+            cp -r install/data/* "$home_dir/.directus/database/"
+            log_success "Copied data files from install directory"
+        fi
+        if [ -d "install/uploads" ] && [ "$(ls -A install/uploads)" ]; then
+            cp -r install/uploads/* "$home_dir/.directus/uploads/"
+            log_success "Copied upload files from install directory"
+        fi
+        if [ -d "install/extensions" ] && [ "$(ls -A install/extensions)" ]; then
+            cp -r install/extensions/* "$home_dir/.directus/extensions/"
+            log_success "Copied extensions from install directory"
+        fi
+    else
+        log_info "No install directory found, skipping data copy"
+    fi    
+
     # Build and start services
     log_info "Building Docker images and starting services..."
     
-    if docker compose --env-file .env.production up -d --build; then
+    if sudo docker compose up -d --build; then
         log_success "Services started successfully!"
     else
         log_error "Failed to start services"
@@ -168,7 +221,7 @@ install_project() {
 
     # Check service status
     log_info "Checking service status..."
-    if docker compose ps | grep -q "Up"; then
+    if sudo docker compose ps | grep -q "Up"; then
         log_success "Services are running!"
         echo
         log_info "Access URLs:"
@@ -181,22 +234,22 @@ install_project() {
         echo "  2. Login with your admin credentials"
         echo "  3. Go to Settings > Access Tokens"
         echo "  4. Create a new token with full permissions"
-        echo "  5. Update DIRECTUS_STATIC_TOKEN in .env.production"
-        echo "  6. Restart the app: $0 run"
+        echo "  5. Update DIRECTUS_STATIC_TOKEN in .env"
+        echo "  6. Restart the app: $0 start"
     else
         log_error "Some services failed to start"
-        log_info "Check logs with: docker compose logs"
+        log_info "Check logs with: sudo docker compose logs"
         exit 1
     fi
 }
 
-# Run the project
-run_project() {
+# Start the project
+start_project() {
     log_info "Starting the project..."
 
     # Check if .env.production exists
     if ! check_env_file; then
-        log_error ".env.production not found!"
+        log_error ".env not found!"
         log_info "Please run '$0 install' first to set up the project."
         exit 1
     fi
@@ -206,7 +259,7 @@ run_project() {
 
     # Start services
     log_info "Starting services..."
-    if docker compose --env-file .env.production up -d; then
+    if sudo docker compose up -d; then
         log_success "Services started successfully!"
         echo
         log_info "Access URLs:"
@@ -223,7 +276,7 @@ run_project() {
 stop_project() {
     log_info "Stopping the project..."
     
-    if docker compose --env-file .env.production down; then
+    if sudo docker compose down; then
         log_success "Project stopped successfully!"
     else
         log_error "Failed to stop project"
@@ -236,7 +289,7 @@ show_status() {
     log_info "Project status:"
     echo
     
-    if docker compose --env-file .env.production ps; then
+    if sudo docker compose ps; then
         echo
         log_info "Access URLs:"
         echo "  • Next.js App: http://localhost:3000"
@@ -251,7 +304,7 @@ show_status() {
 # Show logs
 show_logs() {
     log_info "Showing project logs (Press Ctrl+C to exit):"
-    docker compose --env-file .env.production logs -f
+    sudo docker compose logs -f
 }
 
 # Rebuild the project
@@ -260,7 +313,7 @@ rebuild_project() {
 
     # Check if .env.production exists
     if ! check_env_file; then
-        log_error ".env.production not found!"
+        log_error ".env not found!"
         log_info "Please run '$0 install' first to set up the project."
         exit 1
     fi
@@ -271,7 +324,7 @@ rebuild_project() {
     # Rebuild and start services
     log_info "Rebuilding Docker images and restarting services..."
     
-    if docker compose --env-file .env.production up -d --build; then
+    if sudo docker compose up -d --build; then
         log_success "Project rebuilt and started successfully!"
         echo
         log_info "Access URLs:"
@@ -292,7 +345,7 @@ show_help() {
     echo
     echo "Commands:"
     echo "  install    Install and set up the project (first time)"
-    echo "  run        Start the project (if already installed)"
+    echo "  start      Start the project (if already installed)"
     echo "  stop       Stop the project"
     echo "  restart    Restart the project"
     echo "  status     Show project status"
@@ -302,7 +355,7 @@ show_help() {
     echo
     echo "Examples:"
     echo "  $0 install    # First time setup"
-    echo "  $0 run        # Start the project"
+    echo "  $0 start      # Start the project"
     echo "  $0 logs       # View logs"
     echo "  $0 stop       # Stop the project"
 }
@@ -312,8 +365,8 @@ case "${1:-help}" in
     install)
         install_project
         ;;
-    run)
-        run_project
+    start)
+        start_project
         ;;
     stop)
         stop_project
@@ -321,7 +374,7 @@ case "${1:-help}" in
     restart)
         stop_project
         sleep 2
-        run_project
+        start_project
         ;;
     status)
         show_status
