@@ -1,6 +1,7 @@
 import { createDirectus, rest, staticToken, readItems, readItem } from '@directus/sdk'
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL!
+const DIRECTUS_PUBLIC_URL = process.env.DIRECTUS_PUBLIC_URL || 'http://localhost:8055'
 const DIRECTUS_TOKEN = process.env.DIRECTUS_STATIC_TOKEN
 
 export const directus = (() => {
@@ -12,7 +13,7 @@ export const directus = (() => {
 export function assetUrl(id?: string | null, search = '') {
 	if (!id) return '/placeholder.svg'
 	const qs = search ? (search.startsWith('?') ? search : `?${search}`) : ''
-	return `${DIRECTUS_URL.replace(/\/$/, '')}/assets/${id}${qs}`
+	return `${DIRECTUS_PUBLIC_URL.replace(/\/$/, '')}/assets/${id}${qs}`
 }
 
 export default function fetchEdificios(lang: string = 'pt') {
