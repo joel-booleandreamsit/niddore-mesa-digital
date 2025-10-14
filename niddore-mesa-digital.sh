@@ -84,15 +84,6 @@ prompt_env_vars() {
         log_info "Generated secret: $directus_secret"
     fi
 
-    read -p "Directus Admin Email [admin@niddore.com]: " admin_email
-    admin_email=${admin_email:-admin@niddore.com}
-
-    read -p "Directus Admin Password: " admin_password
-    while [ -z "$admin_password" ]; do
-        log_error "Admin password cannot be empty"
-        read -p "Directus Admin Password: " admin_password
-    done
-
     # LibreTranslate Configuration
     echo
     echo "=== LibreTranslate Configuration ==="
@@ -129,8 +120,6 @@ prompt_env_vars() {
     cat > .env << EOF
 # Directus Configuration
 DIRECTUS_SECRET=$directus_secret
-DIRECTUS_ADMIN_EMAIL=$admin_email
-DIRECTUS_ADMIN_PASSWORD=$admin_password
 DIRECTUS_STATIC_TOKEN=your_token_here
 
 # LibreTranslate Configuration
@@ -231,10 +220,10 @@ install_project() {
         echo
         log_warning "Next steps:"
         echo "  1. Access Directus at http://localhost:8055"
-        echo "  2. Login with your admin credentials"
-        echo "  3. Go to Settings > Access Tokens"
-        echo "  4. Create a new token with full permissions"
-        echo "  5. Update DIRECTUS_STATIC_TOKEN in .env"
+        echo "  2. Login with your admin credentials [admin@niddore.com]"
+        echo "  3. Go to User Directoy > Choose the admin user > Scroll down to Token"
+        echo "  4. Generate a new token > Copy the token > Save the user"
+        echo "  5. Update DIRECTUS_STATIC_TOKEN in .env with the newly generated token"
         echo "  6. Restart the app: $0 start"
     else
         log_error "Some services failed to start"
