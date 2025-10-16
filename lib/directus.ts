@@ -16,6 +16,13 @@ export function assetUrl(id?: string | null, search = '') {
 	return `${DIRECTUS_PUBLIC_URL.replace(/\/$/, '')}/assets/${id}${qs}`
 }
 
+// Utility function to strip HTML tags from WYSIWYG content
+export function stripHtml(html: string): string {
+	if (!html) return ''
+	return html.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+}
+
+
 export default function fetchEdificios(lang: string = 'pt') {
   return directus.request(
     readItems('Edificios', {
@@ -49,4 +56,97 @@ export function fetchEdificioById(id: string | number, lang: string = 'pt') {
 			}
 		})
 	)
+}
+
+// Helper function to get translations from Traducoes collection
+export async function getTranslations(terms: string[], lang: string = 'pt') {
+  try {
+    const translations = await directus.request(
+      readItems('Traducoes', {
+        fields: ['nome', 'traducao'],
+        filter: {
+          nome: {
+            _in: terms
+          },
+          codigo_lingua: {
+            _eq: lang
+          }
+        }
+      })
+    )
+    
+    // Create translation map
+    const translationMap = new Map(translations.map(t => [t.nome, t.traducao]))
+    return translationMap
+  } catch {
+    return new Map()
+  }
+}
+
+export async function fetchPublicacoes(lang: string = 'pt') {
+  const data = await directus.request(
+    readItems('Publicacoes', {
+      fields: ['*', 'translations.*', 'autores.Autores_id.*'],
+      sort: ['-ano_publicacao'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  // Only fetch translations if language is not Portuguese
+  if (lang !== 'pt') {
+    const uniqueTipos = [...new Set(data.map((item: any) => item.tipo_publicacao).filter(Boolean))]
+    const translationMap = await getTranslations(uniqueTipos, lang)
+
+    // Apply translations to the data
+    return data.map((item: any) => ({
+      ...item,
+      tipo_publicacao_translated: translationMap.get(item.tipo_publicacao) || item.tipo_publicacao
+    }))
+  }
+
+  // For Portuguese, return data as-is since tipo_publicacao is already in Portuguese
+  return data.map((item: any) => ({
+    ...item,
+    tipo_publicacao_translated: item.tipo_publicacao
+  }))
+}
+
+export async function fetchPublicacaoById(id: string | number, lang: string = 'pt') {
+	const data = await directus.request(
+		readItem('Publicacoes', id, {
+			fields: ['*', 'translations.*', 'autores.Autores_id.*'],
+			deep: {
+				translations: {
+					_filter: {
+						languages_code: {
+							_eq: lang
+						}
+					}
+				}
+			}
+		})
+	)
+
+	// Only fetch translation if language is not Portuguese
+	if (lang !== 'pt') {
+		const translationMap = await getTranslations([data.tipo_publicacao], lang)
+		return {
+			...data,
+			tipo_publicacao_translated: translationMap.get(data.tipo_publicacao) || data.tipo_publicacao
+		}
+	}
+
+	// For Portuguese, return data as-is since tipo_publicacao is already in Portuguese
+	return {
+		...data,
+		tipo_publicacao_translated: data.tipo_publicacao
+	}
 }
