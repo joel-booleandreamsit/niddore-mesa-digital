@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL?.replace('directus:', 'localhost:') || 'http://localhost:8055'
-const DIRECTUS_TOKEN = process.env.DIRECTUS_STATIC_TOKEN || '***'
+const DIRECTUS_TOKEN = process.env.DIRECTUS_STATIC_TOKEN
 
 if (!DIRECTUS_TOKEN) {
   console.error('DIRECTUS_STATIC_TOKEN is required')
