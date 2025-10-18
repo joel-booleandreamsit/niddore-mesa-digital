@@ -1,10 +1,10 @@
 import { BackButton } from "@/components/back-button"
 import { PageHeader } from "@/components/page-header"
-import { fetchPublicacoes, assetUrl, stripHtml } from "@/lib/directus"
+import { fetchPublicacoes, assetUrl } from "@/lib/static-data"
 import { t, getLang } from "@/lib/i18n"
 import PublicacoesClient from "./publicacoes-client"
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-static'
 
 export default async function PublicacoesPage() {
   const lang = await getLang()

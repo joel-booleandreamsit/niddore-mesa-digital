@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "status": "draft",
+    "sort": null,
+    "user_created": "d8763a18-e583-46a5-8124-32e25b590f09",
+    "date_created": "2025-10-08T11:41:39.100Z",
+    "user_updated": "d8763a18-e583-46a5-8124-32e25b590f09",
+    "date_updated": "2025-10-09T23:41:11.199Z",
+    "nome": "Edifício Principal",
+    "localizacao": "Ponta Delgada",
+    "imagem": "42e81c48-76e1-4ffc-bda2-f02b33a3e3a8",
+    "descricao": "O edifício principal da escola, construído em estilo modernista. Usa a API.Sem docker desktop!!!",
+    "ano_construcao": "1953",
+    "translations": [
+      {
+        "id": 20,
+        "Edificios_id": 1,
+        "languages_code": "pt",
+        "nome": "Edificio Central",
+        "descricao": "Onde se joga as cartas!"
+      },
+      {
+        "id": 21,
+        "Edificios_id": 1,
+        "languages_code": "en",
+        "nome": "Main building",
+        "descricao": "Where you play cards!"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "status": "draft",
+    "sort": null,
+    "user_created": "d8763a18-e583-46a5-8124-32e25b590f09",
+    "date_created": "2025-10-10T00:11:33.844Z",
+    "user_updated": "d8763a18-e583-46a5-8124-32e25b590f09",
+    "date_updated": "2025-10-10T00:12:10.214Z",
+    "nome": null,
+    "localizacao": null,
+    "imagem": "ae07b499-8584-4baa-a39f-a0f57f24f45d",
+    "descricao": null,
+    "ano_construcao": "2050",
+    "translations": [
+      {
+        "id": 23,
+        "Edificios_id": 5,
+        "languages_code": "pt",
+        "nome": "Biblioteca Principal",
+        "descricao": "Que é muito gira e tem professores bons!"
+      },
+      {
+        "id": 24,
+        "Edificios_id": 5,
+        "languages_code": "en",
+        "nome": "Home Library",
+        "descricao": "Which is very cute and has good teachers!"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "status": "draft",
+    "sort": null,
+    "user_created": "d8763a18-e583-46a5-8124-32e25b590f09",
+    "date_created": "2025-10-10T16:25:34.723Z",
+    "user_updated": null,
+    "date_updated": null,
+    "nome": null,
+    "localizacao": null,
+    "imagem": null,
+    "descricao": null,
+    "ano_construcao": null,
+    "translations": [
+      {
+        "id": 26,
+        "Edificios_id": 7,
+        "languages_code": "pt",
+        "nome": "teste de dados",
+        "descricao": "A tecnologia tem transformado profundamente a forma como vivemos e trabalhamos.\nCom o avanço da inteligência artificial, novas possibilidades surgem a cada dia.\nMuitas tarefas que antes levavam horas agora podem ser feitas em minutos.\nApesar dos benefícios, também existem desafios importantes a serem considerados.\nA privacidade dos dados e o uso ético das ferramentas são questões centrais.\nÉ essencial que as empresas invistam em capacitação e responsabilidade digital.\nA educação precisa acompanhar essas mudanças para preparar as novas gerações.\nO acesso à tecnologia também deve ser democratizado para evitar desigualdades.\nCom equilíbrio, é possível aproveitar o melhor que a inovação pode oferecer.\nO futuro é incerto, mas certamente será cada vez mais conectado e automatizado."
+      },
+      {
+        "id": 27,
+        "Edificios_id": 7,
+        "languages_code": "en",
+        "nome": "data test",
+        "descricao": "Technology has profoundly transformed the way we live and work.\nWith the advancement of artificial intelligence, new possibilities arise every day.\nMany tasks that used to take hours now can be done in minutes.\nDespite the benefits, there are also important challenges to be considered.\nData privacy and ethical use of tools are central issues.\nIt is essential that companies invest in digital skills and responsibility.\nEducation must accompany these changes to prepare the new generations.\nAccess to technology must also be democratised to avoid inequalities.\nWith balance, you can enjoy the best innovation can offer.\nThe future is uncertain, but it will certainly be increasingly connected and automated."
+      }
+    ]
+  }
+]

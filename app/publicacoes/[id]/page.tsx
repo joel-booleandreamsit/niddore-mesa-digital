@@ -1,10 +1,17 @@
 import { BackButton } from "@/components/back-button"
-import { fetchPublicacaoById, assetUrl, stripHtml } from "@/lib/directus"
+import { fetchPublicacaoById, assetUrl, fetchPublicacoes } from "@/lib/static-data"
 import { notFound } from "next/navigation"
 import { t, getLang } from "@/lib/i18n"
 import { Calendar, Users } from "lucide-react"
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-static'
+
+export async function generateStaticParams() {
+  const publicacoes = await fetchPublicacoes('pt')
+  return publicacoes.map((publicacao: any) => ({
+    id: publicacao.id.toString(),
+  }))
+}
 
 export default async function PublicacaoDetalhePage({ params }: { params: Promise<{ id: string }> }) {
   try {

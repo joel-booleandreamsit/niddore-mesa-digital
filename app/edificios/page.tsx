@@ -1,11 +1,11 @@
 import { BackButton } from "@/components/back-button"
 import { PageHeader } from "@/components/page-header"
-import fetchEdificios, { assetUrl } from "@/lib/directus"
+import { fetchEdificios, assetUrl } from "@/lib/static-data"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { t, getLang } from "@/lib/i18n"
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-static'
 
 export default async function EdificiosPage() {
     const lang = await getLang()

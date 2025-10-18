@@ -1,9 +1,16 @@
 import { BackButton } from "@/components/back-button"
-import { fetchEdificioById, assetUrl } from "@/lib/directus"
+import { fetchEdificioById, assetUrl, fetchEdificios } from "@/lib/static-data"
 import { notFound } from "next/navigation"
 import { t, getLang } from "@/lib/i18n"
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-static'
+
+export async function generateStaticParams() {
+  const edificios = await fetchEdificios('pt')
+  return edificios.map((edificio: any) => ({
+    id: edificio.id.toString(),
+  }))
+}
 
 export default async function EdificioDetalhePage({ params }: { params: { id: string } }) {
   try {

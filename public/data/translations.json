@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "nome": "Livros e Brochuras",
+    "traducao": "Books and Leaflets",
+    "codigo_lingua": "en"
+  },
+  {
+    "id": 2,
+    "nome": "Jornais",
+    "traducao": "Journals",
+    "codigo_lingua": "en"
+  },
+  {
+    "id": 3,
+    "nome": "Revistas",
+    "traducao": "Magazines",
+    "codigo_lingua": "en"
+  }
+]

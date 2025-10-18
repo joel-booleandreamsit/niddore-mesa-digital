@@ -1,0 +1,266 @@
+[
+  {
+    "id": 1,
+    "tipo_publicacao": "Livros e Brochuras",
+    "ano_publicacao": 1956,
+    "capa": "6df13299-1c6a-4a59-93a5-4ca866d0352f",
+    "nome": "Jogos Florais",
+    "translations": [
+      {
+        "id": 1,
+        "Publicacoes_id": 1,
+        "languages_code": "pt",
+        "breve_descricao": "Livro do seculo XXX",
+        "descricao": "<h1>Grande</h1>\n<p>Livro do&nbsp;<strong>poeta</strong> e <strong>cantor</strong> do s&eacute;culo XXX</p>\n<ol>\n<li>um</li>\n<li>dois</li>\n<li>tr&ecirc;s</li>\n</ol>\n<ul>\n<li>abc</li>\n<li>def</li>\n</ul>\n<p><em>vamos</em> ver <strong><span style=\"text-decoration: underline;\"><em>se</em></span></strong> fica <span style=\"text-decoration: underline;\">bem</span></p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 3,
+          "nome": "Jacinto Soares de Albergaria"
+        }
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "tipo_publicacao": "Jornais",
+    "ano_publicacao": 1966,
+    "capa": "0f64bd49-78c8-4c9b-96ac-2792eb7f368d",
+    "nome": "Escola Industrial e Comercial de Ponta Delgada",
+    "translations": [
+      {
+        "id": 2,
+        "Publicacoes_id": 2,
+        "languages_code": "pt",
+        "breve_descricao": "teste",
+        "descricao": "<p>teste v2</p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 4,
+          "nome": "Luís de Camões"
+        }
+      },
+      {
+        "Autores_id": {
+          "id": 2,
+          "nome": "Aníbal Cymbron Bettencourt Barbosa"
+        }
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "tipo_publicacao": "Revistas",
+    "ano_publicacao": 1970,
+    "capa": null,
+    "nome": "Artur May (1869-1936)",
+    "translations": [
+      {
+        "id": 3,
+        "Publicacoes_id": 3,
+        "languages_code": "pt",
+        "breve_descricao": "Nao sei!",
+        "descricao": "<p>Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!</p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 2,
+          "nome": "Aníbal Cymbron Bettencourt Barbosa"
+        }
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "tipo_publicacao": "Livros e Brochuras",
+    "ano_publicacao": 1986,
+    "capa": "8d6b74ec-8764-49ce-b696-b786f433d413",
+    "nome": "Jogos Florais 1",
+    "translations": [
+      {
+        "id": 4,
+        "Publicacoes_id": 4,
+        "languages_code": "pt",
+        "breve_descricao": "Livro do seculo XXX",
+        "descricao": "<h1>Grande</h1>\n<p>Livro do&nbsp;<strong>poeta</strong> e <strong>cantor</strong> do s&eacute;culo XXX</p>\n<ol>\n<li>um</li>\n<li>dois</li>\n<li>tr&ecirc;s</li>\n</ol>\n<ul>\n<li>abc</li>\n<li>def</li>\n</ul>\n<p><em>vamos</em> ver <strong><span style=\"text-decoration: underline;\"><em>se</em></span></strong> fica <span style=\"text-decoration: underline;\">bem</span></p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 3,
+          "nome": "Jacinto Soares de Albergaria"
+        }
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "tipo_publicacao": "Livros e Brochuras",
+    "ano_publicacao": 1956,
+    "capa": "d6174917-0681-4e39-913b-9220a8f65637",
+    "nome": "Jogos Florais 2",
+    "translations": [
+      {
+        "id": 5,
+        "Publicacoes_id": 5,
+        "languages_code": "pt",
+        "breve_descricao": "Livro do seculo XXX",
+        "descricao": "<h1>Grande</h1>\n<p>Livro do&nbsp;<strong>poeta</strong> e <strong>cantor</strong> do s&eacute;culo XXX</p>\n<ol>\n<li>um</li>\n<li>dois</li>\n<li>tr&ecirc;s</li>\n</ol>\n<ul>\n<li>abc</li>\n<li>def</li>\n</ul>\n<p><em>vamos</em> ver <strong><span style=\"text-decoration: underline;\"><em>se</em></span></strong> fica <span style=\"text-decoration: underline;\">bem</span></p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 3,
+          "nome": "Jacinto Soares de Albergaria"
+        }
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "tipo_publicacao": "Livros e Brochuras",
+    "ano_publicacao": 2000,
+    "capa": "5db5b38a-cc75-4c16-8687-2abe600cc4be",
+    "nome": "Jogos Florais 3",
+    "translations": [
+      {
+        "id": 6,
+        "Publicacoes_id": 6,
+        "languages_code": "pt",
+        "breve_descricao": "Livro do seculo XXX",
+        "descricao": "<h1>Grande</h1>\n<p>Livro do&nbsp;<strong>poeta</strong> e <strong>cantor</strong> do s&eacute;culo XXX</p>\n<ol>\n<li>um</li>\n<li>dois</li>\n<li>tr&ecirc;s</li>\n</ol>\n<ul>\n<li>abc</li>\n<li>def</li>\n</ul>\n<p><em>vamos</em> ver <strong><span style=\"text-decoration: underline;\"><em>se</em></span></strong> fica <span style=\"text-decoration: underline;\">bem</span></p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 3,
+          "nome": "Jacinto Soares de Albergaria"
+        }
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "tipo_publicacao": "Revistas",
+    "ano_publicacao": 1990,
+    "capa": "f901720f-27f7-4f57-920e-807649ed8ab9",
+    "nome": "Escola Industrial e Comercial de Ponta Delgada 2",
+    "translations": [
+      {
+        "id": 7,
+        "Publicacoes_id": 7,
+        "languages_code": "pt",
+        "breve_descricao": "teste",
+        "descricao": "<p>teste v2</p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 4,
+          "nome": "Luís de Camões"
+        }
+      },
+      {
+        "Autores_id": {
+          "id": 2,
+          "nome": "Aníbal Cymbron Bettencourt Barbosa"
+        }
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "tipo_publicacao": "Revistas",
+    "ano_publicacao": 2008,
+    "capa": "39f3b039-cfdb-459e-8efc-1e98c1d81a5d",
+    "nome": "Escola Industrial e Comercial de Ponta Delgada 3",
+    "translations": [
+      {
+        "id": 8,
+        "Publicacoes_id": 8,
+        "languages_code": "pt",
+        "breve_descricao": "teste",
+        "descricao": "<p>teste v2</p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 4,
+          "nome": "Luís de Camões"
+        }
+      },
+      {
+        "Autores_id": {
+          "id": 2,
+          "nome": "Aníbal Cymbron Bettencourt Barbosa"
+        }
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "tipo_publicacao": "Jornais",
+    "ano_publicacao": 2020,
+    "capa": "c4f519c1-6773-4edd-a800-3970a82b1289",
+    "nome": "Escola Industrial e Comercial de Ponta Delgada v2",
+    "translations": [
+      {
+        "id": 9,
+        "Publicacoes_id": 9,
+        "languages_code": "pt",
+        "breve_descricao": "teste",
+        "descricao": "<p>teste v2</p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 4,
+          "nome": "Luís de Camões"
+        }
+      },
+      {
+        "Autores_id": {
+          "id": 2,
+          "nome": "Aníbal Cymbron Bettencourt Barbosa"
+        }
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "tipo_publicacao": "Revistas",
+    "ano_publicacao": 1970,
+    "capa": "11bda8f6-6031-4ec7-9fe5-8d0ff9f40877",
+    "nome": "Artur May (1869-1936) v2",
+    "translations": [
+      {
+        "id": 10,
+        "Publicacoes_id": 10,
+        "languages_code": "pt",
+        "breve_descricao": "Nao sei!",
+        "descricao": "<p>Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!Nao sei!</p>"
+      }
+    ],
+    "autores": [
+      {
+        "Autores_id": {
+          "id": 2,
+          "nome": "Aníbal Cymbron Bettencourt Barbosa"
+        }
+      }
+    ]
+  }
+]
