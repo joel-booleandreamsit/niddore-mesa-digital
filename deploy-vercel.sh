@@ -21,7 +21,7 @@ if ! vercel whoami &> /dev/null; then
 fi
 
 # Set environment variables
-export DIRECTUS_STATIC_TOKEN=E4BU9clij-sC5WCNF4HFhkw7KpEwpYfQ
+export DIRECTUS_STATIC_TOKEN=***
 export DIRECTUS_URL=http://localhost:8055
 
 echo "📦 Building static version with real data..."
