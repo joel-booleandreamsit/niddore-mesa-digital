@@ -55,6 +55,12 @@ export default function HomePage() {
       image: "/images/publicacoes.jpg",
     },
     {
+      title: lang === "pt" ? "Serviços" : "Services",
+      description: lang === "pt" ? "Serviços oferecidos pela escola" : "Services offered by the school",
+      href: "/servicos",
+      image: "/images/servicos.jpg",
+    },
+    {
       title: lang === "pt" ? "Galeria de Fotos" : "Photo Gallery",
       description: lang === "pt" ? "Memórias visuais da escola" : "Visual memories of the school",
       href: "/galeria",
@@ -91,7 +97,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Navigation Grid - Now with 5 sections */}
+      {/* Navigation Grid - Now with 6 sections */}
       <div className="flex-1 px-8 pb-8">
         <div className="h-full grid grid-cols-3 grid-rows-2 gap-6">
           {sections.slice(0, 3).map((section) => (
@@ -140,7 +146,7 @@ export default function HomePage() {
             <Link
               key={section.href}
               href={section.href}
-              className="group relative rounded-2xl overflow-hidden touch-manipulation transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] hover:shadow-2xl col-span-1"
+              className="group relative rounded-2xl overflow-hidden touch-manipulation transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] hover:shadow-2xl"
             >
               <div className="absolute inset-0">
                 <img

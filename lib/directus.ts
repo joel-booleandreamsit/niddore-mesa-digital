@@ -150,3 +150,42 @@ export async function fetchPublicacaoById(id: string | number, lang: string = 'p
 		tipo_publicacao_translated: data.tipo_publicacao
 	}
 }
+
+export async function fetchServicos(lang: string = 'pt') {
+  const data = await directus.request(
+    readItems('Servicos', {
+      fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id'],
+      sort: ['-data_inicio'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchServicoById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Servicos', id, {
+      fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
