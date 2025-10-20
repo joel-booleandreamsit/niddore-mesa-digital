@@ -56,30 +56,10 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
               <h1 className="font-serif text-8xl text-foreground text-balance leading-tight mb-8">
                 {transformedServico.nome}
               </h1>
-
-              {/* Date Information */}
-              <div className="flex flex-wrap gap-12 text-3xl text-muted-foreground mb-12">
-                <div className="flex items-center gap-6">
-                  <Calendar className="w-10 h-10" />
-                  <div>
-                    <p className="text-xl text-muted-foreground mb-2">{labels.startDate || "Data de início"}</p>
-                    <span className="text-4xl font-medium">{formatDate(transformedServico.data_inicio) || 'N/A'}</span>
-                  </div>
-                </div>
-                {transformedServico.data_fim && (
-                  <div className="flex items-center gap-6">
-                    <Clock className="w-10 h-10" />
-                    <div>
-                      <p className="text-xl text-muted-foreground mb-2">{labels.endDate || "Data de fim"}</p>
-                      <span className="text-4xl font-medium">{formatDate(transformedServico.data_fim)}</span>
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
 
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-12 gap-16">
+                {/* Main Content Grid */}
+                <div className="grid grid-cols-12 gap-16">
               {/* Cover Image - Takes 5 columns */}
               <div className="col-span-5">
                 <div className="sticky top-8">
@@ -95,28 +75,46 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
 
               {/* Content - Takes 7 columns */}
               <div className="col-span-7 space-y-16">
+                {/* Date Information - Above Description */}
+                <div className="flex flex-wrap gap-12 text-3xl text-muted-foreground">
+                  <div className="flex items-center gap-6">
+                    <Calendar className="w-10 h-10" />
+                    <div>
+                      <p className="text-xl text-muted-foreground mb-2">{labels.startDate || "Data de início"}</p>
+                      <span className="text-4xl font-medium">{formatDate(transformedServico.data_inicio) || 'N/A'}</span>
+                    </div>
+                  </div>
+                  {transformedServico.data_fim && (
+                    <div className="flex items-center gap-6">
+                      <Clock className="w-10 h-10" />
+                      <div>
+                        <p className="text-xl text-muted-foreground mb-2">{labels.endDate || "Data de fim"}</p>
+                        <span className="text-4xl font-medium">{formatDate(transformedServico.data_fim)}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Description */}
                 <div className="prose prose-2xl max-w-none">
-                  <h2 className="font-serif text-6xl text-foreground mb-12">{labels.aboutService || "Sobre este serviço"}</h2>
                   <div 
                     className="text-3xl text-foreground/80 leading-relaxed prose prose-2xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-5xl [&_h2]:text-4xl [&_h3]:text-3xl"
                     dangerouslySetInnerHTML={{ __html: transformedServico.descricao }}
                   />
                 </div>
-
-                {/* Gallery */}
-                {transformedServico.fotos_galeria && transformedServico.fotos_galeria.length > 0 && (
-                  <div className="space-y-12">
-                    <h2 className="font-serif text-6xl text-foreground">{labels.gallery || "Galeria"}</h2>
-                    <ImageCarousel 
-                      images={transformedServico.fotos_galeria}
-                      alt={transformedServico.nome}
-                      className="w-full"
-                    />
-                  </div>
-                )}
               </div>
             </div>
+
+            {/* Gallery Section - Normal Flow */}
+            {transformedServico.fotos_galeria && transformedServico.fotos_galeria.length > 0 && (
+              <div className="mt-24">
+                <ImageCarousel 
+                  images={transformedServico.fotos_galeria}
+                  alt={transformedServico.nome}
+                  className="w-full"
+                />
+              </div>
+            )}
           </div>
         </div>
       </main>
