@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Cover Generator</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .book-cover {
+            display: inline-block;
+            margin: 20px;
+            border: 2px solid #333;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .book-cover-800x600 {
+            width: 800px;
+            height: 600px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .book-cover-1920x1080 {
+            width: 1920px;
+            height: 1080px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .book-cover-1080x1560 {
+            width: 1080px;
+            height: 1560px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .book-content {
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .book-title {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .book-subtitle {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .book-author {
+            font-size: 1.2em;
+            margin-top: auto;
+            opacity: 0.8;
+        }
+        
+        .book-cover-1920x1080 .book-title {
+            font-size: 4em;
+        }
+        
+        .book-cover-1920x1080 .book-subtitle {
+            font-size: 2em;
+        }
+        
+        .book-cover-1920x1080 .book-author {
+            font-size: 1.5em;
+        }
+        
+        .book-cover-1080x1560 .book-title {
+            font-size: 3.5em;
+        }
+        
+        .book-cover-1080x1560 .book-subtitle {
+            font-size: 1.8em;
+        }
+        
+        .book-cover-1080x1560 .book-author {
+            font-size: 1.3em;
+        }
+        
+        .download-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .download-btn:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book Cover Generator</h1>
+    <p>Right-click on each book cover and select "Save image as..." to download.</p>
+    
+    <!-- 800x600 Book Cover -->
+    <div class="book-cover book-cover-800x600" id="cover1">
+        <div class="book-content">
+            <div class="book-title">História da Escola</div>
+            <div class="book-subtitle">Memórias e Tradições</div>
+            <div class="book-author">Niddore Mesa Digital</div>
+        </div>
+    </div>
+    
+    <!-- 1920x1080 Book Cover -->
+    <div class="book-cover book-cover-1920x1080" id="cover2">
+        <div class="book-content">
+            <div class="book-title">Anuário Escolar</div>
+            <div class="book-subtitle">Ano Letivo 2023-2024</div>
+            <div class="book-author">Niddore Mesa Digital</div>
+        </div>
+    </div>
+    
+    <!-- 1080x1560 Book Cover -->
+    <div class="book-cover book-cover-1080x1560" id="cover3">
+        <div class="book-content">
+            <div class="book-title">Revista Literária</div>
+            <div class="book-subtitle">Trabalhos dos Alunos</div>
+            <div class="book-author">Niddore Mesa Digital</div>
+        </div>
+    </div>
+
+    <script>
+        // Function to download canvas as image
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // Function to convert div to canvas
+        function divToCanvas(div, callback) {
+            html2canvas(div, {
+                allowTaint: true,
+                backgroundColor: null,
+                scale: 1,
+                useCORS: true
+            }).then(callback);
+        }
+        
+        // Add download buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            // You'll need to include html2canvas library for this to work
+            // Add this script tag: <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        });
+    </script>
+</body>
+</html>

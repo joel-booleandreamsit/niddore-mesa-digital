@@ -43,13 +43,13 @@ export default function PublicacoesClient({ publicacoes, tipos, labels }: Public
     })
 
   return (
-    <div className="w-full px-8 pb-8 space-y-8">
+    <div className="w-full h-full px-20 pb-24 space-y-20 mt-16">
       {/* Filters */}
-      <div className="space-y-8">
+      <div className="space-y-16">
         <div>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl md:text-2xl text-muted-foreground">{labels.type || "Tipo"}</h3>
-            <h3 className="text-xl md:text-2xl text-muted-foreground mr-40">{labels.sort || "Ordenar"}</h3>            
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-4xl text-muted-foreground">{labels.type || "Tipo"}</h3>
+            <h3 className="text-4xl text-muted-foreground mr-64">{labels.sort || "Ordenar"}</h3>            
           </div>
           <div className="flex flex-wrap gap-3 items-center justify-between">
             <div className="flex flex-wrap gap-3 items-center">
@@ -57,7 +57,7 @@ export default function PublicacoesClient({ publicacoes, tipos, labels }: Public
                 <button
                   key={tipo}
                   onClick={() => setTipoAtivo(tipo)}
-                  className={`px-6 py-3 md:px-8 md:py-4 text-lg md:text-xl rounded-lg border-2 transition-all duration-300 touch-manipulation active:scale-95 ${
+                          className={`px-12 py-6 text-3xl rounded-lg border-2 transition-all duration-300 touch-manipulation active:scale-95 ${
                     tipoAtivo === tipo
                       ? "bg-primary text-primary-foreground border-primary"
                       : "bg-card text-foreground border-border hover:border-primary"
@@ -70,7 +70,7 @@ export default function PublicacoesClient({ publicacoes, tipos, labels }: Public
             
             {/* Sort Combo Box */}
             <div className="relative">
-              <ArrowUpDown className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                      <ArrowUpDown className="absolute left-4 top-1/2 transform -translate-y-1/2 w-8 h-8 text-muted-foreground pointer-events-none" />
                 <select
                   value={`${sortBy}-${sortOrder}`}
                   onChange={(e) => {
@@ -78,7 +78,7 @@ export default function PublicacoesClient({ publicacoes, tipos, labels }: Public
                     setSortBy(newSortBy)
                     setSortOrder(newSortOrder)
                   }}
-                  className="pl-10 pr-6 py-3 md:pl-12 md:pr-8 md:py-4 text-lg md:text-xl rounded-lg border-2 border-border bg-card text-foreground hover:border-primary focus:border-primary focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
+                          className="pl-20 pr-12 py-6 text-3xl rounded-lg border-2 border-border bg-card text-foreground hover:border-primary focus:border-primary focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
                 >
                   <option value="ano-desc">{labels.sortByYearNewest || "Ano (Mais Recente)"}</option>
                   <option value="ano-asc">{labels.sortByYearOldest || "Ano (Mais Antigo)"}</option>
@@ -91,44 +91,44 @@ export default function PublicacoesClient({ publicacoes, tipos, labels }: Public
       </div>
 
       {/* Publications Horizontal List */}
-      <div className="flex gap-4 md:gap-6 overflow-x-auto pb-4">
+      <div className="flex gap-20 overflow-x-auto pb-4 mt-32">
         {publicacoesFiltradas.map((pub) => (
           <Link
             key={pub.id}
             href={`/publicacoes/${pub.id}`}
-            className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 touch-manipulation active:scale-98 flex-shrink-0 w-72 md:w-128"
+            className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 touch-manipulation active:scale-98 flex-shrink-0 w-[40rem]"
           >
-            <div className="aspect-[4/5] overflow-hidden bg-muted">
+            <div className="aspect-[3/4] overflow-hidden bg-muted">
               <img
                 src={pub.capa}
                 alt={pub.nome}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <div className="p-6 md:p-8 space-y-3">
+                    <div className="p-10 space-y-4">
               <div className="flex items-center justify-between gap-4">
-                <span className="inline-block px-4 py-2 text-sm md:text-base bg-secondary text-secondary-foreground rounded-full">
+                <span className="inline-block px-4 py-2 text-xl bg-secondary text-secondary-foreground rounded-full">
                   {pub.tipo}
                 </span>
-                <span className="text-base md:text-lg text-muted-foreground">
+                <span className="text-2xl text-muted-foreground">
                   {pub.ano}
                 </span>
               </div>
-              <h3 className="font-serif text-2xl md:text-3xl text-foreground text-balance group-hover:text-primary transition-colors">
+              <h3 className="font-serif text-5xl text-foreground text-balance group-hover:text-primary transition-colors">
                 {pub.nome}
               </h3>
-              <div className="text-base md:text-lg text-muted-foreground">
+              <div className="text-2xl text-muted-foreground">
                 {pub.autores.map((autor, index) => (
                   <div key={index}>{autor}</div>
                 ))}
               </div>
               <div 
-                className="text-base md:text-lg text-muted-foreground line-clamp-2 prose prose-sm max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-4 [&_ul]:pl-6 [&_ol]:pl-6"
+                className="text-2xl text-muted-foreground line-clamp-2 prose prose-sm max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-4 [&_ul]:pl-6 [&_ol]:pl-6"
                 dangerouslySetInnerHTML={{ __html: pub.descricao }}
               />
               <div className="flex items-center gap-2 text-primary pt-2">
-                <span className="text-base md:text-lg">Ver detalhes</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <span className="text-2xl">{labels.viewDetails || "Ver detalhes"}</span>
+                <ArrowRight className="w-7 h-7 group-hover:translate-x-1 transition-transform" />
               </div>
             </div>
           </Link>
