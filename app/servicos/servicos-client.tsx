@@ -7,11 +7,9 @@ import { ArrowRight, ArrowUpDown, Calendar } from "lucide-react"
 interface Servico {
   id: number
   nome: string
-  descricao: string
   data_inicio: string | null
   data_fim: string | null
   foto_capa: string
-  fotos_galeria: string[]
   isActive: boolean
 }
 
@@ -140,10 +138,6 @@ export default function ServicosClient({ servicos, statusOptions, labels }: Serv
               <h3 className="font-serif text-7xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
                 {servico.nome}
               </h3>
-              <div 
-                className="text-3xl text-muted-foreground line-clamp-4 prose prose-xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-6"
-                dangerouslySetInnerHTML={{ __html: servico.descricao }}
-              />
               <div className="flex items-center gap-4 text-primary pt-4">
                 <span className="text-3xl font-medium">{labels.viewDetails || "Ver detalhes"}</span>
                 <ArrowRight className="w-10 h-10 group-hover:translate-x-2 transition-transform" />
