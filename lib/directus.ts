@@ -154,7 +154,7 @@ export async function fetchPublicacaoById(id: string | number, lang: string = 'p
 export async function fetchServicos(lang: string = 'pt') {
   const data = await directus.request(
     readItems('Servicos', {
-      fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id'],
+      fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id.*'],
       sort: ['-data_inicio'],
       deep: {
         translations: {
@@ -174,7 +174,7 @@ export async function fetchServicos(lang: string = 'pt') {
 export async function fetchServicoById(id: string | number, lang: string = 'pt') {
   const data = await directus.request(
     readItem('Servicos', id, {
-      fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id'],
+      fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id.*'],
       deep: {
         translations: {
           _filter: {

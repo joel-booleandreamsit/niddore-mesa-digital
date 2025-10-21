@@ -27,24 +27,27 @@ export default async function ServicosPage() {
   const statusOptions = [labels.all || "Todos", labels.active || "Ativo", "Inativo"]
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="h-screen bg-background overflow-hidden flex flex-col">
       <BackButton label={labels.back || "Voltar"} />
       
-      {/* 4K Optimized Header */}
-      <div className="px-16 py-12">
-        <div className="max-w-none mx-auto">
-          <h1 className="font-serif text-8xl text-foreground text-balance mb-6">{labels.services || "Serviços"}</h1>
-          <p className="text-4xl text-muted-foreground max-w-6xl leading-relaxed text-balance">
-            {labels.servicesDesc || "Os serviços oferecidos pela escola"}
-          </p>
+      {/* Header Section */}
+      <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
+        <div className="text-center space-y-4">
+          <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
+            {labels.services || "Serviços"}
+          </h1>
+          <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{labels.servicesDesc || "Os serviços oferecidos pela escola"}</p>
         </div>
       </div>
       
-      <ServicosClient 
-        servicos={servicos}
-        statusOptions={statusOptions}
-        labels={labels}
-      />
+      {/* Content Section */}
+      <div className="flex-1 px-8 pb-8 overflow-y-auto">
+        <ServicosClient 
+          servicos={servicos}
+          statusOptions={statusOptions}
+          labels={labels}
+        />
+      </div>
     </main>
   )
 }

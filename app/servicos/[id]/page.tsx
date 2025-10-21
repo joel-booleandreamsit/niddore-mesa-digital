@@ -22,7 +22,12 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
       data_inicio: servico.data_inicio || null,
       data_fim: servico.data_fim || null,
       foto_capa: servico.foto_capa ? assetUrl(servico.foto_capa, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
-      fotos_galeria: servico.fotos_galeria ? servico.fotos_galeria.map((foto: any) => foto.directus_files_id).filter(Boolean).map((fotoId: string) => assetUrl(fotoId, "fit=cover&width=1600&height=1000&format=webp")) : [],
+              fotos_galeria: servico.fotos_galeria ? servico.fotos_galeria.map((foto: any) => ({
+                id: foto.directus_files_id.id,
+                url: assetUrl(foto.directus_files_id.id, "fit=cover&width=1600&height=1000&format=webp"),
+                title: foto.directus_files_id?.title || '',
+                description: foto.directus_files_id?.description || ''
+              })).filter((foto: any) => foto.id) : [],
       isActive: !servico.data_fim,
     }
 
