@@ -40,20 +40,11 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
         <BackButton label={labels.back || "Voltar"} />
 
         {/* 4K Optimized Layout */}
-        <div className="w-full px-16 py-20">
+        <div className="w-full px-16 pt-32 pb-20">
           <div className="max-w-none mx-auto">
             {/* Header Section */}
             <div className="mb-16">
-              <div className="flex items-center gap-8 mb-8">
-                <span className={`inline-block px-8 py-4 text-3xl rounded-full font-medium ${
-                  transformedServico.isActive 
-                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" 
-                    : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-                }`}>
-                  {transformedServico.isActive ? (labels.active || "Ativo") : "Inativo"}
-                </span>
-              </div>
-              <h1 className="font-serif text-8xl text-foreground text-balance leading-tight mb-8">
+              <h1 className="font-serif text-9xl text-foreground text-balance leading-tight mb-8">
                 {transformedServico.nome}
               </h1>
             </div>
@@ -76,29 +67,29 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
               {/* Content - Takes 7 columns */}
               <div className="col-span-7 space-y-16">
                 {/* Date Information - Above Description */}
-                <div className="flex flex-wrap gap-12 text-3xl text-muted-foreground">
+                <div className="flex flex-wrap gap-12 text-4xl text-muted-foreground">
                   <div className="flex items-center gap-6">
-                    <Calendar className="w-10 h-10" />
+                    <Calendar className="w-12 h-12" />
                     <div>
-                      <p className="text-xl text-muted-foreground mb-2">{labels.startDate || "Data de início"}</p>
-                      <span className="text-4xl font-medium">{formatDate(transformedServico.data_inicio) || 'N/A'}</span>
+                      <p className="text-2xl text-muted-foreground mb-2">{labels.startDate || "Data de início"}</p>
+                      <span className="text-5xl font-medium">{formatDate(transformedServico.data_inicio) || 'N/A'}</span>
                     </div>
                   </div>
                   {transformedServico.data_fim && (
                     <div className="flex items-center gap-6">
-                      <Clock className="w-10 h-10" />
+                      <Clock className="w-12 h-12" />
                       <div>
-                        <p className="text-xl text-muted-foreground mb-2">{labels.endDate || "Data de fim"}</p>
-                        <span className="text-4xl font-medium">{formatDate(transformedServico.data_fim)}</span>
+                        <p className="text-2xl text-muted-foreground mb-2">{labels.endDate || "Data de fim"}</p>
+                        <span className="text-5xl font-medium">{formatDate(transformedServico.data_fim)}</span>
                       </div>
                     </div>
                   )}
                 </div>
 
                 {/* Description */}
-                <div className="prose prose-2xl max-w-none">
+                <div className="prose prose-3xl max-w-none">
                   <div 
-                    className="text-3xl text-foreground/80 leading-relaxed prose prose-2xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-5xl [&_h2]:text-4xl [&_h3]:text-3xl"
+                    className="text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
                     dangerouslySetInnerHTML={{ __html: transformedServico.descricao }}
                   />
                 </div>
