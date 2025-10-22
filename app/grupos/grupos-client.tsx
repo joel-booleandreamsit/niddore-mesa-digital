@@ -27,6 +27,7 @@ export default function GruposClient({ grupos, tipos, labels }: GruposClientProp
     return true
   })
 
+
   return (
     <div className="w-full px-16 pb-24 space-y-24">
       {/* 4K Optimized Filters */}

@@ -207,6 +207,18 @@ export async function fetchGrupos(lang: string = 'pt') {
     })
   )
 
+  // Only fetch translations if language is not Portuguese
+  if (lang !== 'pt') {
+    const uniqueTipos = [...new Set(data.map((item: any) => item.tipo_grupo).filter(Boolean))]
+    const translationMap = await getTranslations(uniqueTipos, lang)    
+
+    // Apply translations to the data
+    return data.map((item: any) => ({
+      ...item,
+      tipo_grupo_translated: translationMap.get(item.tipo_grupo) || item.tipo_grupo
+    }))
+  }  
+
   return data
 }
 
@@ -225,6 +237,7 @@ export async function fetchGrupoById(id: string | number, lang: string = 'pt') {
       }
     })
   )
+
 
   return data
 }

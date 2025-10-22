@@ -14,7 +14,7 @@ export default async function GruposPage() {
   const grupos = data.map((item: any) => ({
     ...item,
     nome: item.translations?.[0]?.nome || 'Nome não disponível',
-    tipo_grupo: item.tipo_grupo || 'Tipo não disponível',
+    tipo_grupo: item.tipo_grupo_translated || item.tipo_grupo || 'Tipo não disponível',
     foto_capa: item.foto_capa ? assetUrl(item.foto_capa, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
   }))
 
