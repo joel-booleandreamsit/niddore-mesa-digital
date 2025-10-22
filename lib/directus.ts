@@ -189,3 +189,42 @@ export async function fetchServicoById(id: string | number, lang: string = 'pt')
 
   return data
 }
+
+export async function fetchGrupos(lang: string = 'pt') {
+  const data = await directus.request(
+    readItems('Grupos', {
+      fields: ['*', 'translations.nome', 'foto_capa'],
+      sort: ['translations.nome'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchGrupoById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Grupos', id, {
+      fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id.*'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
