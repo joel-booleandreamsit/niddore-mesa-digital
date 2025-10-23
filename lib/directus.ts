@@ -289,42 +289,17 @@ export async function fetchGaleriaSubcategorias(categoriaId?: string | number, l
   return data
 }
 
-export async function fetchGaleriaFotos(categoriaId?: string | number, subcategoriaId?: string | number, lang: string = 'pt') {
-  const filter: any = {}
-  
-  if (subcategoriaId) {
-    filter.categoria = { _eq: subcategoriaId }
-  } else if (categoriaId) {
-    // If only categoriaId is provided, get all photos from subcategories of that category
-    const subcategorias = await fetchGaleriaSubcategorias(categoriaId, lang)
-    const subcategoriaIds = subcategorias.map(sub => sub.id)
-    if (subcategoriaIds.length > 0) {
-      filter.categoria = { _in: subcategoriaIds }
-    } else {
-      // No subcategories found, return empty array
-      return []
-    }
-  }
-
+export async function fetchGaleriaFotos(subcategoriaId: string | number, lang: string = 'pt') {
   const data = await directus.request(
     readItems('Galeria_Fotos', {
-      fields: ['*', 'translations.*', 'categoria.translations.*'],
-      filter,
+      fields: ['*', 'translations.*'],
+      filter: { categoria: { _eq: subcategoriaId } },
       sort: ['ordem'],
       deep: {
         translations: {
           _filter: {
             languages_code: {
               _eq: lang
-            }
-          }
-        },
-        categoria: {
-          translations: {
-            _filter: {
-              languages_code: {
-                _eq: lang
-              }
             }
           }
         }

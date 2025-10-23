@@ -16,7 +16,7 @@ export default async function GaleriaSubcategoriaPage({ params }: { params: Prom
     // Fetch subcategory and its photos
     const [subcategoria, fotos] = await Promise.all([
       fetchGaleriaSubcategorias(undefined, lang).then(subs => subs.find(sub => sub.id === parseInt(id))),
-      fetchGaleriaFotos(undefined, parseInt(id), lang)
+      fetchGaleriaFotos(parseInt(id), lang)
     ])
 
     if (!subcategoria) {
@@ -27,14 +27,12 @@ export default async function GaleriaSubcategoriaPage({ params }: { params: Prom
     const subcategoriaTransformada = {
       ...subcategoria,
       nome: subcategoria.translations?.[0]?.nome || 'Nome não disponível',
-      descricao: subcategoria.translations?.[0]?.descricao || 'Descrição não disponível',
     }
 
     // Transform photos data
     const fotosTransformadas = fotos.map((item: any) => ({
       ...item,
       breve_descricao: item.translations?.[0]?.breve_descricao || 'Descrição não disponível',
-      descricao: item.translations?.[0]?.descricao || 'Descrição não disponível',
       foto_url: item.foto ? assetUrl(item.foto, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
     }))
 

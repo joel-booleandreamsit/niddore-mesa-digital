@@ -27,14 +27,12 @@ export default async function GaleriaCategoriaPage({ params }: { params: Promise
     const categoriaTransformada = {
       ...categoria,
       nome: categoria.translations?.[0]?.nome || 'Nome não disponível',
-      descricao: categoria.translations?.[0]?.descricao || 'Descrição não disponível',
     }
 
     // Transform subcategories data
     const subcategoriasTransformadas = subcategorias.map((item: any) => ({
       ...item,
       nome: item.translations?.[0]?.nome || 'Nome não disponível',
-      descricao: item.translations?.[0]?.descricao || 'Descrição não disponível',
       foto_url: item.imagem ? assetUrl(item.imagem, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
     }))
 
