@@ -238,6 +238,136 @@ export async function fetchGrupoById(id: string | number, lang: string = 'pt') {
     })
   )
 
+  return data
+}
+
+export async function fetchGaleriaCategorias(lang: string = 'pt') {
+  const data = await directus.request(
+    readItems('Galeria_Categorias', {
+      fields: ['*', 'translations.*', 'imagem'],
+      filter: { categoria_principal: { _null: true } },
+      sort: ['ordem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchGaleriaSubcategorias(categoriaId?: string | number, lang: string = 'pt') {
+  const filter: any = { categoria_principal: { _nnull: true } }
+  
+  if (categoriaId) {
+    filter.categoria_principal = { _eq: categoriaId }
+  }
+
+  const data = await directus.request(
+    readItems('Galeria_Categorias', {
+      fields: ['*', 'translations.*', 'imagem'],
+      filter,
+      sort: ['ordem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchGaleriaFotos(categoriaId?: string | number, subcategoriaId?: string | number, lang: string = 'pt') {
+  const filter: any = {}
+  
+  if (subcategoriaId) {
+    filter.categoria = { _eq: subcategoriaId }
+  } else if (categoriaId) {
+    // If only categoriaId is provided, get all photos from subcategories of that category
+    const subcategorias = await fetchGaleriaSubcategorias(categoriaId, lang)
+    const subcategoriaIds = subcategorias.map(sub => sub.id)
+    if (subcategoriaIds.length > 0) {
+      filter.categoria = { _in: subcategoriaIds }
+    } else {
+      // No subcategories found, return empty array
+      return []
+    }
+  }
+
+  const data = await directus.request(
+    readItems('Galeria_Fotos', {
+      fields: ['*', 'translations.*', 'categoria.translations.*'],
+      filter,
+      sort: ['ordem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        },
+        categoria: {
+          translations: {
+            _filter: {
+              languages_code: {
+                _eq: lang
+              }
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchGaleriaFotoById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Galeria_Fotos', id, {
+      fields: ['*', 'translations.*', 'categoria.translations.*', 'categoria.categoria_principal.translations.*'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        },
+        categoria: {
+          translations: {
+            _filter: {
+              languages_code: {
+                _eq: lang
+              }
+            }
+          },
+          categoria_principal: {
+            translations: {
+              _filter: {
+                languages_code: {
+                  _eq: lang
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+  )
 
   return data
 }

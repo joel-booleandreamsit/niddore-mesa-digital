@@ -40,6 +40,10 @@ const labels = {
             groups: "Grupos",
             groupsDesc: "Os grupos da escola",
             aboutGroup: "Sobre este grupo",
+            galleryDesc: "Galeria de fotos da escola",
+            category: "Categoria",
+            subcategory: "Subcategoria",
+            photo: "Foto",
   },
   en: {
     buildings: "Buildings",
@@ -69,6 +73,10 @@ const labels = {
             groups: "Groups",
             groupsDesc: "The school groups",
             aboutGroup: "About this group",
+            galleryDesc: "School photo gallery",
+            category: "Category",
+            subcategory: "Subcategory",
+            photo: "Photo",
   },
 } as const
 
