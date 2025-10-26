@@ -238,6 +238,111 @@ export async function fetchGrupoById(id: string | number, lang: string = 'pt') {
     })
   )
 
+  return data
+}
+
+export async function fetchGaleriaCategorias(lang: string = 'pt') {
+  const data = await directus.request(
+    readItems('Galeria_Categorias', {
+      fields: ['*', 'translations.*', 'imagem'],
+      filter: { categoria_principal: { _null: true } },
+      sort: ['ordem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchGaleriaSubcategorias(categoriaId?: string | number, lang: string = 'pt') {
+  const filter: any = { categoria_principal: { _nnull: true } }
+  
+  if (categoriaId) {
+    filter.categoria_principal = { _eq: categoriaId }
+  }
+
+  const data = await directus.request(
+    readItems('Galeria_Categorias', {
+      fields: ['*', 'translations.*', 'imagem'],
+      filter,
+      sort: ['ordem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchGaleriaFotos(subcategoriaId: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItems('Galeria_Fotos', {
+      fields: ['*', 'translations.*'],
+      filter: { categoria: { _eq: subcategoriaId } },
+      sort: ['ordem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchGaleriaFotoById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Galeria_Fotos', id, {
+      fields: ['*', 'translations.*', 'categoria.translations.*', 'categoria.categoria_principal.translations.*'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        },
+        categoria: {
+          translations: {
+            _filter: {
+              languages_code: {
+                _eq: lang
+              }
+            }
+          },
+          categoria_principal: {
+            translations: {
+              _filter: {
+                languages_code: {
+                  _eq: lang
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+  )
 
   return data
 }
