@@ -54,12 +54,18 @@ export default function HomePage() {
       href: "/publicacoes",
       image: "/images/publicacoes.jpg",
     },
-    {
-      title: lang === "pt" ? "Serviços" : "Services",
-      description: lang === "pt" ? "Serviços oferecidos pela escola" : "Services offered by the school",
-      href: "/servicos",
-      image: "/images/servicos.jpg",
-    },
+            {
+              title: lang === "pt" ? "Serviços" : "Services",
+              description: lang === "pt" ? "Serviços oferecidos pela escola" : "Services offered by the school",
+              href: "/servicos",
+              image: "/images/servicos.jpg",
+            },
+            {
+              title: lang === "pt" ? "Grupos" : "Groups",
+              description: lang === "pt" ? "Grupos da escola" : "School groups",
+              href: "/grupos",
+              image: "/images/grupos.jpg",
+            },
     {
       title: lang === "pt" ? "Galeria de Fotos" : "Photo Gallery",
       description: lang === "pt" ? "Memórias visuais da escola" : "Visual memories of the school",
@@ -97,52 +103,10 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Navigation Grid - Now with 6 sections */}
+      {/* Navigation Grid - Now with 7 sections */}
       <div className="flex-1 px-8 pb-8">
-        <div className="h-full grid grid-cols-3 grid-rows-2 gap-6">
-          {sections.slice(0, 3).map((section) => (
-            <Link
-              key={section.href}
-              href={section.href}
-              className="group relative rounded-2xl overflow-hidden touch-manipulation transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] hover:shadow-2xl"
-            >
-              <div className="absolute inset-0">
-                <img
-                  src={section.image || "/placeholder.svg"}
-                  alt={section.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/40 group-hover:from-black/50 group-hover:via-black/30 group-hover:to-black/20 transition-all duration-500" />
-              </div>
-
-              <div className="relative h-full flex flex-col justify-end p-8 md:p-10 lg:p-12">
-                <div className="space-y-3">
-                  <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white group-hover:text-primary transition-colors duration-300 text-balance leading-tight">
-                    {section.title}
-                  </h2>
-                  <p className="text-lg md:text-xl lg:text-2xl text-white/80 group-hover:text-white transition-colors duration-300 text-balance leading-relaxed">
-                    {section.description}
-                  </p>
-
-                  <div className="flex items-center gap-3 text-base md:text-lg text-primary/80 group-hover:text-primary transition-colors duration-300 pt-2">
-                    <span>{lang === "pt" ? "Toque para explorar" : "Tap to explore"}</span>
-                    <svg
-                      className="w-6 h-6 transform group-hover:translate-x-2 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute inset-0 border-4 border-primary/0 group-hover:border-primary/30 rounded-2xl transition-all duration-500 pointer-events-none" />
-            </Link>
-          ))}
-
-          {sections.slice(3).map((section) => (
+        <div className="h-full grid grid-cols-3 grid-rows-3 gap-6">
+          {sections.map((section) => (
             <Link
               key={section.href}
               href={section.href}

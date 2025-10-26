@@ -189,3 +189,55 @@ export async function fetchServicoById(id: string | number, lang: string = 'pt')
 
   return data
 }
+
+export async function fetchGrupos(lang: string = 'pt') {
+  const data = await directus.request(
+    readItems('Grupos', {
+      fields: ['*', 'translations.nome', 'foto_capa'],
+      sort: ['translations.nome'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  // Only fetch translations if language is not Portuguese
+  if (lang !== 'pt') {
+    const uniqueTipos = [...new Set(data.map((item: any) => item.tipo_grupo).filter(Boolean))]
+    const translationMap = await getTranslations(uniqueTipos, lang)    
+
+    // Apply translations to the data
+    return data.map((item: any) => ({
+      ...item,
+      tipo_grupo_translated: translationMap.get(item.tipo_grupo) || item.tipo_grupo
+    }))
+  }  
+
+  return data
+}
+
+export async function fetchGrupoById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Grupos', id, {
+      fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id.*'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+
+  return data
+}
