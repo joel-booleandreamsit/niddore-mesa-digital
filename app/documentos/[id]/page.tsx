@@ -23,12 +23,12 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
     }
 
     const autoresNomes =
-      documento.autores?.map((autor: any) => autor.Autores_id?.nome).filter(Boolean) || ['Autor não disponível']
+      documento.autores?.map((autor: any) => autor.Autores_id?.nome).filter(Boolean) || [labels.authorUnavailable]
 
     const transformed = {
       ...documento,
-      nome: documento.translations?.[0]?.nome || 'Nome não disponível',
-      descricao: documento.translations?.[0]?.descricao || 'Conteúdo não disponível',
+      nome: documento.translations?.[0]?.nome || labels.nameUnavailable,
+      descricao: documento.translations?.[0]?.descricao || labels.contentUnavailable,
       data_fmt: formatDate(documento.data),
       capa_url: documento.capa ? assetUrl(documento.capa, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
       autores: autoresNomes,
@@ -75,7 +75,7 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
                 </div>
 
                 <div className="space-y-4">
-                  <h2 className="font-serif text-5xl text-foreground">Autores</h2>
+                  <h2 className="font-serif text-5xl text-foreground">{labels.authors}</h2>
                   <ul className="list-disc pl-8 text-3xl text-foreground/80">
                     {Array.isArray(transformed.autores) ? (
                       transformed.autores.map((a: string, i: number) => <li key={i}>{a}</li>)

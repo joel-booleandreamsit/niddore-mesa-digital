@@ -23,8 +23,6 @@ export default async function DocumentosCategoriaPage({ params }: { params: Prom
     }
     if (!categoria || !categoria.id) notFound()
 
-    console.log(categoria)
-
     // Fetch documents; if it fails, fallback to empty list (no 404)
     let documentos: any[] = []
     try {
@@ -33,9 +31,7 @@ export default async function DocumentosCategoriaPage({ params }: { params: Prom
       documentos = []
     }
 
-    console.log(documentos)
-
-    const categoriaNome = categoria.translations?.[0]?.nome || 'Nome não disponível'
+    const categoriaNome = categoria.translations?.[0]?.nome || labels.nameUnavailable
 
     const formatDate = (dateString: string | null) => {
       if (!dateString) return null
@@ -48,8 +44,8 @@ export default async function DocumentosCategoriaPage({ params }: { params: Prom
 
     const documentosTransformados = documentos.map((doc: any) => ({
       ...doc,
-      nome: doc.translations?.[0]?.nome || 'Nome não disponível',
-      breve_descricao: doc.translations?.[0]?.breve_descricao || 'Descrição não disponível',
+      nome: doc.translations?.[0]?.nome || labels.nameUnavailable,
+      breve_descricao: doc.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
       data_fmt: formatDate(doc.data),
       capa_url: doc.capa ? assetUrl(doc.capa, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
     }))
@@ -103,7 +99,7 @@ export default async function DocumentosCategoriaPage({ params }: { params: Prom
 
             {documentosTransformados.length === 0 && (
               <div className="text-center py-32">
-                <p className="text-4xl text-muted-foreground font-medium">Nenhum documento encontrado nesta categoria.</p>
+                <p className="text-4xl text-muted-foreground font-medium">{labels.documentsNoDocumentsInCategory}</p>
               </div>
             )}
           </div>
@@ -113,9 +109,9 @@ export default async function DocumentosCategoriaPage({ params }: { params: Prom
   } catch (error) {
     return (
       <main className="h-screen bg-background overflow-hidden flex flex-col">
-        <BackButton label="Voltar" />
+        <BackButton label={labels.back || "Voltar"} />
         <div className="flex-1 px-8 pb-8 overflow-y-auto flex items-center justify-center">
-          <p className="text-4xl text-muted-foreground font-medium">Ocorreu um erro ao carregar a categoria de documentos.</p>
+          <p className="text-4xl text-muted-foreground font-medium">{t(await getLang()).documentsLoadCategoryError}</p>
         </div>
       </main>
     )

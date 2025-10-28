@@ -14,7 +14,7 @@ export default async function DocumentosCategoriasPage() {
 
   const categoriasTransformadas = categorias.map((item: any) => ({
     ...item,
-    nome: item.translations?.[0]?.nome || 'Nome não disponível',
+    nome: item.translations?.[0]?.nome || labels.nameUnavailable,
     foto_url: item.imagem ? assetUrl(item.imagem, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
   }))
 
@@ -62,7 +62,7 @@ export default async function DocumentosCategoriasPage() {
 
           {categoriasTransformadas.length === 0 && (
             <div className="text-center py-32">
-              <p className="text-4xl text-muted-foreground font-medium">Nenhuma categoria encontrada.</p>
+              <p className="text-4xl text-muted-foreground font-medium">{labels.documentsNoCategories}</p>
             </div>
           )}
         </div>

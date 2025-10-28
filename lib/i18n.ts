@@ -44,6 +44,17 @@ const labels = {
             category: "Categoria",
             subcategory: "Subcategoria",
             photo: "Foto",
+            // Documentos
+            documents: "Documentos",
+            documentsDesc: "Categorias de documentos",
+            documentsNoCategories: "Nenhuma categoria encontrada.",
+            documentsNoDocumentsInCategory: "Nenhum documento encontrado nesta categoria.",
+            documentsLoadCategoryError: "Ocorreu um erro ao carregar a categoria de documentos.",
+            authors: "Autores",
+            nameUnavailable: "Nome não disponível",
+            descriptionUnavailable: "Descrição não disponível",
+            contentUnavailable: "Conteúdo não disponível",
+            authorUnavailable: "Autor não disponível",
   },
   en: {
     buildings: "Buildings",
@@ -77,6 +88,17 @@ const labels = {
             category: "Category",
             subcategory: "Subcategory",
             photo: "Photo",
+            // Documents
+            documents: "Documents",
+            documentsDesc: "Document categories",
+            documentsNoCategories: "No categories found.",
+            documentsNoDocumentsInCategory: "No documents found for this category.",
+            documentsLoadCategoryError: "An error occurred while loading the document category.",
+            authors: "Authors",
+            nameUnavailable: "Name not available",
+            descriptionUnavailable: "Description not available",
+            contentUnavailable: "Content not available",
+            authorUnavailable: "Author not available",
   },
 } as const
 
