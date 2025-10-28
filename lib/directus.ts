@@ -171,6 +171,94 @@ export async function fetchServicos(lang: string = 'pt') {
   return data
 }
 
+export async function fetchDocumentosCategorias(lang: string = 'pt') {
+  const data = await directus.request(
+    readItems('Documentos_Categorias', {
+      fields: ['*', 'translations.*', 'imagem'],
+      sort: ['ordem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchDocumentoCategoriaById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Documentos_Categorias', id, {
+      fields: ['*', 'translations.*', 'imagem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchDocumentosByCategoria(categoriaId: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItems('Documentos', {
+      fields: ['*', 'translations.*', 'capa', 'autores.Autores_id.*'],
+      filter: { tipo_documento: { _eq: categoriaId } },
+      sort: ['-data'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
+export async function fetchDocumentoById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Documentos', id, {
+      fields: ['*', 'translations.*', 'capa', 'autores.Autores_id.*', 'categoria.translations.*'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        },
+        categoria: {
+          translations: {
+            _filter: {
+              languages_code: {
+                _eq: lang
+              }
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
 export async function fetchServicoById(id: string | number, lang: string = 'pt') {
   const data = await directus.request(
     readItem('Servicos', id, {
