@@ -72,6 +72,12 @@ export default function HomePage() {
       href: "/galeria",
       image: "/images/galeria.jpg",
     },
+    {
+      title: lang === "pt" ? "Documentos" : "Documents",
+      description: lang === "pt" ? "Categorias de documentos" : "Document categories",
+      href: "/documentos",
+      image: "/images/documentos.jpg",
+    },
   ]
 
   return (
