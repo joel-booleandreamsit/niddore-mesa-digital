@@ -12,7 +12,6 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
     const labels = t(lang)
     const edificio = await fetchEdificioById(id, lang)
 
-    console.log(edificio)
     // Use translations from Directus if available, otherwise fallback to original
     const translatedEdificio = {
       ...edificio,
