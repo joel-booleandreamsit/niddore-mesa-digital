@@ -214,7 +214,7 @@ export async function fetchDocumentosByCategoria(categoriaId: string | number, l
   const data = await directus.request(
     readItems('Documentos', {
       fields: ['*', 'translations.*', 'capa', 'autores.Autores_id.*'],
-      filter: { tipo_documento: { _eq: categoriaId } },
+      filter: { categoria: { _eq: categoriaId } },
       sort: ['-data'],
       deep: {
         translations: {
