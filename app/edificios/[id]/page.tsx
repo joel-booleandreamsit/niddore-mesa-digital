@@ -7,10 +7,12 @@ export const dynamic = 'force-dynamic'
 
 export default async function EdificioDetalhePage({ params }: { params: { id: string } }) {
   try {
+    const { id } = await params
     const lang = await getLang()
     const labels = t(lang)
-    const edificio = await fetchEdificioById(params.id, lang)
+    const edificio = await fetchEdificioById(id, lang)
 
+    console.log(edificio)
     // Use translations from Directus if available, otherwise fallback to original
     const translatedEdificio = {
       ...edificio,
