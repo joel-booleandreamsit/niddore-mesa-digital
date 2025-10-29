@@ -2,7 +2,8 @@ import { BackButton } from "@/components/back-button"
 import { PageHeader } from "@/components/page-header"
 import fetchEdificios, { assetUrl } from "@/lib/directus"
 import Link from "next/link"
-import { ArrowRight, Building2, CheckCircle2 } from "lucide-react"
+import Image from "next/image"
+import { ArrowRight } from "lucide-react"
 import { t, getLang } from "@/lib/i18n"
 
 export const dynamic = 'force-dynamic'
@@ -82,53 +83,65 @@ export default async function EdificiosPage() {
       <BackButton />
       <PageHeader title={labels.buildings} description={labels.buildingsDesc} />
 
-      <div className="mx-auto px-16 2xl:px-20 pb-8 mt-8 w-full">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 gap-8 xl:gap-10 2xl:gap-10 items-start">
+      <div className="mx-auto px-20 pb-8 mt-8 w-full">
+        <div className="grid grid-cols-5 gap-10 items-start">
           {items.map((edificio: any) => (
             <Link
               key={edificio.id}
               href={`/edificios/${edificio.id}`}
               className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98"
             >
-              <div className="overflow-hidden bg-muted h-[54vh] xl:h-[60vh] 2xl:h-[68vh]">
-                <img
-                  src={assetUrl(edificio.foto, "fit=cover&width=1200&height=2000&format=webp")}
+              <div className="overflow-hidden bg-muted h-[62vh]">
+                <Image
+                  src={assetUrl(edificio.foto, 'fit=cover&width=1200&height=1600&quality=85')}
                   alt={edificio.nome}
+                  width={1200}
+                  height={1600}
+                  priority
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="p-8 2xl:p-10 space-y-8">
-                <h3 className="font-serif text-4xl xl:text-5xl 2xl:text-6xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight line-clamp-2">
+              <div className="p-10 space-y-10">
+                <h3 className="font-serif text-6xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight line-clamp-2">
                   {edificio.nome}
                 </h3>
 
                 {/* Active range timeline */}
                 <div className="space-y-6">
-                  {/* Professional timeline with year badges and straight connector */}
-                  <div className="flex items-center gap-6 relative">
+                  {/* Timeline: thin segments with centered dots and label above */}
+                  <div className="flex items-center gap-4 relative">
+                    {/* Duration label above center */}
+                    <div className="absolute left-1/2 -translate-x-1/2 -top-1 text-xl italic leading-tight text-muted-foreground whitespace-nowrap">
+                      ({formatDuration(edificio.data_inicio, edificio.data_fim)})
+                    </div>
+
                     {/* Start year circle */}
-                    <div className="w-16 h-16 2xl:w-20 2xl:h-20 rounded-full border-2 border-primary bg-primary/10 flex items-center justify-center">
-                      <span className="font-mono text-2xl 2xl:text-3xl text-foreground font-semibold">
+                    <div className="w-24 h-24 rounded-full border-2 border-primary/90 bg-background flex items-center justify-center">
+                      <span className="font-mono text-3xl text-foreground font-semibold">
                         {formatYear(edificio.data_inicio)}
                       </span>
                     </div>
-                    {/* Connector */}
-                    <div className="flex-1 h-[3px] bg-border rounded" />
-                    {/* End year circle */}
-                    <div className="w-16 h-16 2xl:w-20 2xl:h-20 rounded-full border-2 border-primary bg-primary/10 flex items-center justify-center">
-                      <span className="font-mono text-2xl 2xl:text-3xl text-foreground font-semibold">
-                        {edificio.data_fim ? formatYear(edificio.data_fim) : (lang === 'pt' ? 'Ativo' : 'Active')}
-                      </span>
+                    {/* Left connector */}
+                    <div className="flex-1 h-[2px] bg-border" />
+                    {/* Center dots */}
+                    <div className="flex items-center gap-2">
+                      <span className="block w-2.5 h-2.5 bg-foreground rounded-full" />
+                      <span className="block w-2.5 h-2.5 bg-foreground rounded-full" />
+                      <span className="block w-2.5 h-2.5 bg-foreground rounded-full" />
                     </div>
-                    {/* Duration badge (below the line) */}
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full translate-y-2 2xl:translate-y-3 text-xl xl:text-2xl text-muted-foreground bg-background px-4 py-1 rounded-full shadow-sm border border-border">
-                      {formatDuration(edificio.data_inicio, edificio.data_fim)}
+                    {/* Right connector */}
+                    <div className="flex-1 h-[2px] bg-border" />
+                    {/* End year circle (ellipsis if no end date) */}
+                    <div className="w-24 h-24 rounded-full border-2 border-primary/90 bg-background flex items-center justify-center">
+                      <span className="font-mono text-3xl text-foreground font-semibold">
+                        {edificio.data_fim ? formatYear(edificio.data_fim) : '…'}
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4 text-primary pt-1">
-                  <span className="text-2xl xl:text-3xl font-medium">{labels.viewDetails}</span>
+                  <span className="text-3xl font-medium">{labels.viewDetails}</span>
                   <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
                 </div>
               </div>
