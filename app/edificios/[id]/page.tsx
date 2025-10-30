@@ -106,9 +106,22 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
       <main className="min-h-screen bg-background">
         <BackButton />
 
-        <div className="mx-auto px-8 py-8 w-full max-w-none space-y-10">
+        <div className="mx-auto px-8 py-8 w-full max-w-none space-y-12">
+          <div className="space-y-3">
+            <h1 className="font-serif text-7xl text-foreground text-balance leading-tight">
+              {translatedEdificio.nome}
+            </h1>
+            {(translatedEdificio as any).ano_construcao && (
+              <div className="flex items-center gap-3">
+                <span className="text-3xl text-primary font-medium">
+                  {(translatedEdificio as any).ano_construcao}
+                </span>
+                <span className="text-xl text-muted-foreground">{labels.yearBuilt}</span>
+              </div>
+            )}
+          </div>
           {/* Top Menu Bar */}
-          <nav className="flex flex-wrap gap-3">
+          <nav className="flex flex-wrap gap-4">
             <Link href="/pessoal" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.people || 'Pessoal'}</Link>
             <Link href="/alunos" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.students || 'Alunos'}</Link>
             <Link href="/cursos" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.courses || 'Cursos'}</Link>
@@ -116,7 +129,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
             <Link href="/trabalhos" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.works || 'Trabalhos'}</Link>
           </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
             {/* Left column: Photo + Location widget */}
             <div className="lg:col-span-2">
               <div className="sticky top-8 space-y-6">
@@ -129,25 +142,27 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
                 </div>
                 {/* Localização widget */}
                 {hasCoords && mapSrc && (
-                  <div className="rounded-xl overflow-hidden border border-border bg-card">
-                    <div className="p-4 text-2xl font-medium">{labels.location}</div>
-                    <div className="w-full h-[26rem] md:h-[30rem]">
-                      <iframe
-                        title="OpenStreetMap"
-                        src={mapSrc}
-                        className="w-full h-full"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="p-4 border-t border-border text-primary">
-                      <a
-                        href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline"
-                      >
-                        {labels.openMap || 'OpenStreetMap'}
-                      </a>
+                  <div className="space-y-4">
+                    <h2 className="font-serif text-4xl text-foreground">{labels.location}</h2>
+                    <div className="rounded-xl overflow-hidden border border-border bg-card">
+                      <div className="w-full h-[26rem]">
+                        <iframe
+                          title="OpenStreetMap"
+                          src={mapSrc}
+                          className="w-full h-full"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="p-4 border-t border-border text-primary">
+                        <a
+                          href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline"
+                        >
+                          {labels.openMap || 'OpenStreetMap'}
+                        </a>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -155,20 +170,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
             </div>
 
             {/* Right column: Content */}
-            <div className="lg:col-span-3 space-y-10">
-              <div className="space-y-4">
-                <h1 className="font-serif text-6xl text-foreground text-balance leading-tight">
-                  {translatedEdificio.nome}
-                </h1>
-                {(translatedEdificio as any).ano_construcao && (
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl text-primary font-medium">
-                      {(translatedEdificio as any).ano_construcao}
-                    </span>
-                    <span className="text-xl text-muted-foreground">{labels.yearBuilt}</span>
-                  </div>
-                )}
-              </div>
+            <div className="lg:col-span-3 space-y-12">
 
               {/* Active period timeline */}
               {(translatedEdificio as any).data_inicio && (
