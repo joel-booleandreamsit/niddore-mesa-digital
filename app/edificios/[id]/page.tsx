@@ -106,7 +106,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
       <main className="min-h-screen bg-background">
         <BackButton />
 
-        <div className="mx-auto px-8 md:px-16 py-10 md:py-16 w-full max-w-[180rem] space-y-12">
+        <div className="mx-auto px-8 py-8 w-full max-w-none space-y-10">
           {/* Top Menu Bar */}
           <nav className="flex flex-wrap gap-3">
             <Link href="/pessoal" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.people || 'Pessoal'}</Link>
@@ -116,7 +116,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
             <Link href="/trabalhos" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.works || 'Trabalhos'}</Link>
           </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 xl:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
             {/* Left column: Photo + Location widget */}
             <div className="lg:col-span-2">
               <div className="sticky top-8 space-y-6">
@@ -157,15 +157,15 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
             {/* Right column: Content */}
             <div className="lg:col-span-3 space-y-10">
               <div className="space-y-4">
-                <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-foreground text-balance leading-tight">
+                <h1 className="font-serif text-6xl text-foreground text-balance leading-tight">
                   {translatedEdificio.nome}
                 </h1>
                 {(translatedEdificio as any).ano_construcao && (
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl md:text-3xl text-primary font-medium">
+                    <span className="text-3xl text-primary font-medium">
                       {(translatedEdificio as any).ano_construcao}
                     </span>
-                    <span className="text-lg md:text-xl text-muted-foreground">{labels.yearBuilt}</span>
+                    <span className="text-xl text-muted-foreground">{labels.yearBuilt}</span>
                   </div>
                 )}
               </div>
@@ -173,7 +173,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
               {/* Active period timeline */}
               {(translatedEdificio as any).data_inicio && (
                 <div className="space-y-6">
-                  <h2 className="font-serif text-3xl md:text-4xl text-foreground">{labels.activePeriod}</h2>
+                  <h2 className="font-serif text-4xl text-foreground">{labels.activePeriod}</h2>
                   <div className="flex items-center gap-4 relative">
                     <div className="absolute left-1/2 -translate-x-1/2 -top-1 text-xl italic leading-tight text-muted-foreground whitespace-nowrap">
                       ({formatDuration((translatedEdificio as any).data_inicio, (translatedEdificio as any).data_fim)})
@@ -202,8 +202,8 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
               {/* Description */}
               {translatedEdificio.descricao && (
                 <div className="prose prose-lg max-w-none">
-                  <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">{labels.aboutBuilding}</h2>
-                  <div className="text-xl md:text-2xl text-foreground/80 leading-relaxed space-y-6 text-pretty">
+                  <h2 className="font-serif text-4xl text-foreground mb-6">{labels.aboutBuilding}</h2>
+                  <div className="h-[36rem] overflow-y-auto pr-4 text-2xl text-foreground/80 leading-relaxed space-y-6 text-pretty">
                     {translatedEdificio.descricao.split("\n\n").map((paragrafo: string, index: number) => (
                       <p key={index}>{paragrafo}</p>
                     ))}
@@ -213,8 +213,8 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
 
               {/* Gallery */}
               {galleryItems.length > 0 && (
-                <div className="border-t border-border pt-10">
-                  <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">{labels.gallery}</h2>
+                <div className="border-t border-border pt-6">
+                  <h2 className="font-serif text-4xl text-foreground mb-4">{labels.gallery}</h2>
                   <EdificioGallery items={galleryItems} labels={{ gallery: labels.gallery, photo: labels.photo, descriptionUnavailable: labels.descriptionUnavailable }} />
                 </div>
               )}

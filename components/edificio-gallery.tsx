@@ -21,12 +21,18 @@ interface EdificioGalleryProps {
 export default function EdificioGallery({ items, labels }: EdificioGalleryProps) {
   const [index, setIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [start, setStart] = useState(0)
 
   const count = items.length
   const safeIndex = (i: number) => (i + count) % count
 
+  // Lightbox navigation
   const prev = useCallback(() => setIndex((i) => safeIndex(i - 1)), [count])
   const next = useCallback(() => setIndex((i) => safeIndex(i + 1)), [count])
+
+  // Strip navigation (4 at a time viewport shifts by 1)
+  const prevStrip = useCallback(() => setStart((s) => safeIndex(s - 1)), [count])
+  const nextStrip = useCallback(() => setStart((s) => safeIndex(s + 1)), [count])
 
   const current = useMemo(() => items[index], [items, index])
 
@@ -46,48 +52,40 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
   return (
     <div className="w-full">
       {/* Carousel */}
-      <div className="relative rounded-xl overflow-hidden border border-border">
-        <div className="aspect-[4/3] bg-muted">
-          <img
-            src={current.src}
-            alt={current.title || labels.photo || "Foto"}
-            className="w-full h-full object-cover cursor-zoom-in"
-            onClick={() => setLightboxOpen(true)}
-          />
-        </div>
-
-        {/* Arrows */}
+      <div className="relative rounded-xl overflow-hidden border border-border bg-muted/40 p-4">
         <button
           aria-label="Previous"
           className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-background/80 hover:bg-background border border-border shadow"
-          onClick={prev}
+          onClick={prevStrip}
         >
           <ChevronLeft className="w-7 h-7" />
         </button>
+
+        <div className="grid grid-cols-4 gap-4">
+          {Array.from({ length: Math.min(4, count) }).map((_, idx) => {
+            const i = safeIndex(start + idx)
+            const it = items[i]
+            return (
+              <button
+                key={i}
+                className="relative w-full aspect-square rounded-2xl overflow-hidden bg-muted"
+                onClick={() => { setIndex(i); setLightboxOpen(true) }}
+                aria-label={`Open ${labels.photo || 'Foto'} ${i + 1}`}
+              >
+                <img src={it.src} alt={it.title || `${labels.photo || 'Foto'} ${i + 1}`} className="w-full h-full object-cover" />
+              </button>
+            )
+          })}
+        </div>
+
         <button
           aria-label="Next"
           className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-background/80 hover:bg-background border border-border shadow"
-          onClick={next}
+          onClick={nextStrip}
         >
           <ChevronRight className="w-7 h-7" />
         </button>
       </div>
-
-      {/* Thumbnails */}
-      {items.length > 1 && (
-        <div className="flex gap-3 mt-4 overflow-x-auto pb-1">
-          {items.map((it, i) => (
-            <button
-              key={i}
-              className={`relative w-28 h-20 rounded-lg overflow-hidden border ${i === index ? "border-primary" : "border-border"}`}
-              onClick={() => setIndex(i)}
-              aria-label={`Go to slide ${i + 1}`}
-            >
-              <img src={it.src} alt={it.title || `${labels.photo || "Foto"} ${i + 1}`} className="w-full h-full object-cover" />
-            </button>
-          ))}
-        </div>
-      )}
 
       {/* Lightbox */}
       {lightboxOpen && (
