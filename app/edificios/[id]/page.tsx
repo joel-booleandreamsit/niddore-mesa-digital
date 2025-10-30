@@ -107,7 +107,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
         <BackButton />
 
         <div className="mx-auto px-8 py-8 w-full max-w-none space-y-12">
-          <div className="space-y-3">
+          <div className="space-y-3 pt-38">
             <h1 className="font-serif text-7xl text-foreground text-balance leading-tight">
               {translatedEdificio.nome}
             </h1>
@@ -132,7 +132,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
             {/* Left column: Photo + Location widget */}
             <div className="lg:col-span-2">
-              <div className="sticky top-8 space-y-6">
+              <div className="sticky top-8 space-y-10">
                 <div className="aspect-[3/2] rounded-2xl overflow-hidden shadow-2xl">
                   <img
                     src={assetUrl((translatedEdificio as any).imagem || (translatedEdificio as any).foto_capa, "fit=cover&width=1600&height=1200&format=webp")}
@@ -152,16 +152,6 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
                           className="w-full h-full"
                           loading="lazy"
                         />
-                      </div>
-                      <div className="p-4 border-t border-border text-primary">
-                        <a
-                          href={`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=16/${lat}/${lon}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline"
-                        >
-                          {labels.openMap || 'OpenStreetMap'}
-                        </a>
                       </div>
                     </div>
                   </div>
@@ -205,11 +195,8 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
               {translatedEdificio.descricao && (
                 <div className="prose prose-lg max-w-none">
                   <h2 className="font-serif text-4xl text-foreground mb-6">{labels.aboutBuilding}</h2>
-                  <div className="h-[36rem] overflow-y-auto pr-4 text-2xl text-foreground/80 leading-relaxed space-y-6 text-pretty">
-                    {translatedEdificio.descricao.split("\n\n").map((paragrafo: string, index: number) => (
-                      <p key={index}>{paragrafo}</p>
-                    ))}
-                  </div>
+                                    <div className="h-[36rem] overflow-y-auto pr-4 text-2xl text-foreground/80 leading-relaxed space-y-6 text-pretty"
+                       dangerouslySetInnerHTML={{ __html: translatedEdificio.descricao }} />
                 </div>
               )}
 

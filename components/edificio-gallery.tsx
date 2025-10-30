@@ -52,7 +52,7 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
   return (
     <div className="w-full">
       {/* Carousel */}
-      <div className="rounded-xl overflow-hidden border border-border bg-muted/40 p-4">
+      <div className="rounded-xl overflow-hidden p-4">
         <div className="flex items-center gap-6">
           <button
             aria-label="Previous"
