@@ -164,8 +164,8 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
                 {hasCoords && mapSrc && (
                   <div className="space-y-4">
                     <h2 className="font-serif text-4xl text-foreground">{labels.location}</h2>
-                    <div className="rounded-xl overflow-hidden border border-border bg-card">
-                      <div className="w-full h-[31rem]">
+                    <div className="rounded-xl overflow-hidden border border-border bg-card mt-11">
+                      <div className="w-full h-[30rem]">
                         <iframe
                           title="OpenStreetMap"
                           src={mapSrc}
@@ -187,7 +187,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
                 <div className="prose prose-3xl max-w-none">
                   <h2 className="font-serif text-4xl text-foreground mb-6">{labels.aboutBuilding}</h2>
                   <div
-                    className="h-[55rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
+                    className="h-[56rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
                     dangerouslySetInnerHTML={{ __html: translatedEdificio.descricao }}
                   />
                 </div>
