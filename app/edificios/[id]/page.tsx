@@ -107,7 +107,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
         <BackButton />
 
         <div className="mx-auto px-8 py-8 w-full max-w-none space-y-12">
-          <div className="space-y-3 pt-18">
+          <div className="space-y-3 pt-12">
             <h1 className="font-serif text-7xl text-foreground text-balance leading-tight text-center">
               {translatedEdificio.nome}
             </h1>            
@@ -163,7 +163,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
                   <div className="space-y-4">
                     <h2 className="font-serif text-4xl text-foreground">{labels.location}</h2>
                     <div className="rounded-xl overflow-hidden border border-border bg-card">
-                      <div className="w-full h-[26rem]">
+                      <div className="w-full h-[31rem]">
                         <iframe
                           title="OpenStreetMap"
                           src={mapSrc}
@@ -182,10 +182,12 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
 
               {/* Description */}
               {translatedEdificio.descricao && (
-                <div className="prose prose-lg max-w-none">
+                <div className="prose prose-3xl max-w-none">
                   <h2 className="font-serif text-4xl text-foreground mb-6">{labels.aboutBuilding}</h2>
-                  <div className="h-[36rem] overflow-y-auto pr-4 text-2xl text-foreground/80 leading-relaxed space-y-6 text-pretty"
-                       dangerouslySetInnerHTML={{ __html: translatedEdificio.descricao }} />
+                  <div
+                    className="h-[55rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
+                    dangerouslySetInnerHTML={{ __html: translatedEdificio.descricao }}
+                  />
                 </div>
               )}
 
