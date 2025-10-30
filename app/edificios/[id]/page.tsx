@@ -107,16 +107,34 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
         <BackButton />
 
         <div className="mx-auto px-8 py-8 w-full max-w-none space-y-12">
-          <div className="space-y-3 pt-38">
-            <h1 className="font-serif text-7xl text-foreground text-balance leading-tight">
+          <div className="space-y-3 pt-18">
+            <h1 className="font-serif text-7xl text-foreground text-balance leading-tight text-center">
               {translatedEdificio.nome}
-            </h1>
-            {(translatedEdificio as any).ano_construcao && (
-              <div className="flex items-center gap-3">
-                <span className="text-3xl text-primary font-medium">
-                  {(translatedEdificio as any).ano_construcao}
-                </span>
-                <span className="text-xl text-muted-foreground">{labels.yearBuilt}</span>
+            </h1>            
+            {(translatedEdificio as any).data_inicio && (
+              <div className="mx-auto max-w-5xl pt-6">
+                <div className="flex items-center gap-4 relative justify-center">
+                  <div className="absolute left-1/2 -translate-x-1/2 -top-1 text-xl italic leading-tight text-muted-foreground whitespace-nowrap">
+                    ({formatDuration((translatedEdificio as any).data_inicio, (translatedEdificio as any).data_fim)})
+                  </div>
+                  <div className="w-24 h-24 rounded-full border-2 border-primary/90 bg-background flex items-center justify-center">
+                    <span className="font-mono text-3xl text-foreground font-semibold">
+                      {formatYear((translatedEdificio as any).data_inicio)}
+                    </span>
+                  </div>
+                  <div className="flex-1 h-[2px] bg-border" />
+                  <div className="flex items-center gap-2">
+                    <span className="block w-2.5 h-2.5 bg-foreground rounded-full" />
+                    <span className="block w-2.5 h-2.5 bg-foreground rounded-full" />
+                    <span className="block w-2.5 h-2.5 bg-foreground rounded-full" />
+                  </div>
+                  <div className="flex-1 h-[2px] bg-border" />
+                  <div className="w-24 h-24 rounded-full border-2 border-primary/90 bg-background flex items-center justify-center">
+                    <span className="font-mono text-3xl text-foreground font-semibold">
+                      {(translatedEdificio as any).data_fim ? formatYear((translatedEdificio as any).data_fim) : '…'}
+                    </span>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -162,51 +180,23 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
             {/* Right column: Content */}
             <div className="lg:col-span-3 space-y-12">
 
-              {/* Active period timeline */}
-              {(translatedEdificio as any).data_inicio && (
-                <div className="space-y-6">
-                  <h2 className="font-serif text-4xl text-foreground">{labels.activePeriod}</h2>
-                  <div className="flex items-center gap-4 relative">
-                    <div className="absolute left-1/2 -translate-x-1/2 -top-1 text-xl italic leading-tight text-muted-foreground whitespace-nowrap">
-                      ({formatDuration((translatedEdificio as any).data_inicio, (translatedEdificio as any).data_fim)})
-                    </div>
-                    <div className="w-24 h-24 rounded-full border-2 border-primary/90 bg-background flex items-center justify-center">
-                      <span className="font-mono text-3xl text-foreground font-semibold">
-                        {formatYear((translatedEdificio as any).data_inicio)}
-                      </span>
-                    </div>
-                    <div className="flex-1 h-[2px] bg-border" />
-                    <div className="flex items-center gap-2">
-                      <span className="block w-2.5 h-2.5 bg-foreground rounded-full" />
-                      <span className="block w-2.5 h-2.5 bg-foreground rounded-full" />
-                      <span className="block w-2.5 h-2.5 bg-foreground rounded-full" />
-                    </div>
-                    <div className="flex-1 h-[2px] bg-border" />
-                    <div className="w-24 h-24 rounded-full border-2 border-primary/90 bg-background flex items-center justify-center">
-                      <span className="font-mono text-3xl text-foreground font-semibold">
-                        {(translatedEdificio as any).data_fim ? formatYear((translatedEdificio as any).data_fim) : '…'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Description */}
               {translatedEdificio.descricao && (
                 <div className="prose prose-lg max-w-none">
                   <h2 className="font-serif text-4xl text-foreground mb-6">{labels.aboutBuilding}</h2>
-                                    <div className="h-[36rem] overflow-y-auto pr-4 text-2xl text-foreground/80 leading-relaxed space-y-6 text-pretty"
+                  <div className="h-[36rem] overflow-y-auto pr-4 text-2xl text-foreground/80 leading-relaxed space-y-6 text-pretty"
                        dangerouslySetInnerHTML={{ __html: translatedEdificio.descricao }} />
                 </div>
               )}
 
-              {/* Gallery */}
+              {/* Gallery aligned with Location (nudged down) */}
               {galleryItems.length > 0 && (
-                <div className="border-t border-border pt-6">
+                <div className="border-t border-border pt-6 mt-10">
                   <h2 className="font-serif text-4xl text-foreground mb-4">{labels.gallery}</h2>
                   <EdificioGallery items={galleryItems} labels={{ gallery: labels.gallery, photo: labels.photo, descriptionUnavailable: labels.descriptionUnavailable }} />
                 </div>
               )}
+
             </div>
           </div>
         </div>
