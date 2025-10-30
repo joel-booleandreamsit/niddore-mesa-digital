@@ -139,13 +139,15 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
             )}
           </div>
           {/* Top Menu Bar */}
-          <nav className="flex flex-wrap gap-4">
-            <Link href="/pessoal" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.people || 'Pessoal'}</Link>
-            <Link href="/alunos" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.students || 'Alunos'}</Link>
-            <Link href="/cursos" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.courses || 'Cursos'}</Link>
-            <Link href="/materiais" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.materials || 'Materiais'}</Link>
-            <Link href="/trabalhos" className="px-12 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all">{labels.works || 'Trabalhos'}</Link>
-          </nav>
+          <div className="w-full">
+            <nav className="grid grid-cols-5 gap-4 w-full">
+              <Link href="/pessoal" className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.people || 'Pessoal'}</Link>
+              <Link href="/alunos" className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.students || 'Alunos'}</Link>
+              <Link href="/cursos" className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.courses || 'Cursos'}</Link>
+              <Link href="/materiais" className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.materials || 'Materiais'}</Link>
+              <Link href="/trabalhos" className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.works || 'Trabalhos'}</Link>
+            </nav>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
             {/* Left column: Photo + Location widget */}
