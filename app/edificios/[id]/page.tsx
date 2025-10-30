@@ -21,21 +21,22 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
       descricao: edificio.translations?.[0]?.descricao || 'Descrição não disponível',
     }
 
-    // Extract gallery items with optional title/description (supports common Directus relation shapes)
+    // Extract gallery items with optional title/description (supports Directus M2M: fotos_galeria.directus_files_id)
     const galleryItems: { src: string; title?: string | null; description?: string | null }[] = (() => {
       const g: any = (edificio as any).fotos_galeria
       if (!g) return []
       const arr = Array.isArray(g) ? g : []
       return arr
         .map((it: any) => {
-          const fileId = typeof it === 'string'
-            ? it
-            : (it?.directus_files_id || it?.file || it?.ficheiro || it?.foto || it?.imagem || it?.id)
-          if (!fileId) return null
-          const title = it?.titulo || it?.title || it?.nome || it?.name || null
+          // Directus many-to-many often returns each item as { directus_files_id: string | { id, title, ... } }
+          const df = it?.directus_files_id
+          const dfId = typeof df === 'object' ? df?.id : df
+          const candidateId = typeof it === 'string' ? it : (dfId || it?.file || it?.ficheiro || it?.foto || it?.imagem || it?.id)
+          if (!candidateId || typeof candidateId !== 'string') return null
+          const title = it?.titulo || it?.title || it?.nome || it?.name || (typeof df === 'object' ? df?.title : null) || null
           const description = it?.descricao || it?.description || null
           return {
-            src: assetUrl(fileId, "fit=cover&width=2000&height=1400&format=webp"),
+            src: assetUrl(candidateId, "fit=cover&width=2000&height=1400&format=webp"),
             title,
             description,
           }
