@@ -110,7 +110,7 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
         >
           <div className="relative flex items-center justify-between p-8">
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
-              <span className="inline-block max-w-[80vw] px-6 py-3 bg-black/60 rounded-xl shadow-xl backdrop-blur-sm text-white text-4xl font-semibold truncate">
+              <span className="inline-block max-w-[80vw] px-6 py-3 bg-black/60 rounded-xl shadow-xl backdrop-blur-sm text-white text-5xl sm:text-6xl font-semibold truncate">
                 {current.title || labels.photo || "Foto"}
               </span>
             </div>
@@ -162,8 +162,10 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
               <ChevronRight className="w-28 h-28" />
             </button>
           </div>
-          <div className="p-6 text-white/95 text-2xl max-w-5xl w-full mx-auto bg-black/60 rounded-xl shadow-xl backdrop-blur-sm">
-            {current.description || labels.descriptionUnavailable || "Descrição não disponível"}
+          <div className="w-full flex justify-center px-4">
+            <span className="inline-block px-8 py-6 text-white/95 text-4xl sm:text-5xl leading-snug tracking-wide bg-black/60 rounded-xl shadow-xl backdrop-blur-sm max-w-[60vw] whitespace-normal break-words text-center">
+              {current.description || labels.descriptionUnavailable || "Descrição não disponível"}
+            </span>
           </div>
         </div>
       )}
