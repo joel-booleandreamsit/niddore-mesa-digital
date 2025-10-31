@@ -108,25 +108,25 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
           className="fixed inset-0 z-50 bg-black/85 flex flex-col"
           onClick={(e) => { setLightboxOpen(false)}}
         >
-          <div className="flex items-center justify-between p-4">
-            <div className="text-white text-lg truncate pr-4">
+          <div className="flex items-center justify-between p-8">
+            <div className="text-white text-2xl font-medium truncate pr-8">
               {current.title || labels.photo || "Foto"}
             </div>
             <button
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white"
+              className="p-8 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-200 transform hover:scale-110 border-4 border-white/30 shadow-2xl"
               onClick={() => setLightboxOpen(false)}
               aria-label="Close"
             >
-              <X className="w-6 h-6" />
+              <X className="w-28 h-28" />
             </button>
           </div>
           <div className="relative flex-1 flex items-center justify-center">
             <button
               aria-label="Previous"
-              className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
+              className="absolute left-12 p-8 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-200 transform hover:scale-110 border-4 border-white/30 shadow-2xl"
               onClick={(e) => { e.stopPropagation(); prev() }}
             >
-              <ChevronLeft className="w-8 h-8" />
+              <ChevronLeft className="w-28 h-28" />
             </button>
             {current.type === 'video' ? (
               <div
@@ -153,10 +153,10 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
             )}
             <button
               aria-label="Next"
-              className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
+              className="absolute right-12 p-8 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-200 transform hover:scale-110 border-4 border-white/30 shadow-2xl"
               onClick={(e) => { e.stopPropagation(); next() }}
             >
-              <ChevronRight className="w-8 h-8" />
+              <ChevronRight className="w-28 h-28" />
             </button>
           </div>
           <div className="p-4 text-white/90 text-base max-w-5xl w-full mx-auto">
