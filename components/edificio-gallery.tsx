@@ -126,7 +126,7 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
               <ChevronLeft className="w-8 h-8" />
             </button>
             {current.type === 'video' ? (
-              <div className="w-full max-w-[90vw] flex justify-center">
+              <div className="w-full max-w-[80vw] flex justify-center">
                 <video
                   src={current.src}
                   className="max-h-[80vh] w-full object-contain"
