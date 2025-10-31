@@ -126,15 +126,17 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
               <ChevronLeft className="w-8 h-8" />
             </button>
             {current.type === 'video' ? (
-              <video
-                src={current.src}
-                className="max-h-[80vh] max-w-[90vw] object-contain"
-                controls
-                autoPlay
-                muted
-                playsInline
-                loop
-              />
+              <div className="w-full max-w-[90vw] flex justify-center">
+                <video
+                  src={current.src}
+                  className="max-h-[80vh] w-full object-contain"
+                  controls
+                  autoPlay
+                  muted
+                  playsInline
+                  loop
+                />
+              </div>
             ) : (
               <img src={current.src} alt={current.title || labels.photo || "Foto"} className="max-h-[80vh] max-w-[90vw] object-contain" />
             )}
