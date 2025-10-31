@@ -104,7 +104,10 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
 
       {/* Lightbox */}
       {lightboxOpen && (
-        <div className="fixed inset-0 z-50 bg-black/85 flex flex-col">
+        <div
+          className="fixed inset-0 z-50 bg-black/85 flex flex-col"
+          onClick={(e) => { setLightboxOpen(false)}}
+        >
           <div className="flex items-center justify-between p-4">
             <div className="text-white text-lg truncate pr-4">
               {current.title || labels.photo || "Foto"}
@@ -121,12 +124,15 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
             <button
               aria-label="Previous"
               className="absolute left-4 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
-              onClick={prev}
+              onClick={(e) => { e.stopPropagation(); prev() }}
             >
               <ChevronLeft className="w-8 h-8" />
             </button>
             {current.type === 'video' ? (
-              <div className="w-full max-w-[60vw] flex justify-center">
+              <div
+                className="w-full max-w-[60vw] flex justify-center"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <video
                   src={current.src}
                   className="max-h-[80vh] w-full object-contain"
@@ -138,12 +144,17 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
                 />
               </div>
             ) : (
-              <img src={current.src} alt={current.title || labels.photo || "Foto"} className="max-h-[80vh] max-w-[90vw] object-contain" />
+              <img
+                src={current.src}
+                alt={current.title || labels.photo || "Foto"}
+                className="max-h-[80vh] max-w-[90vw] object-contain"
+                onClick={(e) => e.stopPropagation()}
+              />
             )}
             <button
               aria-label="Next"
               className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
-              onClick={next}
+              onClick={(e) => { e.stopPropagation(); next() }}
             >
               <ChevronRight className="w-8 h-8" />
             </button>
