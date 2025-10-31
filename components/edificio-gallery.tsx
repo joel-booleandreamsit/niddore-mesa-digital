@@ -108,12 +108,15 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
           className="fixed inset-0 z-50 bg-black/85 flex flex-col"
           onClick={(e) => { setLightboxOpen(false)}}
         >
-          <div className="flex items-center justify-between p-8">
-            <div className="text-white text-2xl font-medium truncate pr-8">
-              {current.title || labels.photo || "Foto"}
+          <div className="relative flex items-center justify-between p-8">
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
+              <span className="inline-block max-w-[80vw] px-6 py-3 bg-black/60 rounded-xl shadow-xl backdrop-blur-sm text-white text-4xl font-semibold truncate">
+                {current.title || labels.photo || "Foto"}
+              </span>
             </div>
+            <div className="flex-1" />
             <button
-              className="p-8 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-200 transform hover:scale-110 border-4 border-white/30 shadow-2xl"
+              className="p-8 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-200 transform hover:scale-110 border-4 border-white/30 shadow-2xl ml-auto"
               onClick={() => setLightboxOpen(false)}
               aria-label="Close"
             >
@@ -159,7 +162,7 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
               <ChevronRight className="w-28 h-28" />
             </button>
           </div>
-          <div className="p-4 text-white/90 text-base max-w-5xl w-full mx-auto">
+          <div className="p-6 text-white/95 text-2xl max-w-5xl w-full mx-auto bg-black/60 rounded-xl shadow-xl backdrop-blur-sm">
             {current.description || labels.descriptionUnavailable || "Descrição não disponível"}
           </div>
         </div>
