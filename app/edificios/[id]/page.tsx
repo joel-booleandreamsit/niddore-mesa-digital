@@ -22,7 +22,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
     }
 
     // Extract gallery items with optional title/description (supports Directus M2M: fotos_galeria.directus_files_id)
-    const galleryItems: { src: string; title?: string | null; description?: string | null }[] = (() => {
+    const galleryItems: { src: string; type?: 'image' | 'video'; title?: string | null; description?: string | null }[] = (() => {
       const g: any = (edificio as any).fotos_galeria
       if (!g) return []
       const arr = Array.isArray(g) ? g : []
@@ -35,13 +35,20 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
           if (!candidateId || typeof candidateId !== 'string') return null
           const title = it?.titulo || it?.title || it?.nome || it?.name || (typeof df === 'object' ? df?.title : null) || null
           const description = it?.descricao || it?.description || null
+          const mime = (typeof df === 'object' && (df?.type || (df as any)?.mime_type)) as string | undefined
+          const filename = (typeof df === 'object' && (df as any)?.filename_download) as string | undefined
+          const isVideo = (mime && mime.startsWith('video/')) || (filename && filename.toLowerCase().endsWith('.mp4'))
+          const src = isVideo
+            ? assetUrl(candidateId)
+            : assetUrl(candidateId, "fit=cover&width=2000&height=1400&format=webp")
           return {
-            src: assetUrl(candidateId, "fit=cover&width=2000&height=1400&format=webp"),
+            src,
+            type: isVideo ? 'video' : 'image',
             title,
             description,
           }
         })
-        .filter(Boolean) as { src: string; title?: string | null; description?: string | null }[]
+        .filter(Boolean) as { src: string; type?: 'image' | 'video'; title?: string | null; description?: string | null }[]
     })()
 
     // Derive coordinates from localizacao (assume GeoJSON Point or {lat, lng})

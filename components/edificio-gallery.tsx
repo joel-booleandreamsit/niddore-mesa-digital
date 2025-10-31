@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react"
 
 interface GalleryItem {
   src: string
+  type?: 'image' | 'video'
   title?: string | null
   description?: string | null
 }
@@ -73,7 +74,19 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
                   onClick={() => { setIndex(i); setLightboxOpen(true) }}
                   aria-label={`Open ${labels.photo || 'Foto'} ${i + 1}`}
                 >
-                  <img src={it.src} alt={it.title || `${labels.photo || 'Foto'} ${i + 1}`} className="w-full h-full object-cover" />
+                  {it.type === 'video' ? (
+                    <video
+                      src={it.src}
+                      className="w-full h-full object-cover"
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img src={it.src} alt={it.title || `${labels.photo || 'Foto'} ${i + 1}`} className="w-full h-full object-cover" />
+                  )}
                 </button>
               )
             })}
@@ -112,7 +125,19 @@ export default function EdificioGallery({ items, labels }: EdificioGalleryProps)
             >
               <ChevronLeft className="w-8 h-8" />
             </button>
-            <img src={current.src} alt={current.title || labels.photo || "Foto"} className="max-h-[80vh] max-w-[90vw] object-contain" />
+            {current.type === 'video' ? (
+              <video
+                src={current.src}
+                className="max-h-[80vh] max-w-[90vw] object-contain"
+                controls
+                autoPlay
+                muted
+                playsInline
+                loop
+              />
+            ) : (
+              <img src={current.src} alt={current.title || labels.photo || "Foto"} className="max-h-[80vh] max-w-[90vw] object-contain" />
+            )}
             <button
               aria-label="Next"
               className="absolute right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white"
