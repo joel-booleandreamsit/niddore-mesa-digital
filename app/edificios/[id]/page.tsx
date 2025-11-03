@@ -151,7 +151,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
               <Link href="/pessoal" className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.people || 'Pessoal'}</Link>
               <Link href="/alunos" className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.students || 'Alunos'}</Link>
               <Link href={`/cursos?edificio=${id}`} className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.courses || 'Cursos'}</Link>
-              <Link href={`/materiais/categorias?edificio=${id}`} className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.materials || 'Materiais'}</Link>
+              <Link href="/materiais" className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.materials || 'Materiais'}</Link>
               <Link href="/trabalhos" className="w-full px-4 py-6 text-3xl rounded-lg border-2 bg-card text-foreground border-border hover:border-primary transition-all text-center">{labels.works || 'Trabalhos'}</Link>
             </nav>
           </div>
