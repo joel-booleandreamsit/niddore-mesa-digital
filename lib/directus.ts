@@ -488,20 +488,20 @@ export async function fetchMateriaisCategoriaById(id: string | number, lang: str
   )
   return data
 }
-export async function fetchMateriaisLinksForEdificios() {
+export async function fetchMateriaisLinksForEdificios(tipo: 'Material' | 'Trabalho' = 'Material') {
   const data = await directus.request(
     readItems('Materiais_e_trabalhos', {
       fields: ['id', 'tipo', 'categoria.id', 'edificio.id'],
-      filter: { tipo: { _eq: 'Material' } },
+      filter: { tipo: { _eq: tipo } },
     })
   )
   return data
 }
-export async function fetchMateriaisByCategoria(categoriaId: string | number, lang: string = 'pt') {
+export async function fetchMateriaisByCategoria(categoriaId: string | number, lang: string = 'pt', tipo: 'Material' | 'Trabalho' = 'Material') {
   const data = await directus.request(
     readItems('Materiais_e_trabalhos', {
       fields: ['id', 'capa', 'translations.*', 'edificio.id'],
-      filter: { categoria: { _eq: categoriaId }, tipo: { _eq: 'Material' } },
+      filter: { categoria: { _eq: categoriaId }, tipo: { _eq: tipo } },
       deep: {
         translations: {
           _filter: {
