@@ -2,6 +2,7 @@
 
 import * as Slider from "@radix-ui/react-slider"
 import { useMemo, useState } from "react"
+import { ArrowUpDown } from "lucide-react"
 
 export type LectiveYear = { start: number; end: number }
 export type CursoItem = {
@@ -91,49 +92,62 @@ export default function CursosList({ courses, labels, edificios, selectedEdifici
   }
 
   return (
-    <div className="max-w-[2200px] mx-auto px-20 pb-24">
+    <div className="max-w-[3000px] mx-auto px-10 pb-24">
       {/* Building filter like Publicações + Ordenar */}
-      <div className="mb-12 flex items-start justify-between gap-12">
-        <div className="flex-1">
-          <label className="block text-3xl text-foreground/80 mb-4">{labels.buildings}</label>
-          <div className="flex flex-wrap gap-4">
-            <button
-              onClick={() => setSelectedBuilding(null)}
-              className={`px-5 py-3 rounded-xl border text-2xl ${!selectedBuilding ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:border-primary"}`}
-            >
-              {labels.allBuildings}
-            </button>
-            {edificios
-              .slice()
-              .sort((a, b) => (a.startYear || 0) - (b.startYear || 0))
-              .slice(0, 5)
-              .map((b) => {
-                const selected = String(selectedBuilding ?? "") === String(b.id)
-                return (
-                  <button
-                    key={b.id}
-                    onClick={() => setSelectedBuilding(b.id)}
-                    className={`px-5 py-3 rounded-xl border text-2xl ${selected ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border hover:border-primary"}`}
-                    aria-pressed={selected}
-                  >
-                    {b.name}
-                  </button>
-                )
-              })}
+      <div className="space-y-16 mt-16">
+        <div>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-4xl text-muted-foreground">{labels.buildings}</h3>
+            <h3 className="text-4xl text-muted-foreground mr-64">{labels.sort}</h3>
           </div>
-        </div>
-        <div className="min-w-[640px]">
-          <label className="block text-3xl text-foreground/80 mb-4">{labels.sort}</label>
-          <select
-            value={sortKey}
-            onChange={(e) => setSortKey(e.target.value as SortKey)}
-            className="w-full p-5 border rounded-xl bg-card border-border text-2xl"
-          >
-            <option value="name-asc">{labels.sortByNameAZ}</option>
-            <option value="name-desc">{labels.sortByNameZA}</option>
-            <option value="years-most">{labels.sortByLectiveYearsMost}</option>
-            <option value="years-least">{labels.sortByLectiveYearsLeast}</option>
-          </select>
+          <div className="flex flex-wrap gap-3 items-center justify-between">
+            <div className="flex flex-wrap gap-3 items-center">
+              <button
+                onClick={() => setSelectedBuilding(null)}
+                className={`px-12 py-6 text-3xl rounded-lg border-2 transition-all duration-300 touch-manipulation active:scale-95 ${
+                  !selectedBuilding 
+                  ? "bg-primary text-primary-foreground border-primary" 
+                  : "bg-card text-foreground border-border hover:border-primary"}`}
+              >
+                {labels.allBuildings}
+              </button>
+              {edificios
+                .slice()
+                .sort((a, b) => (a.startYear || 0) - (b.startYear || 0))
+                .slice(0, 5)
+                .map((b) => {
+                  const selected = String(selectedBuilding ?? "") === String(b.id)
+                  return (
+                    <button
+                      key={b.id}
+                      onClick={() => setSelectedBuilding(b.id)}
+                      className={`px-12 py-6 text-3xl rounded-lg border-2 transition-all duration-300 touch-manipulation active:scale-95 ${
+                        selected 
+                        ? "bg-primary text-primary-foreground border-primary" 
+                        : "bg-card text-foreground border-border hover:border-primary"}`}
+                      aria-pressed={selected}
+                    >
+                      {b.name}
+                    </button>
+                  )
+                })}
+            </div>
+
+            {/* Sort Combo Box */}
+            <div className="relative">
+              <ArrowUpDown className="absolute left-4 top-1/2 transform -translate-y-1/2 w-8 h-8 text-muted-foreground pointer-events-none" />
+              <select
+                value={sortKey}
+                onChange={(e) => setSortKey(e.target.value as SortKey)}
+                className="pl-20 pr-12 py-6 text-3xl rounded-lg border-2 border-border bg-card text-foreground hover:border-primary focus:border-primary focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
+              >
+                <option value="name-asc">{labels.sortByNameAZ}</option>
+                <option value="name-desc">{labels.sortByNameZA}</option>
+                <option value="years-most">{labels.sortByLectiveYearsMost}</option>
+                <option value="years-least">{labels.sortByLectiveYearsLeast}</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -200,10 +214,9 @@ export default function CursosList({ courses, labels, edificios, selectedEdifici
                 {isOpen && (
                   <div className="mt-10 space-y-8">
                     {curso.descricao && (
-                      <div
-                        className="prose prose-3xl max-w-none text-foreground/90 leading-relaxed"
-                        dangerouslySetInnerHTML={{ __html: curso.descricao || labels.descriptionUnavailable }}
-                      />
+                      <p className="max-w-none text-4xl leading-relaxed text-foreground/90 whitespace-pre-line">
+                        {curso.descricao}
+                      </p>
                     )}
                     <div className="flex flex-wrap gap-4">
                       {curso.lectiveYears
