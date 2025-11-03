@@ -1,0 +1,174 @@
+"use client"
+
+import { useEffect, useMemo, useState, useCallback } from "react"
+import { ChevronLeft, ChevronRight, X } from "lucide-react"
+
+interface GalleryItem {
+  src: string
+  type?: 'image' | 'video'
+  title?: string | null
+  description?: string | null
+}
+
+interface EdificioGalleryProps {
+  items: GalleryItem[]
+  labels: {
+    gallery?: string
+    photo?: string
+    descriptionUnavailable?: string
+  }
+}
+
+export default function EdificioGallery({ items, labels }: EdificioGalleryProps) {
+  const [index, setIndex] = useState(0)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [start, setStart] = useState(0)
+
+  const count = items.length
+  const safeIndex = (i: number) => (i + count) % count
+
+  // Lightbox navigation
+  const prev = useCallback(() => setIndex((i) => safeIndex(i - 1)), [count])
+  const next = useCallback(() => setIndex((i) => safeIndex(i + 1)), [count])
+
+  // Strip navigation (4 at a time viewport shifts by 1)
+  const prevStrip = useCallback(() => setStart((s) => safeIndex(s - 1)), [count])
+  const nextStrip = useCallback(() => setStart((s) => safeIndex(s + 1)), [count])
+
+  const current = useMemo(() => items[index], [items, index])
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (!lightboxOpen) return
+      if (e.key === "ArrowLeft") prev()
+      else if (e.key === "ArrowRight") next()
+      else if (e.key === "Escape") setLightboxOpen(false)
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [lightboxOpen, prev, next])
+
+  if (!items || items.length === 0) return null
+
+  return (
+    <div className="w-full">
+      {/* Carousel */}
+      <div className="rounded-xl overflow-hidden p-4">
+        <div className="flex items-center gap-6">
+          <button
+            aria-label="Previous"
+            className="shrink-0 p-4 rounded-full bg-background/90 hover:bg-background border border-border shadow"
+            onClick={prevStrip}
+          >
+            <ChevronLeft className="w-10 h-10" />
+          </button>
+
+          <div className="grid grid-cols-4 gap-6 flex-1">
+            {Array.from({ length: Math.min(4, count) }).map((_, idx) => {
+              const i = safeIndex(start + idx)
+              const it = items[i]
+              return (
+                <button
+                  key={i}
+                  className="relative w-full aspect-square rounded-2xl overflow-hidden bg-muted"
+                  onClick={() => { setIndex(i); setLightboxOpen(true) }}
+                  aria-label={`Open ${labels.photo || 'Foto'} ${i + 1}`}
+                >
+                  {it.type === 'video' ? (
+                    <video
+                      src={it.src}
+                      className="w-full h-full object-cover"
+                      muted
+                      loop
+                      playsInline
+                      autoPlay
+                      preload="metadata"
+                    />
+                  ) : (
+                    <img src={it.src} alt={it.title || `${labels.photo || 'Foto'} ${i + 1}`} className="w-full h-full object-cover" />
+                  )}
+                </button>
+              )
+            })}
+          </div>
+
+          <button
+            aria-label="Next"
+            className="shrink-0 p-4 rounded-full bg-background/90 hover:bg-background border border-border shadow"
+            onClick={nextStrip}
+          >
+            <ChevronRight className="w-10 h-10" />
+          </button>
+        </div>
+      </div>
+
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/85 flex flex-col"
+          onClick={(e) => { setLightboxOpen(false)}}
+        >
+          <div className="relative flex items-center justify-between p-8">
+            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
+              <span className="inline-block max-w-[80vw] px-6 py-3 bg-black/60 rounded-xl shadow-xl backdrop-blur-sm text-white text-5xl sm:text-6xl font-semibold truncate">
+                {current.title || labels.photo || "Foto"}
+              </span>
+            </div>
+            <div className="flex-1" />
+            <button
+              className="p-8 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-200 transform hover:scale-110 border-4 border-white/30 shadow-2xl ml-auto"
+              onClick={() => setLightboxOpen(false)}
+              aria-label="Close"
+            >
+              <X className="w-28 h-28" />
+            </button>
+          </div>
+          <div className="relative flex-1 flex items-center justify-center">
+            <button
+              aria-label="Previous"
+              className="absolute left-12 p-8 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-200 transform hover:scale-110 border-4 border-white/30 shadow-2xl"
+              onClick={(e) => { e.stopPropagation(); prev() }}
+            >
+              <ChevronLeft className="w-28 h-28" />
+            </button>
+            {current.type === 'video' ? (
+              <div
+                className="w-full max-w-[60vw] flex justify-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <video
+                  src={current.src}
+                  className="max-h-[80vh] w-full object-contain"
+                  controls
+                  autoPlay
+                  muted
+                  playsInline
+                  loop
+                />
+              </div>
+            ) : (
+              <img
+                src={current.src}
+                alt={current.title || labels.photo || "Foto"}
+                className="max-h-[80vh] max-w-[90vw] object-contain"
+                onClick={(e) => e.stopPropagation()}
+              />
+            )}
+            <button
+              aria-label="Next"
+              className="absolute right-12 p-8 rounded-full bg-black/60 hover:bg-black/80 text-white transition-all duration-200 transform hover:scale-110 border-4 border-white/30 shadow-2xl"
+              onClick={(e) => { e.stopPropagation(); next() }}
+            >
+              <ChevronRight className="w-28 h-28" />
+            </button>
+          </div>
+          <div className="w-full flex justify-center px-4">
+            <span className="inline-block px-8 py-6 text-white/95 text-4xl sm:text-5xl leading-snug tracking-wide bg-black/60 rounded-xl shadow-xl backdrop-blur-sm max-w-[60vw] whitespace-normal break-words text-center">
+              {current.description || labels.descriptionUnavailable || "Descrição não disponível"}
+            </span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

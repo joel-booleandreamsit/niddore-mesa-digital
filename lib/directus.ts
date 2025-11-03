@@ -44,7 +44,7 @@ export default function fetchEdificios(lang: string = 'pt') {
 export function fetchEdificioById(id: string | number, lang: string = 'pt') {
 	return directus.request(
 		readItem('Edificios', id, {
-			fields: ['*', 'translations.*'],
+			fields: ['*', 'translations.*', 'fotos_galeria.directus_files_id.*'],
 			deep: {
 				translations: {
 					_filter: {
