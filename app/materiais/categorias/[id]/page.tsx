@@ -9,15 +9,17 @@ import { fetchMateriaisCategoriaById } from '@/lib/directus'
 
 export const dynamic = 'force-dynamic'
 
-export default async function MateriaisCategoriaPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function MateriaisCategoriaPage({ params, searchParams }: { params: { id: string }, searchParams?: { tipo?: string } }) {
   try {
-    const { id } = await params
+    const { id } = params
     const lang = await getLang()
     const labels = t(lang)
+    const tipoParam = searchParams?.tipo
+    const tipo: 'Material' | 'Trabalho' = tipoParam === 'Trabalho' ? 'Trabalho' : 'Material'
 
     const [categoria, materiais] = await Promise.all([
       fetchMateriaisCategoriaById(id, lang),
-      fetchMateriaisByCategoria(id, lang),
+      fetchMateriaisByCategoria(id, lang, tipo),
     ])
 
     if (!categoria) notFound()
@@ -50,7 +52,7 @@ export default async function MateriaisCategoriaPage({ params }: { params: Promi
               {materiaisTransformados.map((item) => (
                 <Link
                   key={item.id}
-                  href={`/materiais/${item.id}`}
+                  href={`/materiais/${item.id}?tipo=${encodeURIComponent(tipo)}`}
                   className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98"
                 >
                   <div className="aspect-[4/3] overflow-hidden bg-muted">

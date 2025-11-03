@@ -7,14 +7,16 @@ import MateriaisCategoriasClient from "@/components/materiais-categorias-client"
 
 export const dynamic = 'force-dynamic'
 
-export default async function MateriaisCategoriasPage() {
+export default async function MateriaisCategoriasPage({ searchParams }: { searchParams?: { tipo?: string } }) {
   const lang = await getLang()
   const labels = t(lang)
+  const tipoParam = searchParams?.tipo
+  const tipo: 'Material' | 'Trabalho' = tipoParam === 'Trabalho' ? 'Trabalho' : 'Material'
 
   const [categorias, edificios, links] = await Promise.all([
     fetchMateriaisCategorias(lang),
     fetchEdificios(lang),
-    fetchMateriaisLinksForEdificios(),
+    fetchMateriaisLinksForEdificios(tipo),
   ])
 
   const categoriasTransformed = categorias.map((c: any) => ({
@@ -39,7 +41,7 @@ export default async function MateriaisCategoriasPage() {
       <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
         <div className="text-center space-y-4">
           <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
-            {labels.materials || "Materiais"}
+            {tipo === 'Trabalho' ? (labels.works || 'Trabalhos') : (labels.materials || 'Materiais')}
           </h1>
           <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">Categorias</p>
         </div>
@@ -51,6 +53,7 @@ export default async function MateriaisCategoriasPage() {
           edificios={edificiosTransformed}
           links={linksTransformed}
           labels={labels}
+          tipo={tipo}
         />
       </div>
     </main>

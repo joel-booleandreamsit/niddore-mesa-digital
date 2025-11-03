@@ -6,14 +6,16 @@ import { fetchMaterialById } from '@/lib/directus'
 
 export const dynamic = 'force-dynamic'
 
-export default async function MaterialDetalhePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function MaterialDetalhePage({ params, searchParams }: { params: { id: string }, searchParams?: { tipo?: string } }) {
   try {
-    const { id } = await params
+    const { id } = params
     const lang = await getLang()
     const labels = t(lang)
+    const tipoParam = searchParams?.tipo
+    const tipo: 'Material' | 'Trabalho' = tipoParam === 'Trabalho' ? 'Trabalho' : 'Material'
 
     const material = await fetchMaterialById(id, lang)
-    if (!material || (material as any).tipo !== 'Material') notFound()
+    if (!material || (material as any).tipo !== tipo) notFound()
 
     const nome = material.translations?.[0]?.nome || 'Nome não disponível'
     const descricao = material.translations?.[0]?.descricao || ''

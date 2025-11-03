@@ -14,9 +14,10 @@ type Props = {
   edificios: Edificio[]
   links: LinkEntry[]
   labels: any
+  tipo: 'Material' | 'Trabalho'
 }
 
-export default function MateriaisCategoriasClient({ categorias, edificios, links, labels }: Props) {
+export default function MateriaisCategoriasClient({ categorias, edificios, links, labels, tipo }: Props) {
   const searchParams = useSearchParams()
   const initial = searchParams.get("edificio") || "all"
   const [selectedEdificio, setSelectedEdificio] = useState<string | number>(initial)
@@ -69,7 +70,7 @@ export default function MateriaisCategoriasClient({ categorias, edificios, links
         {categoriasFiltradas.map((categoria) => (
           <Link
             key={categoria.id}
-            href={`/materiais/categorias/${categoria.id}`}
+            href={`/materiais/categorias/${categoria.id}?tipo=${encodeURIComponent(tipo)}`}
             className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98"
           >
             <div className="aspect-[4/3] overflow-hidden bg-muted">
