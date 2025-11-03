@@ -10,7 +10,8 @@ export const dynamic = 'force-dynamic'
 export default async function MateriaisCategoriasPage({ searchParams }: { searchParams?: { tipo?: string } }) {
   const lang = await getLang()
   const labels = t(lang)
-  const tipoParam = searchParams?.tipo
+  const sParam = await searchParams
+  const tipoParam = sParam?.tipo
   const tipo: 'Material' | 'Trabalho' = tipoParam === 'Trabalho' ? 'Trabalho' : 'Material'
 
   const [categorias, edificios, links] = await Promise.all([
