@@ -58,6 +58,31 @@ export function fetchEdificioById(id: string | number, lang: string = 'pt') {
 	)
 }
 
+export async function fetchCursos(edificioId?: string | number, lang: string = 'pt') {
+  const filter: any = {}
+  if (edificioId) {
+    filter.edificio = { _eq: edificioId }
+  }
+
+  const data = await directus.request(
+    readItems('Cursos', {
+      fields: ['*', 'translations.*', 'edificio.id', 'anos_lectivos.Anos_Lectivos_id.*'],
+      filter,
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang,
+            },
+          },
+        },
+      },
+    })
+  )
+
+  return data
+}
+
 // Helper function to get translations from Traducoes collection
 export async function getTranslations(terms: string[], lang: string = 'pt') {
   try {
