@@ -70,6 +70,7 @@ const labels = {
             lectiveYears: "Anos letivos",
             sortByLectiveYearsMost: "Anos letivos (Mais)",
             sortByLectiveYearsLeast: "Anos letivos (Menos)",
+            allBuildings: "Todos os edifícios",
   },
   en: {
     buildings: "Buildings",
@@ -129,6 +130,7 @@ const labels = {
             lectiveYears: "Lective years",
             sortByLectiveYearsMost: "Lective years (Most)",
             sortByLectiveYearsLeast: "Lective years (Least)",
+            allBuildings: "All buildings",
   },
 } as const
 

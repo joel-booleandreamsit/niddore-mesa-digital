@@ -1,7 +1,7 @@
 import { BackButton } from "@/components/back-button"
 import { PageHeader } from "@/components/page-header"
 import CursosList, { type CursoItem } from "@/components/cursos-list"
-import { fetchCursos } from "@/lib/directus"
+import fetchEdificios, { fetchCursos } from "@/lib/directus"
 import { getLang, t } from "@/lib/i18n"
 
 export const dynamic = 'force-dynamic'
@@ -9,14 +9,16 @@ export const dynamic = 'force-dynamic'
 export default async function CursosPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined }
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const lang = await getLang()
   const labels = t(lang)
-  const edificioParam = searchParams?.edificio
+  const sp = await searchParams
+  const edificioParam = sp?.edificio
   const edificioId = Array.isArray(edificioParam) ? edificioParam[0] : edificioParam
 
-  const data = await fetchCursos(edificioId, lang)
+  const data = await fetchCursos(undefined, lang)
+  const edificiosData = await fetchEdificios(lang)
 
   const courses: CursoItem[] = (data || []).map((item: any) => {
     const nome = item.translations?.[0]?.nome || labels.nameUnavailable
@@ -37,8 +39,16 @@ export default async function CursosPage({
       nome,
       descricao,
       lectiveYears,
+      edificioId: item?.edificio?.id ?? null,
     }
   })
+
+  const edificios = (edificiosData || []).map((e: any) => ({
+    id: e.id,
+    name: e.translations?.[0]?.nome || String(e.id),
+    startYear: Number(e?.data_inicio) || undefined,
+  })) as Array<{ id: string | number; name: string; startYear?: number }>
+
 
   return (
     <main className="min-h-screen bg-background">
@@ -57,7 +67,11 @@ export default async function CursosPage({
           resetFilters: labels.resetFilters,
           lectiveYears: labels.lectiveYears,
           descriptionUnavailable: labels.descriptionUnavailable,
+          allBuildings: labels.allBuildings,
+          buildings: labels.buildings,
         }}
+        edificios={edificios}
+        selectedEdificioId={edificioId || null}
       />
     </main>
   )
