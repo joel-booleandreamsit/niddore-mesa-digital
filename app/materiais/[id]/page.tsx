@@ -2,7 +2,7 @@ import { BackButton } from "@/components/back-button"
 import { t, getLang } from "@/lib/i18n"
 import { notFound } from "next/navigation"
 import { assetUrl } from "@/lib/directus"
-import { fetchMaterialById } from "@/lib/materials"
+import { fetchMaterialById } from '@/lib/directus'
 
 export const dynamic = 'force-dynamic'
 

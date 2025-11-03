@@ -1,7 +1,8 @@
 import { BackButton } from "@/components/back-button"
 import { t, getLang } from "@/lib/i18n"
 import fetchEdificios, { assetUrl } from "@/lib/directus"
-import { fetchMateriaisCategorias, fetchMateriaisLinksForEdificios } from "@/lib/materials"
+import { fetchMateriaisLinksForEdificios } from '@/lib/directus'
+import { fetchMateriaisCategorias } from '@/lib/directus'
 import MateriaisCategoriasClient from "@/components/materiais-categorias-client"
 
 export const dynamic = 'force-dynamic'

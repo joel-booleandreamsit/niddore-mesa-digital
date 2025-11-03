@@ -4,7 +4,8 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { assetUrl } from "@/lib/directus"
-import { fetchMateriaisCategoriaById, fetchMateriaisByCategoria } from "@/lib/materials"
+import { fetchMateriaisByCategoria } from '@/lib/directus'
+import { fetchMateriaisCategoriaById } from '@/lib/directus'
 
 export const dynamic = 'force-dynamic'
 
