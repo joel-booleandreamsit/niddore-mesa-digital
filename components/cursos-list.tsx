@@ -86,15 +86,10 @@ export default function CursosList({ courses, labels, edificios, selectedEdifici
     return arr
   }, [filtered, sortKey])
 
-  function reset() {
-    setRange([minYear, maxYear])
-    setSortKey("name-asc")
-  }
-
   return (
     <div className="max-w-[3000px] mx-auto px-10 pb-24">
       {/* Building filter like Publicações + Ordenar */}
-      <div className="space-y-16 mt-16">
+      <div className="space-y-16 mt-16 mb-12">
         <div>
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-4xl text-muted-foreground">{labels.buildings}</h3>
@@ -175,11 +170,6 @@ export default function CursosList({ courses, labels, edificios, selectedEdifici
           <Slider.Thumb className="block w-8 h-8 rounded-full bg-primary shadow-[0_2px_10px] shadow-black/20 hover:scale-105 transition-transform" aria-label="Start year" />
           <Slider.Thumb className="block w-8 h-8 rounded-full bg-primary shadow-[0_2px_10px] shadow-black/20 hover:scale-105 transition-transform" aria-label="End year" />
         </Slider.Root>
-        <div className="mt-6">
-          <button onClick={reset} className="px-6 py-3 border rounded-xl text-2xl bg-card border-border hover:border-primary transition-colors">
-            {labels.resetFilters}
-          </button>
-        </div>
       </div>
 
       {/* List */}
