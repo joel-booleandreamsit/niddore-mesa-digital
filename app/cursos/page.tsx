@@ -51,7 +51,7 @@ export default async function CursosPage({
 
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background overflow-auto">
       <BackButton />
       <PageHeader title={labels.courses} description={labels.coursesDesc} />
 

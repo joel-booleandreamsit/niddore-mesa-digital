@@ -79,7 +79,7 @@ export default async function EdificiosPage() {
   })
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background overflow-auto">
       <BackButton />
       <PageHeader title={labels.buildings} description={labels.buildingsDesc} />
 

@@ -81,7 +81,7 @@ export default function HomePage() {
   ]
 
   return (
-    <main className="h-screen bg-background overflow-hidden flex flex-col">
+    <main className="h-screen bg-background ">
       {/* Language Toggle */}
       <div className="absolute top-4 right-4 z-10 flex gap-2">
         <button

@@ -58,7 +58,7 @@ export default function MateriaisPage() {
     categoriaAtiva === "Todos" ? materiais : materiais.filter((m) => m.categoria === categoriaAtiva)
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background overflow-auto">
       <BackButton />
       <PageHeader title="Materiais" description="Materiais históricos utilizados na escola" />
 

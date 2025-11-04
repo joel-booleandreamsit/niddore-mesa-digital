@@ -31,11 +31,11 @@ export default async function GrupoDetalhePage({ params }: { params: Promise<{ i
     
 
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background overflow-auto">
         <BackButton label={labels.back || "Voltar"} />
 
         {/* 4K Optimized Layout */}
-        <div className="w-full px-16 pt-32 pb-20">
+        <div className="w-full px-16 pt-32 pb-8">
           <div className="max-w-none mx-auto">
             {/* Header Section */}
             <div className="mb-16">
@@ -64,8 +64,8 @@ export default async function GrupoDetalhePage({ params }: { params: Promise<{ i
                 {/* Description */}
                 <ScrollFade
                   html={transformedGrupo.descricao}
-                  containerClassName="relative prose prose-3xl max-w-none mt-10"
-                  contentClassName="h-[68rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
+                  containerClassName="relative prose prose-3xl max-w-none mt-4"
+                  contentClassName="h-[70rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
                 />
               </div>              
             </div>

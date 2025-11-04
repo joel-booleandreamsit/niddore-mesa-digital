@@ -26,7 +26,7 @@ export default async function PublicacoesPage() {
   const tipos = [labels.all || "Todos", ...Array.from(new Set(publicacoes.map(pub => pub.tipo).filter(Boolean)))]
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background overflow-auto">
       <BackButton label={labels.back || "Voltar"} />
       <PageHeader title={labels.publications || "Publicações"} description={labels.publicationsDesc || "Publicações da escola ao longo dos anos"} />
       

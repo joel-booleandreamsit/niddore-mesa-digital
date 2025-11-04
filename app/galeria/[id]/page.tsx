@@ -23,7 +23,7 @@ export default async function GaleriaDetalhePage({ params }: { params: Promise<{
     }
 
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background overflow-auto">
         <BackButton label={labels.back || "Voltar"} />
 
         {/* 4K Optimized Layout */}

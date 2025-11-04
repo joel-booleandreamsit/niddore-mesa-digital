@@ -111,7 +111,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
     }
 
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background overflow-auto">
         <BackButton />
 
         <div className="mx-auto px-8 py-8 w-full max-w-none space-y-12">

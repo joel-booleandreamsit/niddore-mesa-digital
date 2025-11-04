@@ -42,11 +42,11 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
     }
 
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background overflow-auto">
         <BackButton label={labels.back || "Voltar"} />
 
         {/* 4K Optimized Layout */}
-        <div className="w-full px-16 pt-32 pb-20">
+        <div className="w-full px-16 pt-32 pb-8">
           <div className="max-w-none mx-auto">
             {/* Header Section */}
             <div className="mb-16">

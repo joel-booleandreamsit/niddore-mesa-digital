@@ -23,7 +23,7 @@ export default async function MaterialDetalhePage({ params, searchParams }: { pa
     const capa = material.capa ? assetUrl(material.capa, "fit=cover&width=2000&height=1400&format=webp") : '/placeholder.svg'
 
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background overflow-auto">
         <BackButton label={labels.back || "Voltar"} />
         <div className="w-full px-16 pt-32 pb-20">
           <div className="max-w-none mx-auto">
