@@ -43,29 +43,23 @@ export default function HomePage() {
       image: "/images/cursos.jpg",
     },
     {
-      title: lang === "pt" ? "Materiais" : "Materials",
-      description: lang === "pt" ? "Materiais utilizados na escola" : "Materials used in school",
-      href: "/materiais",
-      image: "/images/materiais.jpg",
-    },
-    {
       title: lang === "pt" ? "Publicações" : "Publications",
       description: lang === "pt" ? "Publicações da escola" : "School publications",
       href: "/publicacoes",
       image: "/images/publicacoes.jpg",
     },
-            {
-              title: lang === "pt" ? "Serviços" : "Services",
-              description: lang === "pt" ? "Serviços oferecidos pela escola" : "Services offered by the school",
-              href: "/servicos",
-              image: "/images/servicos.jpg",
-            },
-            {
-              title: lang === "pt" ? "Grupos" : "Groups",
-              description: lang === "pt" ? "Grupos da escola" : "School groups",
-              href: "/grupos",
-              image: "/images/grupos.jpg",
-            },
+    {
+      title: lang === "pt" ? "Serviços" : "Services",
+      description: lang === "pt" ? "Serviços oferecidos pela escola" : "Services offered by the school",
+      href: "/servicos",
+      image: "/images/servicos.jpg",
+    },
+    {
+      title: lang === "pt" ? "Grupos" : "Groups",
+      description: lang === "pt" ? "Grupos da escola" : "School groups",
+      href: "/grupos",
+      image: "/images/materiais.jpg",
+    },
     {
       title: lang === "pt" ? "Galeria de Fotos" : "Photo Gallery",
       description: lang === "pt" ? "Memórias visuais da escola" : "Visual memories of the school",
@@ -76,7 +70,7 @@ export default function HomePage() {
       title: lang === "pt" ? "Documentos" : "Documents",
       description: lang === "pt" ? "Categorias de documentos" : "Document categories",
       href: "/documentos",
-      image: "/images/documentos.jpg",
+      image: "/images/publicacoes.jpg",
     },
   ]
 

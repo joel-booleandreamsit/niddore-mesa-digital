@@ -36,7 +36,7 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
     }
 
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background overflow-auto">
         <BackButton label={labels.back || "Voltar"} />
 
         <div className="w-full px-16 pt-32 pb-20">
@@ -58,7 +58,7 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
             </div>
 
             <div className="grid grid-cols-12 gap-16">
-              <div className="col-span-8">
+              <div className="col-span-5">
                 <div className="sticky top-8">
                   <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
                     <img src={transformed.capa_url} alt={transformed.nome} className="w-full h-full object-cover" />
@@ -66,7 +66,7 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
                 </div>
               </div>
 
-              <div className="col-span-4 space-y-16">
+              <div className="col-span-7 space-y-16">
                 <div className="prose prose-3xl max-w-none">
                   <div
                     className="text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
