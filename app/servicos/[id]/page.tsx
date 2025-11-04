@@ -4,6 +4,7 @@ import { fetchServicoById, assetUrl } from "@/lib/directus"
 import { notFound } from "next/navigation"
 import { t, getLang } from "@/lib/i18n"
 import { Calendar, Clock, Image as ImageIcon } from "lucide-react"
+import { ScrollFade } from "@/components/scroll-fade"
 
 export const dynamic = 'force-dynamic'
 
@@ -92,15 +93,15 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
                 </div>
 
                 {/* Description */}
-                <div className="prose prose-3xl max-w-none">
-                  <div 
-                    className="text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
-                    dangerouslySetInnerHTML={{ __html: transformedServico.descricao }}
-                  />
-                </div>
+                <ScrollFade
+                  html={transformedServico.descricao}
+                  containerClassName="relative prose prose-3xl max-w-none mt-10"
+                  contentClassName="h-[60rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
+                />
               </div>
             </div>
 
+            
             {/* Gallery Section - Normal Flow */}
             {transformedServico.fotos_galeria && transformedServico.fotos_galeria.length > 0 && (
               <div className="mt-24">
