@@ -1,47 +1,78 @@
 import { BackButton } from "@/components/back-button"
 import { PageHeader } from "@/components/page-header"
+import CursosList, { type CursoItem } from "@/components/cursos-list"
+import fetchEdificios, { fetchCursos } from "@/lib/directus"
+import { getLang, t } from "@/lib/i18n"
 
-const cursos = [
-  { id: 1, nome: "Ciências e Tecnologias", ano: 1952 },
-  { id: 2, nome: "Línguas e Humanidades", ano: 1952 },
-  { id: 3, nome: "Artes Visuais", ano: 1965 },
-  { id: 4, nome: "Ciências Socioeconómicas", ano: 1978 },
-  { id: 5, nome: "Técnico de Informática", ano: 1995 },
-  { id: 6, nome: "Técnico de Eletrónica", ano: 1998 },
-  { id: 7, nome: "Técnico de Multimédia", ano: 2005 },
-  { id: 8, nome: "Técnico de Design Gráfico", ano: 2008 },
-  { id: 9, nome: "Técnico de Gestão", ano: 2010 },
-  { id: 10, nome: "Técnico de Turismo", ano: 2015 },
-]
+export const dynamic = 'force-dynamic'
 
-export default function CursosPage() {
+export default async function CursosPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const lang = await getLang()
+  const labels = t(lang)
+  const sp = await searchParams
+  const edificioParam = sp?.edificio
+  const edificioId = Array.isArray(edificioParam) ? edificioParam[0] : edificioParam
+
+  const data = await fetchCursos(undefined, lang)
+  const edificiosData = await fetchEdificios(lang)
+
+  const courses: CursoItem[] = (data || []).map((item: any) => {
+    const nome = item.translations?.[0]?.nome || labels.nameUnavailable
+    const descricao = item.translations?.[0]?.descricao || null
+    const lectiveYears = Array.isArray(item.anos_lectivos)
+      ? item.anos_lectivos
+          .map((row: any) => {
+            const y = row?.Anos_Lectivos_id || row
+            const start = Number(y?.ano_inicio)
+            const end = Number(y?.ano_fim)
+            if (!Number.isFinite(start) || !Number.isFinite(end)) return null
+            return { start, end }
+          })
+          .filter(Boolean) as { start: number; end: number }[]
+      : []
+    return {
+      id: item.id,
+      nome,
+      descricao,
+      lectiveYears,
+      edificioId: item?.edificio?.id ?? null,
+    }
+  })
+
+  const edificios = (edificiosData || []).map((e: any) => ({
+    id: e.id,
+    name: e.translations?.[0]?.nome || String(e.id),
+    startYear: Number(e?.data_inicio) || undefined,
+  })) as Array<{ id: string | number; name: string; startYear?: number }>
+
+
   return (
     <main className="min-h-screen bg-background">
       <BackButton />
-      <PageHeader title="Cursos" description="Disciplinas lecionadas ao longo da história da escola" />
+      <PageHeader title={labels.courses} description={labels.coursesDesc} />
 
-      <div className="max-w-6xl mx-auto px-8 md:px-16 pb-16">
-        <div className="bg-card border border-border rounded-lg overflow-hidden">
-          <div className="divide-y divide-border">
-            {cursos.map((curso, index) => (
-              <div
-                key={curso.id}
-                className="flex items-center justify-between p-8 md:p-10 hover:bg-muted/30 transition-colors touch-manipulation"
-              >
-                <div className="flex items-center gap-6 md:gap-8">
-                  <span className="text-3xl md:text-4xl font-serif text-muted-foreground/40 w-16 text-right">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="text-2xl md:text-3xl lg:text-4xl text-foreground text-balance">{curso.nome}</h3>
-                </div>
-                <span className="text-2xl md:text-3xl text-primary font-medium whitespace-nowrap ml-4">
-                  {curso.ano}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <CursosList
+        courses={courses}
+        labels={{
+          sort: labels.sort,
+          sortByNameAZ: labels.sortByNameAZ,
+          sortByNameZA: labels.sortByNameZA,
+          sortByLectiveYearsMost: labels.sortByLectiveYearsMost,
+          sortByLectiveYearsLeast: labels.sortByLectiveYearsLeast,
+          yearRange: labels.yearRange,
+          resetFilters: labels.resetFilters,
+          lectiveYears: labels.lectiveYears,
+          descriptionUnavailable: labels.descriptionUnavailable,
+          allBuildings: labels.allBuildings,
+          buildings: labels.buildings,
+        }}
+        edificios={edificios}
+        selectedEdificioId={edificioId || null}
+      />
     </main>
   )
 }

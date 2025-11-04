@@ -33,6 +33,7 @@ const labels = {
     people: "Pessoal",
     students: "Alunos",
     courses: "Cursos",
+    coursesDesc: "Disciplinas lecionadas ao longo da história da escola",
     materials: "Materiais",
     works: "Trabalhos",
     services: "Serviços",
@@ -63,6 +64,13 @@ const labels = {
             descriptionUnavailable: "Descrição não disponível",
             contentUnavailable: "Conteúdo não disponível",
             authorUnavailable: "Autor não disponível",
+            // Cursos
+            yearRange: "Intervalo de anos",
+            resetFilters: "Repor filtros",
+            lectiveYears: "Anos letivos",
+            sortByLectiveYearsMost: "Anos letivos (Mais)",
+            sortByLectiveYearsLeast: "Anos letivos (Menos)",
+            allBuildings: "Todos os edifícios",
   },
   en: {
     buildings: "Buildings",
@@ -85,6 +93,7 @@ const labels = {
     people: "People",
     students: "Students",
     courses: "Courses",
+    coursesDesc: "Subjects taught throughout the school's history",
     materials: "Materials",
     works: "Works",
     services: "Services",
@@ -115,6 +124,13 @@ const labels = {
             descriptionUnavailable: "Description not available",
             contentUnavailable: "Content not available",
             authorUnavailable: "Author not available",
+            // Courses
+            yearRange: "Year range",
+            resetFilters: "Reset filters",
+            lectiveYears: "Lective years",
+            sortByLectiveYearsMost: "Lective years (Most)",
+            sortByLectiveYearsLeast: "Lective years (Least)",
+            allBuildings: "All buildings",
   },
 } as const
 
