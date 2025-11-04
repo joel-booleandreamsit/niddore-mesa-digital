@@ -93,11 +93,13 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
                 </div>
 
                 {/* Description */}
+                
                 <ScrollFade
                   html={transformedServico.descricao}
-                  containerClassName="relative prose prose-3xl max-w-none mt-10"
-                  contentClassName="h-[60rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
+                  containerClassName="relative prose prose-3xl max-w-none mt-10 "
+                  contentClassName="h-[57rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
                 />
+                <div className="border-t border-border"/>
               </div>
             </div>
 

@@ -197,15 +197,14 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
                   <ScrollFade
                     html={translatedEdificio.descricao}
                     containerClassName="relative prose prose-3xl max-w-none"
-                    contentClassName="h-[56rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
+                    contentClassName="h-[62rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
                   />
                 </div>
               )}
 
               {/* Gallery aligned with Location (nudged down) */}
               {galleryItems.length > 0 && (
-                <div className="border-t border-border pt-6 mt-10">
-                  <h2 className="font-serif text-4xl text-foreground mb-4">{labels.gallery}</h2>
+                <div className="border-t border-border pt-13 mt-12">                  
                   <EdificioGallery items={galleryItems} labels={{ gallery: labels.gallery, photo: labels.photo, descriptionUnavailable: labels.descriptionUnavailable }} />
                 </div>
               )}
