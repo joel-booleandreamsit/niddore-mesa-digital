@@ -1,45 +1,45 @@
 "use client"
 
-import { useMemo, useState, useEffect } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 
-type Categoria = { id: string | number; nome: string; foto_url: string }
-type Edificio = { id: string | number; nome: string }
-type LinkEntry = { categoriaId: string | number; edificioId: string | number }
-
-type Props = {
-  categorias: Categoria[]
-  edificios: Edificio[]
-  links: LinkEntry[]
-  labels: any
-  tipo: 'Material' | 'Trabalho'
+type Item = {
+  id: string | number
+  nome: string
+  breve?: string
+  foto_url: string
+  edificioId?: string | number | null
 }
 
-export default function MateriaisCategoriasClient({ categorias, edificios, links, labels, tipo }: Props) {
-  const searchParams = useSearchParams()
-  const initial = searchParams.get("edificio") || "all"
-  const [selectedEdificio, setSelectedEdificio] = useState<string | number>(initial)
+type Edificio = { id: string | number; nome: string }
 
+type Props = {
+  items: Item[]
+  edificios: Edificio[]
+  labels: any
+  tipo: "Material" | "Trabalho"
+}
+
+export default function MateriaisCategoriaClient({ items, edificios, labels, tipo }: Props) {
+  const [selectedEdificio, setSelectedEdificio] = useState<string | number>("all")
+
+  // Keep URL in sync if query param exists
   useEffect(() => {
-    const v = searchParams.get("edificio") || "all"
+    const sp = new URLSearchParams(window.location.search)
+    const v = sp.get("edificio") || "all"
     setSelectedEdificio(v)
-  }, [searchParams])
+  }, [])
 
-  const categoriasFiltradas = useMemo(() => {
-    if (selectedEdificio === "all") return categorias
+  const filtered = useMemo(() => {
+    if (selectedEdificio === "all") return items
     const edif = String(selectedEdificio)
-    const set = new Set(
-      links
-        .filter((l) => String(l.edificioId) === edif && l.categoriaId != null)
-        .map((l) => String(l.categoriaId))
-    )
-    return categorias.filter((c) => set.has(String(c.id)))
-  }, [categorias, links, selectedEdificio])
+    return items.filter((it) => (it.edificioId != null ? String(it.edificioId) === edif : false))
+  }, [items, selectedEdificio])
 
   return (
     <div className="px-20 pb-24 space-y-20 mt-16">
+      {/* Building filter */}
       <div className="flex flex-wrap gap-6 justify-center">
         <button
           onClick={() => setSelectedEdificio("all")}
@@ -66,24 +66,28 @@ export default function MateriaisCategoriasClient({ categorias, edificios, links
         ))}
       </div>
 
+      {/* Items grid */}
       <div className="grid grid-cols-4 gap-16">
-        {categoriasFiltradas.map((categoria) => (
+        {filtered.map((item) => (
           <Link
-            key={categoria.id}
-            href={`/materiais/categorias/${categoria.id}?tipo=${encodeURIComponent(tipo)}${selectedEdificio === "all" ? "" : `&edificio=${encodeURIComponent(String(selectedEdificio))}`}`}
+            key={item.id}
+            href={`/materiais/${item.id}?tipo=${encodeURIComponent(tipo)}`}
             className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98"
           >
             <div className="aspect-[4/3] overflow-hidden bg-muted">
               <img
-                src={categoria.foto_url}
-                alt={categoria.nome}
+                src={item.foto_url}
+                alt={item.nome}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
             <div className="p-10 space-y-6">
               <h3 className="font-serif text-5xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
-                {categoria.nome}
+                {item.nome}
               </h3>
+              {item.breve && (
+                <p className="text-2xl text-foreground/80 leading-relaxed">{item.breve}</p>
+              )}
               <div className="flex items-center gap-4 text-primary pt-4">
                 <span className="text-2xl font-medium">{labels.viewDetails || "Ver detalhes"}</span>
                 <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
@@ -93,9 +97,9 @@ export default function MateriaisCategoriasClient({ categorias, edificios, links
         ))}
       </div>
 
-      {categoriasFiltradas.length === 0 && (
+      {filtered.length === 0 && (
         <div className="text-center py-32">
-          <p className="text-4xl text-muted-foreground font-medium">Nenhuma categoria encontrada.</p>
+          <p className="text-4xl text-muted-foreground font-medium">{labels.noneFound || "Nenhum item encontrado."}</p>
         </div>
       )}
     </div>
