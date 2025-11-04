@@ -84,12 +84,13 @@ export default async function PublicacaoDetalhePage({ params }: { params: Promis
                   </div>
                 </div>
 
-                <div className="prose prose-lg max-w-none flex-1 min-h-0 mt-10 md:mt-12 2xl:mt-16">
-                  
-                  <div 
-                    className="text-2xl md:text-3xl 2xl:text-4xl text-foreground/80 leading-relaxed prose prose-lg max-w-none overflow-y-auto pr-4 [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-4 [&_ul]:pl-6 [&_ol]:pl-6"
+                <div className="relative prose prose-3xl max-w-none mt-10">
+                  <div
+                    className="h-[84rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
                     dangerouslySetInnerHTML={{ __html: transformedPublicacao.conteudo }}
                   />
+                  <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+                  
                 </div>
               </div>
             </div>
