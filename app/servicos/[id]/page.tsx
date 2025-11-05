@@ -23,14 +23,31 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
       data_inicio: servico.data_inicio || null,
       data_fim: servico.data_fim || null,
       foto_capa: servico.foto_capa ? assetUrl(servico.foto_capa, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
-              fotos_galeria: servico.fotos_galeria ? servico.fotos_galeria.map((foto: any) => ({
-                id: foto.directus_files_id.id,
-                url: assetUrl(foto.directus_files_id.id, "fit=cover&width=1600&height=1000&format=webp"),
-                title: foto.directus_files_id?.title || '',
-                description: foto.directus_files_id?.description || ''
-              })).filter((foto: any) => foto.id) : [],
+      fotos_galeria: (() => {
+        const g: any = (servico as any).fotos_galeria
+        if (!g) return []
+        const arr = Array.isArray(g) ? g : []
+        return arr
+          .map((it: any) => {
+            const df = it?.directus_files_id
+            const dfId = typeof df === 'object' ? df?.id : df
+            const candidateId = typeof it === 'string' ? it : (dfId || it?.file || it?.ficheiro || it?.foto || it?.imagem || it?.id)
+            if (!candidateId || typeof candidateId !== 'string') return null
+            const title = it?.titulo || it?.title || it?.nome || it?.name || (typeof df === 'object' ? (df as any)?.title : null) || ''
+            const description = it?.descricao || it?.description || (typeof df === 'object' ? (df as any)?.description : null) || ''
+            const mime = (typeof df === 'object' && (df?.type || (df as any)?.mime_type)) as string | undefined
+            const filename = (typeof df === 'object' && (df as any)?.filename_download) as string | undefined
+            const isVideo = (mime && mime.startsWith('video/')) || (filename && filename.toLowerCase().endsWith('.mp4'))
+            const url = isVideo
+              ? assetUrl(candidateId)
+              : assetUrl(candidateId, "fit=cover&format=webp")
+            return { id: candidateId, url, title, description, type: isVideo ? 'video' : 'image' as const }
+          })
+          .filter(Boolean) as any[]
+      })(),
       isActive: !servico.data_fim,
     }
+    
 
     const formatDate = (dateString: string | null) => {
       if (!dateString) return null

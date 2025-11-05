@@ -21,14 +21,30 @@ export default async function GrupoDetalhePage({ params }: { params: Promise<{ i
       descricao: grupo.translations?.[0]?.descricao || 'Descrição não disponível',
       tipo_grupo: grupo.tipo_grupo_translated || grupo.tipo_grupo || 'Tipo não disponível',
       foto_capa: grupo.foto_capa ? assetUrl(grupo.foto_capa, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
-      fotos_galeria: grupo.fotos_galeria ? grupo.fotos_galeria.map((foto: any) => ({
-        id: foto.directus_files_id?.id || foto.directus_files_id,
-        url: assetUrl(foto.directus_files_id?.id || foto.directus_files_id, "fit=cover&width=1600&height=1000&format=webp"),
-        title: foto.directus_files_id?.title || '',
-        description: foto.directus_files_id?.description || ''
-      })).filter((foto: any) => foto.id) : [],
+      fotos_galeria: (() => {
+        const g: any = (grupo as any).fotos_galeria
+        if (!g) return []
+        const arr = Array.isArray(g) ? g : []
+        return arr
+          .map((it: any) => {
+            const df = it?.directus_files_id
+            const dfId = typeof df === 'object' ? df?.id : df
+            const candidateId = typeof it === 'string' ? it : (dfId || it?.file || it?.ficheiro || it?.foto || it?.imagem || it?.id)
+            if (!candidateId || typeof candidateId !== 'string') return null
+            const title = it?.titulo || it?.title || it?.nome || it?.name || (typeof df === 'object' ? (df as any)?.title : null) || ''
+            const description = it?.descricao || it?.description || (typeof df === 'object' ? (df as any)?.description : null) || ''
+            const mime = (typeof df === 'object' && (df?.type || (df as any)?.mime_type)) as string | undefined
+            const filename = (typeof df === 'object' && (df as any)?.filename_download) as string | undefined
+            const isVideo = (mime && mime.startsWith('video/')) || (filename && filename.toLowerCase().endsWith('.mp4'))
+            const url = isVideo
+              ? assetUrl(candidateId)
+              : assetUrl(candidateId, "fit=cover&width=1600&height=1000&format=webp")
+            return { id: candidateId, url, title, description, type: isVideo ? 'video' : 'image' as const }
+          })
+          .filter(Boolean) as any[]
+      })(),
     }
-    
+        
 
     return (
       <main className="min-h-screen bg-background overflow-auto">
