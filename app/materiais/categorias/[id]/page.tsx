@@ -2,7 +2,6 @@ import { BackButton } from "@/components/back-button"
 import { t, getLang } from "@/lib/i18n"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
 import { assetUrl } from "@/lib/directus"
 import { fetchMateriaisByCategoria } from '@/lib/directus'
 import { fetchMateriaisCategoriaById } from '@/lib/directus'

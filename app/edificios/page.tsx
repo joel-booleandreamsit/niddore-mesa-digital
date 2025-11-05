@@ -3,7 +3,6 @@ import { PageHeader } from "@/components/page-header"
 import fetchEdificios, { assetUrl } from "@/lib/directus"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight } from "lucide-react"
 import { t, getLang } from "@/lib/i18n"
 
 export const dynamic = 'force-dynamic'
@@ -140,10 +139,7 @@ export default async function EdificiosPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-primary pt-1">
-                  <span className="text-3xl font-medium">{labels.viewDetails}</span>
-                  <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
-                </div>
+                
               </div>
             </Link>
           ))}

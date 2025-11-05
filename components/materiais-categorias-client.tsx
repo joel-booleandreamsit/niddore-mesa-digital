@@ -3,7 +3,6 @@
 import { useMemo, useState, useEffect } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { ArrowRight } from "lucide-react"
 
 type Categoria = { id: string | number; nome: string; foto_url: string }
 type Edificio = { id: string | number; nome: string }
@@ -83,11 +82,7 @@ export default function MateriaisCategoriasClient({ categorias, edificios, links
             <div className="p-10 space-y-6">
               <h3 className="font-serif text-5xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
                 {categoria.nome}
-              </h3>
-              <div className="flex items-center gap-4 text-primary pt-4">
-                <span className="text-2xl font-medium">{labels.viewDetails || "Ver detalhes"}</span>
-                <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
-              </div>
+              </h3>              
             </div>
           </Link>
         ))}

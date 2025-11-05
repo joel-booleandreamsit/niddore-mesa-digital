@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
 
 type Item = {
   id: string | number
@@ -88,10 +87,7 @@ export default function MateriaisCategoriaClient({ items, edificios, labels, tip
               {item.breve && (
                 <p className="text-2xl text-foreground/80 leading-relaxed">{item.breve}</p>
               )}
-              <div className="flex items-center gap-4 text-primary pt-4">
-                <span className="text-2xl font-medium">{labels.viewDetails || "Ver detalhes"}</span>
-                <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
-              </div>
+              
             </div>
           </Link>
         ))}

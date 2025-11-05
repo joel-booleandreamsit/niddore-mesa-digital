@@ -3,7 +3,7 @@ import { fetchDocumentoCategoriaById, fetchDocumentosByCategoria, assetUrl } fro
 import { t, getLang } from "@/lib/i18n"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowRight, Calendar } from "lucide-react"
+import { Calendar } from "lucide-react"
 
 export const dynamic = 'force-dynamic'
 
@@ -88,10 +88,7 @@ export default async function DocumentosCategoriaPage({ params }: { params: Prom
                       <Calendar className="w-6 h-6" />
                       <span className="text-2xl">{doc.data_fmt || '—'}</span>
                     </div>
-                    <div className="flex items-center gap-4 text-primary pt-2">
-                      <span className="text-2xl font-medium">{labels.viewDetails || "Ver detalhes"}</span>
-                      <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
-                    </div>
+                    
                   </div>
                 </Link>
               ))}
@@ -109,7 +106,7 @@ export default async function DocumentosCategoriaPage({ params }: { params: Prom
   } catch (error) {
     return (
       <main className="h-screen bg-background overflow-hidden flex flex-col">
-        <BackButton label={labels.back || "Voltar"} />
+        <BackButton label={(t(await getLang()).back) || "Voltar"} />
         <div className="flex-1 px-8 pb-8 overflow-y-auto flex items-center justify-center">
           <p className="text-4xl text-muted-foreground font-medium">{t(await getLang()).documentsLoadCategoryError}</p>
         </div>

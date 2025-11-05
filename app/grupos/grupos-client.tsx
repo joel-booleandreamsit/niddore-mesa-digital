@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
 
 interface Grupo {
   id: number
@@ -78,10 +77,7 @@ export default function GruposClient({ grupos, tipos, labels }: GruposClientProp
               <h3 className="font-serif text-7xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
                 {grupo.nome}
               </h3>
-              <div className="flex items-center gap-4 text-primary pt-4">
-                <span className="text-3xl font-medium">{labels.viewDetails || "Ver detalhes"}</span>
-                <ArrowRight className="w-10 h-10 group-hover:translate-x-2 transition-transform" />
-              </div>
+              
             </div>
           </Link>
         ))}
