@@ -57,7 +57,7 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
 
             {/* Content */}
             <div className="lg:col-span-7">
-              <div className="sticky top-24 h-[calc(100vh-16rem)] flex flex-col gap-8 overflow-hidden">
+              <div className="sticky top-24 h-[calc(100vh-18rem)] flex flex-col gap-8 overflow-hidden">
                 <div className="space-y-4">
                   {transformed.categoria_nome && (
                     <span className="inline-block px-12 py-6 text-2xl lg:text-3xl 2xl:text-5xl bg-secondary text-secondary-foreground rounded-full">

@@ -52,7 +52,7 @@ export default async function PublicacaoDetalhePage({ params }: { params: Promis
 
             {/* Content */}
             <div className="lg:col-span-7">
-              <div className="sticky top-24 max-h-[calc(100vh-8rem)] flex flex-col gap-8">
+              <div className="sticky top-24 h-[calc(100vh-18rem)] flex flex-col gap-8 overflow-hidden">
                 <div className="space-y-4">
                   <span className="inline-block px-12 py-6 text-2xl lg:text-3xl 2xl:text-5xl bg-secondary text-secondary-foreground rounded-full">
                     {transformedPublicacao.tipo}
@@ -62,7 +62,7 @@ export default async function PublicacaoDetalhePage({ params }: { params: Promis
                   </h1>
                 </div>
 
-                <div className="flex flex-wrap gap-6 text-xl md:text-2xl 2xl:text-3xl text-muted-foreground">
+                <div className="flex-shrink-0 flex flex-wrap gap-6 text-xl md:text-2xl 2xl:text-3xl text-muted-foreground">
                   <div className="flex items-start gap-3">
                     <div>
                       {Array.isArray(transformedPublicacao.autores) ? 
@@ -85,11 +85,13 @@ export default async function PublicacaoDetalhePage({ params }: { params: Promis
                   </div>
                 </div>
 
-                <ScrollFade
-                  html={transformedPublicacao.conteudo}
-                  containerClassName="relative prose prose-3xl max-w-none mt-10"
-                  contentClassName="h-[84rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
-                />
+                <div className="border-t flex-1 min-h-0 mt-6 pt-4">
+                  <ScrollFade
+                    html={transformedPublicacao.conteudo}
+                    containerClassName="relative prose prose-3xl max-w-none h-full"
+                    contentClassName="h-full overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
+                  />
+                </div>
               </div>
             </div>
           </div>
