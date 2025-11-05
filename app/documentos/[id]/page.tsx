@@ -3,6 +3,7 @@ import { fetchDocumentoById, assetUrl } from "@/lib/directus"
 import { notFound } from "next/navigation"
 import { t, getLang } from "@/lib/i18n"
 import { Calendar, Users } from "lucide-react"
+import { ScrollFade } from "@/components/scroll-fade"
 
 export const dynamic = 'force-dynamic'
 
@@ -30,7 +31,7 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
       nome: documento.translations?.[0]?.nome || labels.nameUnavailable,
       descricao: documento.translations?.[0]?.descricao || labels.contentUnavailable,
       data_fmt: formatDate(documento.data),
-      capa_url: documento.capa ? assetUrl(documento.capa, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
+      capa_url: documento.capa ? assetUrl(documento.capa, "fit=cover&width=1600&height=2133&format=webp") : '/placeholder.svg',
       autores: autoresNomes,
       categoria_nome: documento.categoria?.translations?.[0]?.nome || null,
     }
@@ -39,51 +40,63 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
       <main className="min-h-screen bg-background overflow-auto">
         <BackButton label={labels.back || "Voltar"} />
 
-        <div className="w-full px-16 pt-32 pb-20">
-          <div className="max-w-none mx-auto">
-            <div className="mb-16">
-              <h1 className="font-serif text-9xl text-foreground text-balance leading-tight mb-8">{transformed.nome}</h1>
-
-              <div className="flex items-center gap-6 text-3xl text-muted-foreground mb-8">
-                {transformed.categoria_nome && <span>{transformed.categoria_nome}</span>}
-                <div className="flex items-center gap-3">
-                  <Calendar className="w-6 h-6" />
-                  <span>{transformed.data_fmt || '—'}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Users className="w-6 h-6" />
-                  <span>{Array.isArray(transformed.autores) ? transformed.autores.join('; ') : transformed.autores}</span>
+        <div className="w-full mx-auto px-6 lg:px-8 xl:px-10 2xl:px-22 py-10 md:pt-46">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 xl:gap-16 2xl:gap-16">
+            {/* Cover Image */}
+            <div className="lg:col-span-5">
+              <div className="sticky top-24">
+                <div className="h-[calc(100vh-18rem)] rounded-lg overflow-hidden shadow-2xl">
+                  <img
+                    src={transformed.capa_url}
+                    alt={transformed.nome}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-12 gap-16">
-              <div className="col-span-5">
-                <div className="sticky top-8">
-                  <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
-                    <img src={transformed.capa_url} alt={transformed.nome} className="w-full h-full object-cover" />
+            {/* Content */}
+            <div className="lg:col-span-7">
+              <div className="sticky top-24 max-h-[calc(100vh-8rem)] flex flex-col gap-8">
+                <div className="space-y-4">
+                  {transformed.categoria_nome && (
+                    <span className="inline-block px-12 py-6 text-2xl lg:text-3xl 2xl:text-5xl bg-secondary text-secondary-foreground rounded-full">
+                      {transformed.categoria_nome}
+                    </span>
+                  )}
+                  <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl 2xl:text-8xl text-foreground text-balance leading-tight">
+                    {transformed.nome}
+                  </h1>
+                </div>
+
+                <div className="flex flex-wrap gap-6 text-xl md:text-2xl 2xl:text-3xl text-muted-foreground">
+                  <div className="flex items-start gap-3">
+                    <div>
+                      {Array.isArray(transformed.autores) ? 
+                        transformed.autores.map((autor, index) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <Users className="w-7 h-7 lg:w-8 lg:h-8 mt-1" />
+                            <span>{autor}</span>
+                          </div>
+                        )) : 
+                        <div className="flex items-center gap-2">
+                          <Users className="w-7 h-7 lg:w-8 lg:h-8 mt-1" />
+                          <span>{transformed.autores}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3 lg:ml-16 xl:ml-24 2xl:ml-52">
+                    <Calendar className="w-7 h-7 lg:w-8 lg:h-8 mt-1" />
+                    <span>{transformed.data_fmt || '—'}</span>
                   </div>
                 </div>
-              </div>
 
-              <div className="col-span-7 space-y-16">
-                <div className="prose prose-3xl max-w-none">
-                  <div
-                    className="text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
-                    dangerouslySetInnerHTML={{ __html: transformed.descricao }}
-                  />
-                </div>
-
-                <div className="space-y-4">
-                  <h2 className="font-serif text-5xl text-foreground">{labels.authors}</h2>
-                  <ul className="list-disc pl-8 text-3xl text-foreground/80">
-                    {Array.isArray(transformed.autores) ? (
-                      transformed.autores.map((a: string, i: number) => <li key={i}>{a}</li>)
-                    ) : (
-                      <li>{transformed.autores}</li>
-                    )}
-                  </ul>
-                </div>
+                <ScrollFade
+                  html={transformed.descricao}
+                  containerClassName="relative prose prose-3xl max-w-none mt-10"
+                  contentClassName="h-[84rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
+                />
               </div>
             </div>
           </div>
@@ -94,3 +107,4 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
     notFound()
   }
 }
+
