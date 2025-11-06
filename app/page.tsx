@@ -72,6 +72,18 @@ export default function HomePage() {
       href: "/documentos",
       image: "/images/publicacoes.jpg",
     },
+    {
+      title: lang === "pt" ? "Alunos" : "Students",
+      description: lang === "pt" ? "Categorias de documentos" : "Document categories",
+      href: "/alunos",
+      image: "/images/publicacoes.jpg",
+    },
+    {
+      title: lang === "pt" ? "Pessoal" : "Workforce",
+      description: lang === "pt" ? "Categorias de documentos" : "Document categories",
+      href: "/pessoal",
+      image: "/images/publicacoes.jpg",
+    },
   ]
 
   return (
@@ -91,7 +103,7 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section - Compact */}
-      <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
+      <div className="relative flex flex-col items-center justify-center px-12 pt-32 pb-8 bg-gradient-to-b from-background via-background/95 to-background/80">
         <div className="text-center space-y-4">
           <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
             Domingos Rebelo
@@ -104,8 +116,8 @@ export default function HomePage() {
       </div>
 
       {/* Navigation Grid - Now with 7 sections */}
-      <div className="flex-1 px-8 pb-8">
-        <div className="h-full grid grid-cols-3 grid-rows-3 gap-6">
+      <div className="flex-1 px-16 pt-16 pb-16">
+        <div className="h-full grid grid-cols-3 grid-rows-3 gap-16">
           {sections.map((section) => (
             <Link
               key={section.href}
