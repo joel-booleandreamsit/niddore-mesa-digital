@@ -26,8 +26,8 @@ export default async function PublicacaoDetalhePage({ params }: { params: Promis
       ano: publicacao.ano_publicacao || new Date().getFullYear(),
       capa: publicacao.capa ? assetUrl(publicacao.capa, "fit=cover&width=1600&height=2133&format=webp") : '/placeholder.svg',
       conteudo: publicacao.translations?.[0]?.descricao || labels.contentUnavailable,
-      paginas: publicacao.paginas || 'N/A',
-      edicao: publicacao.edicao || 'N/A',
+      paginas: publicacao.paginas || labels.notAvailable,
+      edicao: publicacao.edicao || labels.notAvailable,
       autores: autoresNomes
     }
 

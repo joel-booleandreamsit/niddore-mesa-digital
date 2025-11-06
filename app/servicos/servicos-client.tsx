@@ -37,8 +37,8 @@ export default function ServicosClient({ servicos, statusOptions, labels }: Serv
     })
     .sort((a, b) => {
       if (sortBy === "data_inicio") {
-        const dateA = new Date(a.data_inicio || '1900-01-01')
-        const dateB = new Date(b.data_inicio || '1900-01-01')
+        const dateA = new Date(a.data_inicio || '1900-01-01T00:00:00')
+        const dateB = new Date(b.data_inicio || '1900-01-01T00:00:00')
         return sortOrder === "desc" ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime()
       } else {
         return sortOrder === "desc" 
@@ -126,12 +126,12 @@ export default function ServicosClient({ servicos, statusOptions, labels }: Serv
                     ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" 
                     : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
                 }`}>
-                  {servico.isActive ? (labels.active || "Ativo") : "Inativo"}
+                  {servico.isActive ? labels.active : labels.inactive}
                 </span>
                 <div className="flex items-center gap-4 text-muted-foreground">
                   <Calendar className="w-10 h-10" />
                   <span className="text-3xl font-medium">
-                    {formatDate(servico.data_inicio) || 'N/A'}
+                    {formatDate(servico.data_inicio) || labels.notAvailable}
                   </span>
                 </div>
               </div>

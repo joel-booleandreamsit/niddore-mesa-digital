@@ -32,14 +32,14 @@ export default async function MateriaisCategoriaPage({ params, searchParams }: {
     const materiaisTransformados = (materiais || []).map((m: any) => ({
       id: m.id,
       nome: m.translations?.[0]?.nome || labels.nameUnavailable,
-      breve: m.translations?.[0]?.breve_descricao || '',
+      breve: m.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
       foto_url: m.capa ? assetUrl(m.capa, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
       edificioId: m.edificio?.id ?? null,
     }))
 
     const edificiosTransformed = (edificios || []).map((e: any) => ({
       id: e.id,
-      nome: e.translations?.[0]?.nome || '—',
+      nome: e.translations?.[0]?.nome || labels.nameUnavailable,
     }))
 
     return (
@@ -51,7 +51,7 @@ export default async function MateriaisCategoriaPage({ params, searchParams }: {
             <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
               {categoriaNome}
             </h1>
-            <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{labels.gallery || 'Galeria'}</p>
+            <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{labels.gallery}</p>
           </div>
         </div>
 
