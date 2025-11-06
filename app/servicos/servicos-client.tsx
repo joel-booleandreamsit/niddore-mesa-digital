@@ -37,8 +37,8 @@ export default function ServicosClient({ servicos, statusOptions, labels }: Serv
     })
     .sort((a, b) => {
       if (sortBy === "data_inicio") {
-        const dateA = new Date(a.data_inicio || '1900-01-01T00:00:00')
-        const dateB = new Date(b.data_inicio || '1900-01-01T00:00:00')
+        const dateA = new Date(a.data_inicio || '1900-01-01')
+        const dateB = new Date(b.data_inicio || '1900-01-01')
         return sortOrder === "desc" ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime()
       } else {
         return sortOrder === "desc" 

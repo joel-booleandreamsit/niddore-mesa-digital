@@ -33,8 +33,8 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
             const dfId = typeof df === 'object' ? df?.id : df
             const candidateId = typeof it === 'string' ? it : (dfId || it?.file || it?.ficheiro || it?.foto || it?.imagem || it?.id)
             if (!candidateId || typeof candidateId !== 'string') return null
-            const title = it?.titulo || it?.title || it?.nome || it?.name || (typeof df === 'object' ? (df as any)?.title : null) || labels.nameUnavailable
-            const description = it?.descricao || it?.description || (typeof df === 'object' ? (df as any)?.description : null) || labels.descriptionUnavailable
+            const title = it?.titulo || it?.title || it?.nome || it?.name || (typeof df === 'object' ? (df as any)?.title : null) || ''
+            const description = it?.descricao || it?.description || (typeof df === 'object' ? (df as any)?.description : null) || ''
             const mime = (typeof df === 'object' && (df?.type || (df as any)?.mime_type)) as string | undefined
             const filename = (typeof df === 'object' && (df as any)?.filename_download) as string | undefined
             const isVideo = (mime && mime.startsWith('video/')) || (filename && filename.toLowerCase().endsWith('.mp4'))

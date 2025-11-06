@@ -28,7 +28,7 @@ export default async function MateriaisCategoriasPage({ searchParams }: { search
 
   const edificiosTransformed = edificios.map((e: any) => ({
     id: e.id,
-    nome: e.translations?.[0]?.nome || labels.nameUnavailable,
+    nome: e.translations?.[0]?.nome || '—',
   }))
 
   const linksTransformed = links

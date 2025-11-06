@@ -32,14 +32,14 @@ export default async function MateriaisCategoriaPage({ params, searchParams }: {
     const materiaisTransformados = (materiais || []).map((m: any) => ({
       id: m.id,
       nome: m.translations?.[0]?.nome || labels.nameUnavailable,
-      breve: m.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
+      breve: m.translations?.[0]?.breve_descricao || '',
       foto_url: m.capa ? assetUrl(m.capa, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
       edificioId: m.edificio?.id ?? null,
     }))
 
     const edificiosTransformed = (edificios || []).map((e: any) => ({
       id: e.id,
-      nome: e.translations?.[0]?.nome || labels.nameUnavailable,
+      nome: e.translations?.[0]?.nome || '—',
     }))
 
     return (
