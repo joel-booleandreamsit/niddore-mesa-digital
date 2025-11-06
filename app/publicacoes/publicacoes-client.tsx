@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, ArrowUpDown } from "lucide-react"
+import { ArrowUpDown } from "lucide-react"
 
 interface Publicacao {
   id: number
@@ -126,10 +126,7 @@ export default function PublicacoesClient({ publicacoes, tipos, labels }: Public
                 className="text-2xl text-muted-foreground line-clamp-2 prose prose-sm max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-4 [&_ul]:pl-6 [&_ol]:pl-6"
                 dangerouslySetInnerHTML={{ __html: pub.descricao }}
               />
-              <div className="flex items-center gap-2 text-primary pt-2">
-                <span className="text-2xl">{labels.viewDetails || "Ver detalhes"}</span>
-                <ArrowRight className="w-7 h-7 group-hover:translate-x-1 transition-transform" />
-              </div>
+              
             </div>
           </Link>
         ))}

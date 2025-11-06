@@ -3,7 +3,6 @@ import { PageHeader } from "@/components/page-header"
 import fetchEdificios, { assetUrl } from "@/lib/directus"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight } from "lucide-react"
 import { t, getLang } from "@/lib/i18n"
 
 export const dynamic = 'force-dynamic'
@@ -79,7 +78,7 @@ export default async function EdificiosPage() {
   })
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background overflow-auto">
       <BackButton />
       <PageHeader title={labels.buildings} description={labels.buildingsDesc} />
 
@@ -101,13 +100,13 @@ export default async function EdificiosPage() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="p-10 space-y-10">
+              <div className="p-10 space-y-10 mb-8">
                 <h3 className="font-serif text-6xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight line-clamp-2">
                   {edificio.nome}
                 </h3>
 
                 {/* Active range timeline */}
-                <div className="space-y-6">
+                <div className="space-y-6 pt-8">
                   {/* Timeline: thin segments with centered dots and label above */}
                   <div className="flex items-center gap-4 relative">
                     {/* Duration label above center */}
@@ -140,10 +139,7 @@ export default async function EdificiosPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-primary pt-1">
-                  <span className="text-3xl font-medium">{labels.viewDetails}</span>
-                  <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
-                </div>
+                
               </div>
             </Link>
           ))}

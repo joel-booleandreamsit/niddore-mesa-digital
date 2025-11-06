@@ -2,7 +2,7 @@ import { BackButton } from "@/components/back-button"
 import { fetchGaleriaCategorias, assetUrl } from "@/lib/directus"
 import { t, getLang } from "@/lib/i18n"
 import Link from "next/link"
-import { ArrowRight } from "lucide-react"
+ 
 
 export const dynamic = 'force-dynamic'
 
@@ -52,14 +52,11 @@ export default async function GaleriaPage() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="p-10 space-y-6">
+                <div className="p-10 space-y-6 mb-10">
                   <h3 className="font-serif text-5xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
                     {categoria.nome}
                   </h3>
-                  <div className="flex items-center gap-4 text-primary pt-4">
-                    <span className="text-2xl font-medium">{labels.viewDetails || "Ver detalhes"}</span>
-                    <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
-                  </div>
+                  
                 </div>
               </Link>
             ))}

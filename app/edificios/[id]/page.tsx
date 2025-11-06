@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { t, getLang } from "@/lib/i18n"
 import Link from "next/link"
 import EdificioGallery from "@/components/edificio-gallery"
+import { ScrollFade } from "@/components/scroll-fade"
 
 export const dynamic = 'force-dynamic'
 
@@ -110,7 +111,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
     }
 
     return (
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-background overflow-auto">
         <BackButton />
 
         <div className="mx-auto px-8 py-8 w-full max-w-none space-y-12">
@@ -192,18 +193,18 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
               {/* Description */}
               {translatedEdificio.descricao && (
                 <div className="prose prose-3xl max-w-none">
-                  <h2 className="font-serif text-4xl text-foreground mb-6">{labels.aboutBuilding}</h2>
-                  <div
-                    className="h-[56rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
-                    dangerouslySetInnerHTML={{ __html: translatedEdificio.descricao }}
+                  
+                  <ScrollFade
+                    html={translatedEdificio.descricao}
+                    containerClassName="relative prose prose-3xl max-w-none"
+                    contentClassName="h-[62rem] overflow-y-auto pr-4 text-4xl text-foreground/80 leading-relaxed prose prose-3xl max-w-none [&_ul]:list-disc [&_ol]:list-decimal [&_li]:ml-8 [&_ul]:pl-12 [&_ol]:pl-12 [&_p]:mb-8 [&_h1]:text-6xl [&_h2]:text-5xl [&_h3]:text-4xl"
                   />
                 </div>
               )}
 
               {/* Gallery aligned with Location (nudged down) */}
               {galleryItems.length > 0 && (
-                <div className="border-t border-border pt-6 mt-10">
-                  <h2 className="font-serif text-4xl text-foreground mb-4">{labels.gallery}</h2>
+                <div className="border-t border-border pt-13 mt-12">                  
                   <EdificioGallery items={galleryItems} labels={{ gallery: labels.gallery, photo: labels.photo, descriptionUnavailable: labels.descriptionUnavailable }} />
                 </div>
               )}

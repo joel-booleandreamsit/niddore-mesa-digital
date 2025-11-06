@@ -43,29 +43,23 @@ export default function HomePage() {
       image: "/images/cursos.jpg",
     },
     {
-      title: lang === "pt" ? "Materiais" : "Materials",
-      description: lang === "pt" ? "Materiais utilizados na escola" : "Materials used in school",
-      href: "/materiais",
-      image: "/images/materiais.jpg",
-    },
-    {
       title: lang === "pt" ? "Publicações" : "Publications",
       description: lang === "pt" ? "Publicações da escola" : "School publications",
       href: "/publicacoes",
       image: "/images/publicacoes.jpg",
     },
-            {
-              title: lang === "pt" ? "Serviços" : "Services",
-              description: lang === "pt" ? "Serviços oferecidos pela escola" : "Services offered by the school",
-              href: "/servicos",
-              image: "/images/servicos.jpg",
-            },
-            {
-              title: lang === "pt" ? "Grupos" : "Groups",
-              description: lang === "pt" ? "Grupos da escola" : "School groups",
-              href: "/grupos",
-              image: "/images/grupos.jpg",
-            },
+    {
+      title: lang === "pt" ? "Serviços" : "Services",
+      description: lang === "pt" ? "Serviços oferecidos pela escola" : "Services offered by the school",
+      href: "/servicos",
+      image: "/images/servicos.jpg",
+    },
+    {
+      title: lang === "pt" ? "Grupos" : "Groups",
+      description: lang === "pt" ? "Grupos da escola" : "School groups",
+      href: "/grupos",
+      image: "/images/materiais.jpg",
+    },
     {
       title: lang === "pt" ? "Galeria de Fotos" : "Photo Gallery",
       description: lang === "pt" ? "Memórias visuais da escola" : "Visual memories of the school",
@@ -76,7 +70,19 @@ export default function HomePage() {
       title: lang === "pt" ? "Documentos" : "Documents",
       description: lang === "pt" ? "Categorias de documentos" : "Document categories",
       href: "/documentos",
-      image: "/images/documentos.jpg",
+      image: "/images/publicacoes.jpg",
+    },
+    {
+      title: lang === "pt" ? "Alunos" : "Students",
+      description: lang === "pt" ? "Categorias de documentos" : "Document categories",
+      href: "/alunos",
+      image: "/images/publicacoes.jpg",
+    },
+    {
+      title: lang === "pt" ? "Pessoal" : "Workforce",
+      description: lang === "pt" ? "Categorias de documentos" : "Document categories",
+      href: "/pessoal",
+      image: "/images/publicacoes.jpg",
     },
   ]
 
@@ -97,21 +103,21 @@ export default function HomePage() {
       </div>
 
       {/* Hero Section - Compact */}
-      <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
+      <div className="relative flex flex-col items-center justify-center px-12 pt-32 pb-8 bg-gradient-to-b from-background via-background/95 to-background/80">
         <div className="text-center space-y-4">
-          <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
+          <h1 className="text-7xl md:text-8xl lg:text-9xl text-foreground tracking-normal text-balance leading-none" style={{ fontFamily: 'DearScript, cursive', fontWeight: 'normal', letterSpacing: '16px' }}>
             Domingos Rebelo
           </h1>
-          <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{lang === "pt" ? "Escola Secundária" : "Secondary School"}</p>
-          <p className="text-xl md:text-2xl text-muted-foreground/80 text-balance">
-            {lang === "pt" ? "Descubra a história e o legado cultural" : "Discover the history and cultural legacy"}
+          <p className="pt-6 text-2xl md:text-6xl text-primary/80 font-serif italic text-balance">{lang === "pt" ? "Escola Secundária" : "Secondary School"}</p>
+          <p className="text-xl md:text-4xl text-muted-foreground/80 text-balance">
+            {lang === "pt" ? "Sentir a nossa identidade" : "Discover the history and cultural legacy"}
           </p>
         </div>
       </div>
 
       {/* Navigation Grid - Now with 7 sections */}
-      <div className="flex-1 px-8 pb-8">
-        <div className="h-full grid grid-cols-3 grid-rows-3 gap-6">
+      <div className="flex-1 px-16 pt-8 pb-16">
+        <div className="h-full grid grid-cols-3 grid-rows-3 gap-16">
           {sections.map((section) => (
             <Link
               key={section.href}

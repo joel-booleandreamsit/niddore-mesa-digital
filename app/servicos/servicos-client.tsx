@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowRight, ArrowUpDown, Calendar } from "lucide-react"
+import { ArrowUpDown, Calendar } from "lucide-react"
 
 interface Servico {
   id: number
@@ -138,10 +138,7 @@ export default function ServicosClient({ servicos, statusOptions, labels }: Serv
               <h3 className="font-serif text-7xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
                 {servico.nome}
               </h3>
-              <div className="flex items-center gap-4 text-primary pt-4">
-                <span className="text-3xl font-medium">{labels.viewDetails || "Ver detalhes"}</span>
-                <ArrowRight className="w-10 h-10 group-hover:translate-x-2 transition-transform" />
-              </div>
+              
             </div>
           </Link>
         ))}
