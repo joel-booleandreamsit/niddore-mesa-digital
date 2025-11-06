@@ -1,9 +1,9 @@
 import { BackButton } from "@/components/back-button"
-import { fetchGaleriaCategorias, fetchGaleriaFotosByCategoriaIds, assetUrl } from "@/lib/directus"
+import { fetchGaleriaCategorias, assetUrl } from "@/lib/directus"
 import { t, getLang } from "@/lib/i18n"
 import Link from "next/link"
-import { Folder, Image as ImageIcon } from "lucide-react"
- 
+import { Folder } from "lucide-react"
+
 
 export const dynamic = 'force-dynamic'
 
@@ -14,22 +14,11 @@ export default async function GaleriaPage() {
   // Fetch root categories
   const categorias = await fetchGaleriaCategorias(lang)
 
-  // Fetch photos that belong to root categories
-  const categoriaIds = categorias.map((c: any) => c.id)
-  const fotos = await fetchGaleriaFotosByCategoriaIds(categoriaIds, lang)
-
   // Transform categories data
   const categoriasTransformadas = categorias.map((item: any) => ({
     ...item,
     nome: item.translations?.[0]?.nome || 'Nome não disponível',
     foto_url: item.imagem ? assetUrl(item.imagem, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
-  }))
-
-  // Transform photos data
-  const fotosTransformadas = fotos.map((item: any) => ({
-    ...item,
-    breve_descricao: item.translations?.[0]?.breve_descricao || 'Descrição não disponível',
-    foto_url: item.foto ? assetUrl(item.foto, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
   }))
 
   return (
@@ -73,35 +62,6 @@ export default async function GaleriaPage() {
               </Link>
             ))}
           </div>
-
-          {fotosTransformadas.length > 0 && (
-            <div className="mt-24 space-y-10">
-              <h2 className="font-serif text-5xl text-foreground">{labels.photos || "Fotos"}</h2>
-              <div className="grid grid-cols-4 gap-16">
-                {fotosTransformadas.map((foto) => (
-                  <Link
-                    key={foto.id}
-                    href={`/galeria/${foto.id}`}
-                    className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98"
-                  >
-                    <div className="aspect-[4/3] overflow-hidden bg-muted">
-                      <img
-                        src={foto.foto_url}
-                        alt={foto.breve_descricao}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-                    <div className="p-10 space-y-6 mb-10">
-                      <h3 className="font-serif text-5xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight flex items-center gap-4">
-                        <ImageIcon className="w-10 h-10 text-muted-foreground" />
-                        {foto.breve_descricao}
-                      </h3>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
 
           {categoriasTransformadas.length === 0 && (
             <div className="text-center py-32">
