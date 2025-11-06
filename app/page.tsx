@@ -88,18 +88,30 @@ export default function HomePage() {
 
   return (
     <main className="h-screen bg-background overflow-hidden flex flex-col">
-      {/* Language Toggle */}
-      <div className="absolute top-4 right-4 z-10 flex gap-2">
+      {/* Language Toggle - Large and Prominent */}
+      <div className="absolute top-10 right-16 z-10 flex gap-6">
         <button
           onClick={() => changeLang("pt")}
-          className={`px-3 py-2 rounded-md border ${lang === "pt" ? "bg-primary text-primary-foreground border-primary" : "bg-card text-foreground border-border"}`}
+          className={`px-12 py-6 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 ${
+            lang === "pt" 
+              ? "bg-primary text-primary-foreground border-primary shadow-xl scale-[1.02]" 
+              : "bg-card/90 hover:bg-card text-foreground/90 border-border hover:border-primary/40 hover:scale-[1.02]"
+          }`}
           aria-label="Português"
-        >PT</button>
+        >
+          PT
+        </button>
         <button
           onClick={() => changeLang("en")}
-          className={`px-3 py-2 rounded-md border ${lang === "en" ? "bg-primary text-primary-foreground border-primary" : "bg-card text-foreground border-border"}`}
+          className={`px-12 py-6 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 ${
+            lang === "en" 
+              ? "bg-primary text-primary-foreground border-primary shadow-xl scale-[1.02]" 
+              : "bg-card/90 hover:bg-card text-foreground/90 border-border hover:border-primary/40 hover:scale-[1.02]"
+          }`}
           aria-label="English"
-        >EN</button>
+        >
+          EN
+        </button>
       </div>
 
       {/* Hero Section - Compact */}
@@ -140,19 +152,7 @@ export default function HomePage() {
                   </h2>
                   <p className="text-lg md:text-xl lg:text-2xl text-white/80 group-hover:text-white transition-colors duration-300 text-balance leading-relaxed">
                     {section.description}
-                  </p>
-
-                  <div className="flex items-center gap-3 text-base md:text-lg text-primary/80 group-hover:text-primary transition-colors duration-300 pt-2">
-                    <span>{lang === "pt" ? "Toque para explorar" : "Tap to explore"}</span>
-                    <svg
-                      className="w-6 h-6 transform group-hover:translate-x-2 transition-transform duration-300"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
+                  </p>                  
                 </div>
               </div>
 
