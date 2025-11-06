@@ -51,6 +51,8 @@ const labels = {
             galleryDesc: "Galeria de fotos da escola",
             category: "Categoria",
             subcategory: "Subcategoria",
+            photos: "Fotos",
+            subcategories: "Sub-Categorias",
             photo: "Foto",
             openMap: "Abrir no OpenStreetMap",
             // Documentos
@@ -111,6 +113,8 @@ const labels = {
             galleryDesc: "School photo gallery",
             category: "Category",
             subcategory: "Subcategory",
+            photos: "Photos",
+            subcategories: "Subcategories",
             photo: "Photo",
             openMap: "OpenStreetMap",
             // Documents

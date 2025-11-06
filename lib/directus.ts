@@ -402,6 +402,41 @@ export async function fetchGaleriaSubcategorias(categoriaId?: string | number, l
   return data
 }
 
+export async function fetchGaleriaCategoriaById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Galeria_Categorias', id, {
+      fields: [
+        '*',
+        'translations.*',
+        'imagem',
+        'categoria_principal.id',
+        'categoria_principal.translations.*',
+        'categoria_principal.categoria_principal'
+      ],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        },
+        categoria_principal: {
+          translations: {
+            _filter: {
+              languages_code: {
+                _eq: lang
+              }
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
 export async function fetchGaleriaFotos(subcategoriaId: string | number, lang: string = 'pt') {
   const data = await directus.request(
     readItems('Galeria_Fotos', {
@@ -423,10 +458,39 @@ export async function fetchGaleriaFotos(subcategoriaId: string | number, lang: s
   return data
 }
 
+export async function fetchGaleriaFotosByCategoriaIds(ids: Array<string | number>, lang: string = 'pt') {
+  if (!ids || ids.length === 0) return []
+  const data = await directus.request(
+    readItems('Galeria_Fotos', {
+      fields: ['*', 'translations.*', 'categoria.id'],
+      filter: { categoria: { _in: ids } },
+      sort: ['ordem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+
+  return data
+}
+
 export async function fetchGaleriaFotoById(id: string | number, lang: string = 'pt') {
   const data = await directus.request(
     readItem('Galeria_Fotos', id, {
-      fields: ['*', 'translations.*', 'categoria.translations.*', 'categoria.categoria_principal.translations.*'],
+      fields: [
+        '*',
+        'translations.*',
+        'categoria.id',
+        'categoria.translations.*',
+        'categoria.categoria_principal.id',
+        'categoria.categoria_principal.translations.*'
+      ],
       deep: {
         translations: {
           _filter: {
@@ -458,7 +522,9 @@ export async function fetchGaleriaFotoById(id: string | number, lang: string = '
   )
 
   return data
-}export async function fetchMateriaisCategorias(lang: string = 'pt') {
+}
+
+export async function fetchMateriaisCategorias(lang: string = 'pt') {
   const data = await directus.request(
     readItems('Materiais_e_trabalhos_Categorias', {
       fields: ['*', 'translations.*', 'imagem'],

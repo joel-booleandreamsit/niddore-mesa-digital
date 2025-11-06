@@ -1,5 +1,6 @@
 import { BackButton } from "@/components/back-button"
-import { fetchGaleriaFotoById, assetUrl } from "@/lib/directus"
+import { fetchGaleriaFotoById, fetchGaleriaCategoriaById, assetUrl } from "@/lib/directus"
+import { Folder, Image as ImageIcon } from "lucide-react"
 import { notFound } from "next/navigation"
 import { t, getLang } from "@/lib/i18n"
 
@@ -18,8 +19,20 @@ export default async function GaleriaDetalhePage({ params }: { params: Promise<{
       breve_descricao: foto.translations?.[0]?.breve_descricao || 'Descrição não disponível',
       descricao: foto.translations?.[0]?.descricao || 'Descrição não disponível',
       categoria_nome: foto.categoria?.translations?.[0]?.nome || 'Categoria não disponível',
-      categoria_principal_nome: foto.categoria?.categoria_principal?.translations?.[0]?.nome || null,
+      categoria_id: foto.categoria?.id || null,
       foto_url: foto.foto ? assetUrl(foto.foto, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
+    }
+
+    // Build breadcrumb chain up to root: Root > ... > Category > Foto
+    const breadcrumbs: Array<{ id: number; nome: string }> = []
+    if (transformedFoto.categoria_id) {
+      let current = await fetchGaleriaCategoriaById(transformedFoto.categoria_id, lang)
+      while (current) {
+        breadcrumbs.unshift({ id: current.id, nome: current.translations?.[0]?.nome || 'Categoria' })
+        const parentId = current.categoria_principal?.id
+        if (!parentId) break
+        current = await fetchGaleriaCategoriaById(parentId, lang)
+      }
     }
 
     return (
@@ -31,19 +44,27 @@ export default async function GaleriaDetalhePage({ params }: { params: Promise<{
           <div className="max-w-none mx-auto">
             {/* Header Section */}
             <div className="mb-16">
-              <h1 className="font-serif text-9xl text-foreground text-balance leading-tight mb-8">
+              <h1 className="font-serif text-9xl text-foreground text-balance leading-tight mb-8 flex items-center gap-6">
+                <ImageIcon className="w-16 h-16 text-muted-foreground" />
                 {transformedFoto.breve_descricao}
               </h1>
               
               {/* Breadcrumbs */}
               <div className="flex items-center gap-4 text-3xl text-muted-foreground mb-8">
-                {transformedFoto.categoria_principal_nome && (
-                  <>
-                    <span>{transformedFoto.categoria_principal_nome}</span>
-                    <span>/</span>
-                  </>
-                )}
-                <span>{transformedFoto.categoria_nome}</span>
+                {breadcrumbs.map((bc, idx) => (
+                  <span key={bc.id} className="flex items-center gap-4">
+                    {idx > 0 && <span>&gt;</span>}
+                    <a href={`/galeria/categoria/${bc.id}`} className="hover:text-primary flex items-center gap-2">
+                      <Folder className="w-6 h-6" />
+                      {bc.nome}
+                    </a>
+                  </span>
+                ))}
+                {breadcrumbs.length > 0 && <span className="mx-2">&gt;</span>}
+                <span className="text-foreground flex items-center gap-2">
+                  <ImageIcon className="w-6 h-6" />
+                  {transformedFoto.breve_descricao}
+                </span>
               </div>
             </div>
 
