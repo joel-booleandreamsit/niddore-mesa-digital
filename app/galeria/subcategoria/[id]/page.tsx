@@ -67,7 +67,7 @@ export default async function GaleriaSubcategoriaPage({ params }: { params: Prom
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>
-                  <div className="p-10 space-y-6">
+                  <div className="p-10 space-y-6 mb-10">
                     <h3 className="font-serif text-5xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
                       {foto.breve_descricao}
                     </h3>

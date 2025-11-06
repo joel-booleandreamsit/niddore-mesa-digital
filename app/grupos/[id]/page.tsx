@@ -38,7 +38,7 @@ export default async function GrupoDetalhePage({ params }: { params: Promise<{ i
             const isVideo = (mime && mime.startsWith('video/')) || (filename && filename.toLowerCase().endsWith('.mp4'))
             const url = isVideo
               ? assetUrl(candidateId)
-              : assetUrl(candidateId, "fit=cover&width=1600&height=1000&format=webp")
+              : assetUrl(candidateId, "fit=cover&format=webp")
             return { id: candidateId, url, title, description, type: isVideo ? 'video' : 'image' as const }
           })
           .filter(Boolean) as any[]
