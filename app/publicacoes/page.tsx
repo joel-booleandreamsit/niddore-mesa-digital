@@ -27,8 +27,8 @@ export default async function PublicacoesPage() {
 
   return (
     <main className="min-h-screen bg-background overflow-auto">
-      <BackButton label={labels.back || "Voltar"} />
-      <PageHeader title={labels.publications || "Publicações"} description={labels.publicationsDesc || "Publicações da escola ao longo dos anos"} />
+      <BackButton label={labels.back} />
+      <PageHeader title={labels.publications} description={labels.publicationsDesc} />
       
       <PublicacoesClient 
         publicacoes={publicacoes}

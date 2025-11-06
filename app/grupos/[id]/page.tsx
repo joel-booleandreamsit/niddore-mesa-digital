@@ -48,7 +48,7 @@ export default async function GrupoDetalhePage({ params }: { params: Promise<{ i
 
     return (
       <main className="min-h-screen bg-background overflow-auto">
-        <BackButton label={labels.back || "Voltar"} />
+        <BackButton label={labels.back} />
 
         {/* 4K Optimized Layout */}
         <div className="w-full px-16 pt-32 pb-8">

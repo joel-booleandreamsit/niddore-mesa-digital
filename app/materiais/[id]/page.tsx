@@ -26,7 +26,7 @@ export default async function MaterialDetalhePage({ params, searchParams }: { pa
 
     return (
       <main className="min-h-screen bg-background overflow-auto">
-        <BackButton label={labels.back || "Voltar"} />
+        <BackButton label={labels.back} />
 
         <div className="w-full mx-auto px-6 lg:px-8 xl:px-10 2xl:px-22 py-10 md:pt-46">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 xl:gap-16 2xl:gap-16">

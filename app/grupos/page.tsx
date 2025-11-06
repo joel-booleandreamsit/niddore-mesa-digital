@@ -23,7 +23,7 @@ export default async function GruposPage() {
 
   return (
     <main className="h-screen bg-background overflow-hidden flex flex-col">
-      <BackButton label={labels.back || "Voltar"} />
+      <BackButton label={labels.back} />
       
       {/* Header Section */}
       <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
