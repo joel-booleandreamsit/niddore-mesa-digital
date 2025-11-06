@@ -105,18 +105,18 @@ export default function HomePage() {
       {/* Hero Section - Compact */}
       <div className="relative flex flex-col items-center justify-center px-12 pt-32 pb-8 bg-gradient-to-b from-background via-background/95 to-background/80">
         <div className="text-center space-y-4">
-          <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
+          <h1 className="text-7xl md:text-8xl lg:text-9xl text-foreground tracking-normal text-balance leading-none" style={{ fontFamily: 'DearScript, cursive', fontWeight: 'normal', letterSpacing: '16px' }}>
             Domingos Rebelo
           </h1>
-          <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{lang === "pt" ? "Escola Secundária" : "Secondary School"}</p>
-          <p className="text-xl md:text-2xl text-muted-foreground/80 text-balance">
-            {lang === "pt" ? "Descubra a história e o legado cultural" : "Discover the history and cultural legacy"}
+          <p className="pt-6 text-2xl md:text-6xl text-primary/80 font-serif italic text-balance">{lang === "pt" ? "Escola Secundária" : "Secondary School"}</p>
+          <p className="text-xl md:text-4xl text-muted-foreground/80 text-balance">
+            {lang === "pt" ? "Sentir a nossa identidade" : "Discover the history and cultural legacy"}
           </p>
         </div>
       </div>
 
       {/* Navigation Grid - Now with 7 sections */}
-      <div className="flex-1 px-16 pt-16 pb-16">
+      <div className="flex-1 px-16 pt-8 pb-16">
         <div className="h-full grid grid-cols-3 grid-rows-3 gap-16">
           {sections.map((section) => (
             <Link
