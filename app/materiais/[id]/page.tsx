@@ -19,7 +19,7 @@ export default async function MaterialDetalhePage({ params, searchParams }: { pa
     const material = await fetchMaterialById(id, lang)
     if (!material || (material as any).tipo !== tipo) notFound()
 
-    const nome = material.translations?.[0]?.nome || 'Nome não disponível'
+    const nome = material.translations?.[0]?.nome || labels.nameUnavailable
     const descricao = material.translations?.[0]?.descricao || ''
     const capa = material.capa ? assetUrl(material.capa, "fit=cover&width=1600&height=2133&format=webp") : '/placeholder.svg'
     const categoriaNome = material.categoria?.translations?.[0]?.nome || null

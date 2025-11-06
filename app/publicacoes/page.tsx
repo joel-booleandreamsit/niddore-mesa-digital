@@ -14,16 +14,16 @@ export default async function PublicacoesPage() {
   // Transform data to match expected format
   const publicacoes = data.map((item: any) => ({
     ...item,
-    nome: item.nome || 'Nome não disponível',
-    descricao: item.translations?.[0]?.breve_descricao || 'Descrição não disponível',
-    tipo: item.tipo_publicacao_translated || item.tipo_publicacao || 'Tipo não disponível',
+    nome: item.nome || labels.nameUnavailable,
+    descricao: item.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
+    tipo: item.tipo_publicacao_translated || item.tipo_publicacao || labels.typeUnavailable,
     ano: item.ano_publicacao || new Date().getFullYear(),
     capa: item.capa ? assetUrl(item.capa, "fit=cover&width=400&height=600&format=webp") : '/placeholder.svg',
-    autores: item.autores?.map((autor: any) => autor.Autores_id?.nome).filter(Boolean) || ['Autor não disponível']
+    autores: item.autores?.map((autor: any) => autor.Autores_id?.nome).filter(Boolean) || [labels.authorUnavailable]
   }))
 
   // Generate dynamic filters
-  const tipos = [labels.all || "Todos", ...Array.from(new Set(publicacoes.map(pub => pub.tipo).filter(Boolean)))]
+  const tipos = [labels.all, ...Array.from(new Set(publicacoes.map(pub => pub.tipo).filter(Boolean)))]
 
   return (
     <main className="min-h-screen bg-background overflow-auto">

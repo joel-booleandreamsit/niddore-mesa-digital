@@ -14,7 +14,7 @@ export default async function ServicosPage() {
   // Transform data to match expected format
   const servicos = data.map((item: any) => ({
     ...item,
-    nome: item.translations?.[0]?.nome || 'Nome não disponível',
+    nome: item.translations?.[0]?.nome || labels.nameUnavailable,
     data_inicio: item.data_inicio || null,
     data_fim: item.data_fim || null,
     foto_capa: item.foto_capa ? assetUrl(item.foto_capa, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
@@ -22,7 +22,7 @@ export default async function ServicosPage() {
   }))
 
   // Generate dynamic filters based on status
-  const statusOptions = [labels.all || "Todos", labels.active || "Ativo", "Inativo"]
+  const statusOptions = [labels.all, labels.active, labels.inactive]
 
   return (
     <main className="h-screen bg-background overflow-hidden flex flex-col">
