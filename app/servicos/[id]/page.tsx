@@ -51,7 +51,7 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
 
     const formatDate = (dateString: string | null) => {
       if (!dateString) return null
-      return new Date(dateString).toLocaleDateString('pt-PT', {
+      return new Date(dateString).toLocaleDateString(lang === 'en' ? 'en-US' : 'pt-PT', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'

@@ -19,7 +19,7 @@ interface ServicosClientProps {
   labels: any
 }
 
-export default function ServicosClient({ servicos, statusOptions, labels }: ServicosClientProps) {
+export default function ServicosClient({ servicos, statusOptions, labels, lang }: ServicosClientProps) {
   const [statusAtivo, setStatusAtivo] = useState(labels.all || "Todos")
   const [sortBy, setSortBy] = useState<"data_inicio" | "nome">("data_inicio")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
@@ -49,7 +49,7 @@ export default function ServicosClient({ servicos, statusOptions, labels }: Serv
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return null
-    return new Date(dateString).toLocaleDateString('pt-PT', {
+    return new Date(dateString).toLocaleDateString(lang === 'en' ? 'en-US' : 'pt-PT', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'

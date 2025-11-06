@@ -112,7 +112,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
 
     return (
       <main className="min-h-screen bg-background overflow-auto">
-        <BackButton label={t(lang).back} />
+        <BackButton label={labels.back} />
 
         <div className="mx-auto px-8 py-8 w-full max-w-none space-y-12">
           <div className="space-y-3 pt-12">

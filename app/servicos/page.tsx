@@ -44,6 +44,7 @@ export default async function ServicosPage() {
           servicos={servicos}
           statusOptions={statusOptions}
           labels={labels}
+          lang={lang}
         />
       </div>
     </main>
