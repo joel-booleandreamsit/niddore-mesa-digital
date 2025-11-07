@@ -18,8 +18,8 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
     // Transform data to match expected format
     const transformedServico = {
       ...servico,
-      nome: servico.translations?.[0]?.nome || 'Nome não disponível',
-      descricao: servico.translations?.[0]?.descricao || 'Descrição não disponível',
+      nome: servico.translations?.[0]?.nome || labels.nameUnavailable,
+      descricao: servico.translations?.[0]?.descricao || labels.descriptionUnavailable,
       data_inicio: servico.data_inicio || null,
       data_fim: servico.data_fim || null,
       foto_capa: servico.foto_capa ? assetUrl(servico.foto_capa, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
@@ -51,7 +51,7 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
 
     const formatDate = (dateString: string | null) => {
       if (!dateString) return null
-      return new Date(dateString).toLocaleDateString('pt-PT', {
+      return new Date(dateString).toLocaleDateString(lang === 'en' ? 'en-US' : 'pt-PT', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
@@ -94,15 +94,15 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
                   <div className="flex items-center gap-6">
                     <Calendar className="w-12 h-12" />
                     <div>
-                      <p className="text-2xl text-muted-foreground mb-2">{labels.startDate || "Data de início"}</p>
-                      <span className="text-5xl font-medium">{formatDate(transformedServico.data_inicio) || 'N/A'}</span>
+                      <p className="text-2xl text-muted-foreground mb-2">{labels.startDate}</p>
+                      <span className="text-5xl font-medium">{formatDate(transformedServico.data_inicio) || labels.notAvailable}</span>
                     </div>
                   </div>
                   {transformedServico.data_fim && (
                     <div className="flex items-center gap-6">
                       <Clock className="w-12 h-12" />
                       <div>
-                        <p className="text-2xl text-muted-foreground mb-2">{labels.endDate || "Data de fim"}</p>
+                        <p className="text-2xl text-muted-foreground mb-2">{labels.endDate}</p>
                         <span className="text-5xl font-medium">{formatDate(transformedServico.data_fim)}</span>
                       </div>
                     </div>

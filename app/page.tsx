@@ -92,25 +92,27 @@ export default function HomePage() {
       <div className="absolute top-10 right-16 z-10 flex gap-6">
         <button
           onClick={() => changeLang("pt")}
-          className={`px-12 py-6 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 ${
+          className={`px-12 py-6 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 flex items-center gap-3 ${
             lang === "pt" 
               ? "bg-primary text-primary-foreground border-primary shadow-xl scale-[1.02]" 
               : "bg-card/90 hover:bg-card text-foreground/90 border-border hover:border-primary/40 hover:scale-[1.02]"
           }`}
           aria-label="Português"
         >
-          PT
+          <span className="text-4xl">🇵🇹</span>
+          <span>PT</span>
         </button>
         <button
           onClick={() => changeLang("en")}
-          className={`px-12 py-6 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 ${
+          className={`px-12 py-6 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 flex items-center gap-3 ${
             lang === "en" 
               ? "bg-primary text-primary-foreground border-primary shadow-xl scale-[1.02]" 
               : "bg-card/90 hover:bg-card text-foreground/90 border-border hover:border-primary/40 hover:scale-[1.02]"
           }`}
           aria-label="English"
         >
-          EN
+          <span className="text-4xl">🇬🇧</span>
+          <span>EN</span>
         </button>
       </div>
 

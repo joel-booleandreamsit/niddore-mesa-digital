@@ -17,13 +17,13 @@ export default async function GaleriaPage() {
   // Transform categories data
   const categoriasTransformadas = categorias.map((item: any) => ({
     ...item,
-    nome: item.translations?.[0]?.nome || 'Nome não disponível',
+    nome: item.translations?.[0]?.nome || labels.nameUnavailable,
     foto_url: item.imagem ? assetUrl(item.imagem, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
   }))
 
   return (
     <main className="h-screen bg-background overflow-hidden flex flex-col">
-      <BackButton label={labels.back || "Voltar"} />
+      <BackButton label={labels.back} />
       
       {/* Header Section */}
       <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
@@ -65,7 +65,7 @@ export default async function GaleriaPage() {
 
           {categoriasTransformadas.length === 0 && (
             <div className="text-center py-32">
-              <p className="text-4xl text-muted-foreground font-medium">Nenhuma categoria encontrada.</p>
+              <p className="text-4xl text-muted-foreground font-medium">{labels.noCategoriesFound}</p>
             </div>
           )}
         </div>

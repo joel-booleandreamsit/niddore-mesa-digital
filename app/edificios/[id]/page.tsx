@@ -18,8 +18,8 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
     // Use translations from Directus if available, otherwise fallback to original
     const translatedEdificio = {
       ...edificio,
-      nome: edificio.translations?.[0]?.nome || 'Nome não disponível',
-      descricao: edificio.translations?.[0]?.descricao || 'Descrição não disponível',
+      nome: edificio.translations?.[0]?.nome || labels.nameUnavailable,
+      descricao: edificio.translations?.[0]?.descricao || labels.descriptionUnavailable,
     }
 
     // Extract gallery items with optional title/description (supports Directus M2M: fotos_galeria.directus_files_id)
@@ -112,7 +112,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
 
     return (
       <main className="min-h-screen bg-background overflow-auto">
-        <BackButton />
+        <BackButton label={labels.back} />
 
         <div className="mx-auto px-8 py-8 w-full max-w-none space-y-12">
           <div className="space-y-3 pt-12">
@@ -175,7 +175,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
                     <div className="rounded-xl overflow-hidden border border-border bg-card mt-11">
                       <div className="w-full h-[30rem]">
                         <iframe
-                          title="OpenStreetMap"
+                          title={labels.openMap}
                           src={mapSrc}
                           className="w-full h-full"
                           loading="lazy"

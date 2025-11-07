@@ -52,7 +52,7 @@ export default async function CursosPage({
 
   return (
     <main className="min-h-screen bg-background overflow-auto">
-      <BackButton />
+      <BackButton label={labels.back} />
       <PageHeader title={labels.courses} description={labels.coursesDesc} />
 
       <CursosList

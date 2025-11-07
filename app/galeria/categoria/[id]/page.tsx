@@ -26,13 +26,13 @@ export default async function GaleriaCategoriaPage({ params }: { params: Promise
     // Transform category data
     const categoriaTransformada = {
       ...categoria,
-      nome: categoria.translations?.[0]?.nome || 'Nome não disponível',
+      nome: categoria.translations?.[0]?.nome || labels.nameUnavailable,
     }
 
     // Transform subcategories data
     const subcategoriasTransformadas = subcategorias.map((item: any) => ({
       ...item,
-      nome: item.translations?.[0]?.nome || 'Nome não disponível',
+      nome: item.translations?.[0]?.nome || labels.nameUnavailable,
       foto_url: item.imagem ? assetUrl(item.imagem, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
     }))
 
@@ -40,7 +40,7 @@ export default async function GaleriaCategoriaPage({ params }: { params: Promise
 
     const fotosTransformadas = fotosData.map((item: any) => ({
       ...item,
-      breve_descricao: item.translations?.[0]?.breve_descricao || 'Descrição não disponível',
+      breve_descricao: item.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
       foto_url: item.foto ? assetUrl(item.foto, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
     }))
 
@@ -48,7 +48,7 @@ export default async function GaleriaCategoriaPage({ params }: { params: Promise
     const breadcrumbs: Array<{ id: number; nome: string }> = []
     let current: any = categoria
     while (current) {
-      breadcrumbs.unshift({ id: current.id, nome: current.translations?.[0]?.nome || 'Categoria' })
+      breadcrumbs.unshift({ id: current.id, nome: current.translations?.[0]?.nome || labels.category })
       const parentId = current.categoria_principal?.id
       if (!parentId) break
       current = await fetchGaleriaCategoriaById(parentId, lang)
@@ -56,7 +56,7 @@ export default async function GaleriaCategoriaPage({ params }: { params: Promise
 
     return (
       <main className="h-screen bg-background overflow-hidden flex flex-col">
-        <BackButton label={labels.back || "Voltar"} />
+        <BackButton label={labels.back} />
         
         {/* Header Section */}
         <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">

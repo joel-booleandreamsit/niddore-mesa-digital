@@ -15,25 +15,25 @@ export default async function PublicacaoDetalhePage({ params }: { params: Promis
     const publicacao = await fetchPublicacaoById(id, lang)
 
     // Extract author names from the autores data
-    const autoresNomes = publicacao.autores?.map((autor: any) => autor.Autores_id?.nome).filter(Boolean) || ['Autor não disponível']
+    const autoresNomes = publicacao.autores?.map((autor: any) => autor.Autores_id?.nome).filter(Boolean) || [labels.authorUnavailable]
 
     // Transform data to match expected format
     const transformedPublicacao = {
       ...publicacao,
-      nome: publicacao.nome || 'Nome não disponível',
-      descricao: publicacao.translations?.[0]?.breve_descricao || 'Descrição não disponível',
-      tipo: publicacao.tipo_publicacao_translated || publicacao.tipo_publicacao || 'Tipo não disponível',
+      nome: publicacao.nome || labels.nameUnavailable,
+      descricao: publicacao.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
+      tipo: publicacao.tipo_publicacao_translated || publicacao.tipo_publicacao || labels.typeUnavailable,
       ano: publicacao.ano_publicacao || new Date().getFullYear(),
       capa: publicacao.capa ? assetUrl(publicacao.capa, "fit=cover&width=1600&height=2133&format=webp") : '/placeholder.svg',
-      conteudo: publicacao.translations?.[0]?.descricao || 'Conteúdo não disponível',
-      paginas: publicacao.paginas || 'N/A',
-      edicao: publicacao.edicao || 'N/A',
+      conteudo: publicacao.translations?.[0]?.descricao || labels.contentUnavailable,
+      paginas: publicacao.paginas || labels.notAvailable,
+      edicao: publicacao.edicao || labels.notAvailable,
       autores: autoresNomes
     }
 
     return (
       <main className="min-h-screen bg-background overflow-auto">
-        <BackButton label={labels.back || "Voltar"} />
+        <BackButton label={labels.back} />
 
         <div className="w-full mx-auto px-6 lg:px-8 xl:px-10 2xl:px-22 py-10 md:pt-46">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 xl:gap-16 2xl:gap-16">

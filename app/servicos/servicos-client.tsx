@@ -19,7 +19,7 @@ interface ServicosClientProps {
   labels: any
 }
 
-export default function ServicosClient({ servicos, statusOptions, labels }: ServicosClientProps) {
+export default function ServicosClient({ servicos, statusOptions, labels, lang }: ServicosClientProps) {
   const [statusAtivo, setStatusAtivo] = useState(labels.all || "Todos")
   const [sortBy, setSortBy] = useState<"data_inicio" | "nome">("data_inicio")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
@@ -49,7 +49,7 @@ export default function ServicosClient({ servicos, statusOptions, labels }: Serv
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return null
-    return new Date(dateString).toLocaleDateString('pt-PT', {
+    return new Date(dateString).toLocaleDateString(lang === 'en' ? 'en-US' : 'pt-PT', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -126,12 +126,12 @@ export default function ServicosClient({ servicos, statusOptions, labels }: Serv
                     ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" 
                     : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
                 }`}>
-                  {servico.isActive ? (labels.active || "Ativo") : "Inativo"}
+                  {servico.isActive ? labels.active : labels.inactive}
                 </span>
                 <div className="flex items-center gap-4 text-muted-foreground">
                   <Calendar className="w-10 h-10" />
                   <span className="text-3xl font-medium">
-                    {formatDate(servico.data_inicio) || 'N/A'}
+                    {formatDate(servico.data_inicio) || labels.notAvailable}
                   </span>
                 </div>
               </div>

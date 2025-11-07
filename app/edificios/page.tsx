@@ -67,7 +67,7 @@ export default async function EdificiosPage() {
   }
 
   const items = (data || []).slice(0, 5).map((item: any) => {
-    const nome = item.translations?.[0]?.nome || 'Nome não disponível'
+    const nome = item.translations?.[0]?.nome || labels.nameUnavailable
     return {
       id: item.id,
       nome,
@@ -79,7 +79,7 @@ export default async function EdificiosPage() {
 
   return (
     <main className="min-h-screen bg-background overflow-auto">
-      <BackButton />
+      <BackButton label={labels.back} />
       <PageHeader title={labels.buildings} description={labels.buildingsDesc} />
 
       <div className="mx-auto px-20 pb-8 mt-8 w-full">

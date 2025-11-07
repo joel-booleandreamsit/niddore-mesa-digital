@@ -19,14 +19,14 @@ export default async function MaterialDetalhePage({ params, searchParams }: { pa
     const material = await fetchMaterialById(id, lang)
     if (!material || (material as any).tipo !== tipo) notFound()
 
-    const nome = material.translations?.[0]?.nome || 'Nome não disponível'
+    const nome = material.translations?.[0]?.nome || labels.nameUnavailable
     const descricao = material.translations?.[0]?.descricao || ''
     const capa = material.capa ? assetUrl(material.capa, "fit=cover&width=1600&height=2133&format=webp") : '/placeholder.svg'
     const categoriaNome = material.categoria?.translations?.[0]?.nome || null
 
     return (
       <main className="min-h-screen bg-background overflow-auto">
-        <BackButton label={labels.back || "Voltar"} />
+        <BackButton label={labels.back} />
 
         <div className="w-full mx-auto px-6 lg:px-8 xl:px-10 2xl:px-22 py-10 md:pt-46">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 xl:gap-16 2xl:gap-16">

@@ -16,9 +16,9 @@ export default async function GaleriaDetalhePage({ params }: { params: Promise<{
     // Transform data to match expected format
     const transformedFoto = {
       ...foto,
-      breve_descricao: foto.translations?.[0]?.breve_descricao || 'Descrição não disponível',
-      descricao: foto.translations?.[0]?.descricao || 'Descrição não disponível',
-      categoria_nome: foto.categoria?.translations?.[0]?.nome || 'Categoria não disponível',
+      breve_descricao: foto.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
+      descricao: foto.translations?.[0]?.descricao || labels.descriptionUnavailable,
+      categoria_nome: foto.categoria?.translations?.[0]?.nome || labels.categoryUnavailable,
       categoria_id: foto.categoria?.id || null,
       foto_url: foto.foto ? assetUrl(foto.foto, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
     }
@@ -28,7 +28,7 @@ export default async function GaleriaDetalhePage({ params }: { params: Promise<{
     if (transformedFoto.categoria_id) {
       let current = await fetchGaleriaCategoriaById(transformedFoto.categoria_id, lang)
       while (current) {
-        breadcrumbs.unshift({ id: current.id, nome: current.translations?.[0]?.nome || 'Categoria' })
+        breadcrumbs.unshift({ id: current.id, nome: current.translations?.[0]?.nome || labels.category })
         const parentId = current.categoria_principal?.id
         if (!parentId) break
         current = await fetchGaleriaCategoriaById(parentId, lang)
@@ -37,7 +37,7 @@ export default async function GaleriaDetalhePage({ params }: { params: Promise<{
 
     return (
       <main className="min-h-screen bg-background overflow-auto">
-        <BackButton label={labels.back || "Voltar"} />
+        <BackButton label={labels.back} />
 
         {/* 4K Optimized Layout */}
         <div className="w-full px-16 pt-32 pb-20">

@@ -27,11 +27,11 @@ export default async function MateriaisCategoriaPage({ params, searchParams }: {
 
     if (!categoria) notFound()
 
-    const categoriaNome = categoria.translations?.[0]?.nome || 'Nome não disponível'
+    const categoriaNome = categoria.translations?.[0]?.nome || labels.nameUnavailable
 
     const materiaisTransformados = (materiais || []).map((m: any) => ({
       id: m.id,
-      nome: m.translations?.[0]?.nome || 'Nome não disponível',
+      nome: m.translations?.[0]?.nome || labels.nameUnavailable,
       breve: m.translations?.[0]?.breve_descricao || '',
       foto_url: m.capa ? assetUrl(m.capa, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
       edificioId: m.edificio?.id ?? null,
@@ -44,14 +44,14 @@ export default async function MateriaisCategoriaPage({ params, searchParams }: {
 
     return (
       <main className="h-screen bg-background overflow-hidden flex flex-col">
-        <BackButton label={labels.back || "Voltar"} />
+        <BackButton label={labels.back} />
 
         <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
           <div className="text-center space-y-4">
             <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
               {categoriaNome}
             </h1>
-            <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{labels.gallery || 'Galeria'}</p>
+            <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{labels.gallery}</p>
           </div>
         </div>
 
