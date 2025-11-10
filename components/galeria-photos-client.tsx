@@ -70,14 +70,15 @@ export default function GaleriaPhotosClient({
 
       {selected && (
         <div className="fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/50" onClick={close} />
-          <div className="absolute inset-0 flex items-center justify-center p-3 md:p-6">
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-0 flex items-center justify-center p-3 md:p-6" onClick={close}>
             <div
               className={`relative w-[92vw] h-[85vh] md:w-[82vw] md:h-[82vh] lg:w-[80vw] lg:h-[82vh] bg-card border-2 border-border rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
                 entered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
               }`}
               role="dialog"
               aria-modal="true"
+              onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={close}
