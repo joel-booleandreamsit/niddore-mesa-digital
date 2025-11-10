@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { ArrowUpDown, Calendar } from "lucide-react"
+import type { Lang } from "@/lib/i18n"
 
 interface Servico {
   id: number
@@ -17,6 +18,7 @@ interface ServicosClientProps {
   servicos: Servico[]
   statusOptions: string[]
   labels: any
+  lang: Lang
 }
 
 export default function ServicosClient({ servicos, statusOptions, labels, lang }: ServicosClientProps) {

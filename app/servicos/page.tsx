@@ -25,18 +25,10 @@ export default async function ServicosPage() {
   const statusOptions = [labels.all, labels.active, labels.inactive]
 
   return (
-    <main className="h-screen bg-background overflow-hidden flex flex-col">
+    <main className="min-h-screen bg-background overflow-auto">
       <BackButton label={labels.back} />
-      
       {/* Header Section */}
-      <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
-        <div className="text-center space-y-4">
-          <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
-            {labels.services || "Serviços"}
-          </h1>
-          <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{labels.servicesDesc || "Os serviços oferecidos pela escola"}</p>
-        </div>
-      </div>
+      <PageHeader title={labels.services} description={labels.servicesDesc} />
       
       {/* Content Section */}
       <div className="flex-1 px-8 pb-8 overflow-y-auto">
@@ -50,3 +42,4 @@ export default async function ServicosPage() {
     </main>
   )
 }
+
