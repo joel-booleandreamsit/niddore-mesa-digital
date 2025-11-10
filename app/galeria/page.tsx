@@ -32,8 +32,7 @@ export default async function GaleriaPage() {
       {/* Content Section */}
       <div className="flex-1 px-8 pb-8 overflow-y-auto">
         <div className="px-20 pb-24 space-y-20 mt-16">
-          {/* 4K Optimized Categories Grid - 8 cards visible */}
-          <div className="grid grid-cols-4 gap-16">
+          <div className="grid grid-cols-4 xl:grid-cols-5 gap-16">
             {categoriasTransformadas.map((categoria) => (
               <Link
                 key={categoria.id}
