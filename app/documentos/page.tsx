@@ -1,4 +1,5 @@
 import { BackButton } from "@/components/back-button"
+import { PageHeader } from "@/components/page-header"
 import { fetchDocumentosCategorias, assetUrl } from "@/lib/directus"
 import { t, getLang } from "@/lib/i18n"
 import Link from "next/link"
@@ -19,17 +20,10 @@ export default async function DocumentosCategoriasPage() {
   }))
 
   return (
-    <main className="h-screen bg-background overflow-hidden flex flex-col">
+    <main className="min-h-screen bg-background overflow-auto">
       <BackButton label={labels.back || "Voltar"} />
 
-      <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
-        <div className="text-center space-y-4">
-          <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
-            {labels.documents || "Documentos"}
-          </h1>
-          <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">{labels.documentsDesc || "Categorias de documentos"}</p>
-        </div>
-      </div>
+      <PageHeader title={labels.documents} description={labels.documentsDesc} />
 
       <div className="flex-1 px-8 pb-8 overflow-y-auto">
         <div className="px-20 pb-24 space-y-20 mt-16">

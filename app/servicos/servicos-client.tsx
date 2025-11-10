@@ -2,7 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowUpDown, Calendar } from "lucide-react"
+import { Calendar } from "lucide-react"
+import { FilterButtons, SortSelect } from "@/components/filters"
+import { HorizontalList } from "@/components/horizontal-list"
+import type { Lang } from "@/lib/i18n"
 
 interface Servico {
   id: number
@@ -17,6 +20,7 @@ interface ServicosClientProps {
   servicos: Servico[]
   statusOptions: string[]
   labels: any
+  lang: Lang
 }
 
 export default function ServicosClient({ servicos, statusOptions, labels, lang }: ServicosClientProps) {
@@ -57,92 +61,70 @@ export default function ServicosClient({ servicos, statusOptions, labels, lang }
   }
 
   return (
-    <div className="w-full px-16 pb-24 space-y-24">
-      {/* 4K Optimized Filters */}
-      <div className="space-y-20">
+    <div className="w-full h-full px-20 pb-24 space-y-20 mt-16">
+      {/* Filters */}
+      <div className="space-y-16">
         <div>
-          <div className="flex items-center justify-between mb-12">
-            <h3 className="text-6xl text-muted-foreground font-medium">{labels.status || "Status"}</h3>
-            <h3 className="text-6xl text-muted-foreground font-medium">{labels.sort || "Ordenar"}</h3>            
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-4xl text-muted-foreground">{labels.status}</h3>
+            <h3 className="text-4xl text-muted-foreground mr-64">{labels.sort}</h3>            
           </div>
-          <div className="flex flex-wrap gap-6 items-center justify-between">
-            <div className="flex flex-wrap gap-6 items-center">
-              {statusOptions.map((status) => (
-                <button
-                  key={status}
-                  onClick={() => setStatusAtivo(status)}
-                  className={`px-16 py-8 text-4xl rounded-xl border-3 transition-all duration-300 touch-manipulation active:scale-95 font-medium ${
-                    statusAtivo === status
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-card text-foreground border-border hover:border-primary"
-                  }`}
-                >
-                  {status}
-                </button>
-              ))}
-            </div>
-            
-            {/* Sort Combo Box */}
-            <div className="relative">
-              <ArrowUpDown className="absolute left-6 top-1/2 transform -translate-y-1/2 w-12 h-12 text-muted-foreground pointer-events-none" />
-              <select
-                value={`${sortBy}-${sortOrder}`}
-                onChange={(e) => {
-                  const [newSortBy, newSortOrder] = e.target.value.split('-') as ["data_inicio" | "nome", "asc" | "desc"]
-                  setSortBy(newSortBy)
-                  setSortOrder(newSortOrder)
-                }}
-                className="pl-24 pr-16 py-8 text-4xl rounded-xl border-3 border-border bg-card text-foreground hover:border-primary focus:border-primary focus:outline-none transition-all duration-300 appearance-none cursor-pointer font-medium"
-              >
-                <option value="data_inicio-desc">{labels.sortByYearNewest || "Data (Mais Recente)"}</option>
-                <option value="data_inicio-asc">{labels.sortByYearOldest || "Data (Mais Antigo)"}</option>
-                <option value="nome-asc">{labels.sortByNameAZ || "Nome (A-Z)"}</option>
-                <option value="nome-desc">{labels.sortByNameZA || "Nome (Z-A)"}</option>
-              </select>
-            </div>
+          <div className="flex flex-wrap gap-3 items-center justify-between">
+            <FilterButtons options={statusOptions} active={statusAtivo} onChange={setStatusAtivo} />
+
+            <SortSelect
+              value={`${sortBy}-${sortOrder}`}
+              onChange={(v) => {
+                const [newSortBy, newSortOrder] = v.split('-') as ["data_inicio" | "nome", "asc" | "desc"]
+                setSortBy(newSortBy)
+                setSortOrder(newSortOrder)
+              }}
+              options={[
+                { value: "data_inicio-desc", label: labels.sortByYearNewest || "Data (Mais Recente)" },
+                { value: "data_inicio-asc", label: labels.sortByYearOldest || "Data (Mais Antigo)" },
+                { value: "nome-asc", label: labels.sortByNameAZ || "Nome (A-Z)" },
+                { value: "nome-desc", label: labels.sortByNameZA || "Nome (Z-A)" },
+              ]}
+            />
           </div>
         </div>
       </div>
 
-      {/* 4K Optimized Services Horizontal List */}
-      <div className="flex gap-32 overflow-x-auto pb-8">
+      {/* Services Horizontal List */}
+      <HorizontalList>
         {servicosFiltrados.map((servico) => (
           <Link
             key={servico.id}
             href={`/servicos/${servico.id}`}
-            className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98 flex-shrink-0 w-[56rem]"
+            className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 touch-manipulation active:scale-98 flex-shrink-0 w-[40rem]"
           >
-            <div className="aspect-[4/3] overflow-hidden bg-muted">
+            <div className="aspect-[3/4] overflow-hidden bg-muted">
               <img
                 src={servico.foto_capa}
                 alt={servico.nome}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <div className="p-16 space-y-8">
+            <div className="p-10 space-y-4 pb-16">
               <div className="flex items-center justify-between gap-8">
-                <span className={`inline-block px-8 py-4 text-3xl rounded-full font-medium ${
-                  servico.isActive 
-                    ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" 
-                    : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
-                }`}>
+                <span className="inline-block px-4 py-2 text-xl bg-secondary text-secondary-foreground rounded-full">
                   {servico.isActive ? labels.active : labels.inactive}
                 </span>
-                <div className="flex items-center gap-4 text-muted-foreground">
-                  <Calendar className="w-10 h-10" />
-                  <span className="text-3xl font-medium">
+                <div className="flex items-center gap-3 text-muted-foreground">
+                  <Calendar className="w-8 h-8" />
+                  <span className="text-2xl">
                     {formatDate(servico.data_inicio) || labels.notAvailable}
                   </span>
                 </div>
               </div>
-              <h3 className="font-serif text-7xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
+              <h3 className="font-serif text-5xl text-foreground text-balance group-hover:text-primary transition-colors">
                 {servico.nome}
               </h3>
               
             </div>
           </Link>
         ))}
-      </div>
+      </HorizontalList>
 
       {servicosFiltrados.length === 0 && (
         <div className="text-center py-32">

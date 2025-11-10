@@ -45,7 +45,7 @@ const labels = {
     activePeriod: "Período ativo",
     aboutService: "Sobre este serviço",
     gallery: "Galeria",
-    status: "Status",
+    status: "Estado",
     groups: "Grupos",
     groupsDesc: "Os grupos da escola",
     aboutGroup: "Sobre este grupo",

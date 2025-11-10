@@ -66,7 +66,7 @@ export default function MateriaisCategoriaClient({ items, edificios, labels, tip
       </div>
 
       {/* Items grid */}
-      <div className="grid grid-cols-4 gap-16">
+      <div className="grid grid-cols-4 xl:grid-cols-5 gap-16">
         {filtered.map((item) => (
           <Link
             key={item.id}

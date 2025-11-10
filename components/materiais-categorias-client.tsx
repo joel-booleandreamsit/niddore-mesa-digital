@@ -65,7 +65,7 @@ export default function MateriaisCategoriasClient({ categorias, edificios, links
         ))}
       </div>
 
-      <div className="grid grid-cols-4 gap-16">
+      <div className="grid grid-cols-4 xl:grid-cols-5 gap-16">
         {categoriasFiltradas.map((categoria) => (
           <Link
             key={categoria.id}

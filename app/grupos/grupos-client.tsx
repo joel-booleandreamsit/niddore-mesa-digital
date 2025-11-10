@@ -2,6 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { FilterButtons } from "@/components/filters"
+import { HorizontalList } from "@/components/horizontal-list"
 
 interface Grupo {
   id: number
@@ -28,60 +30,46 @@ export default function GruposClient({ grupos, tipos, labels }: GruposClientProp
 
 
   return (
-    <div className="w-full px-16 pb-24 space-y-24">
-      {/* 4K Optimized Filters */}
-      <div className="space-y-20">
+    <div className="w-full h-full px-20 pb-24 space-y-20 mt-16">
+      {/* Filters */}
+      <div className="space-y-16">
         <div>
-          <div className="mb-12">
-            <h3 className="text-6xl text-muted-foreground font-medium">{labels.type || "Tipo"}</h3>
+          <div className="mb-6">
+            <h3 className="text-4xl text-muted-foreground">{labels.type || "Tipo"}</h3>
           </div>
-          <div className="flex flex-wrap gap-6 items-center">
-            {tipos.map((tipo) => (
-              <button
-                key={tipo}
-                onClick={() => setTipoAtivo(tipo)}
-                className={`px-16 py-8 text-4xl rounded-xl border-3 transition-all duration-300 touch-manipulation active:scale-95 font-medium ${
-                  tipoAtivo === tipo
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-card text-foreground border-border hover:border-primary"
-                }`}
-              >
-                {tipo}
-              </button>
-            ))}
-          </div>
+          <FilterButtons options={tipos} active={tipoAtivo} onChange={setTipoAtivo} />
         </div>
       </div>
 
-      {/* 4K Optimized Groups Horizontal List */}
-      <div className="flex gap-32 overflow-x-auto pb-8">
+      {/* Groups Horizontal List */}
+      <HorizontalList>
         {gruposFiltrados.map((grupo) => (
           <Link
             key={grupo.id}
             href={`/grupos/${grupo.id}`}
-            className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98 flex-shrink-0 w-[56rem]"
+            className="group bg-card border border-border rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 touch-manipulation active:scale-98 flex-shrink-0 w-[40rem]"
           >
-            <div className="aspect-[4/3] overflow-hidden bg-muted">
+            <div className="aspect-[3/4] overflow-hidden bg-muted">
               <img
                 src={grupo.foto_capa}
                 alt={grupo.nome}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <div className="p-16 space-y-8">
-              <div className="flex items-center justify-between gap-8">
-                <span className="inline-block px-8 py-4 text-3xl bg-secondary text-secondary-foreground rounded-full font-medium">
+            <div className="p-10 space-y-4 pb-16">
+              <div className="flex items-center justify-between gap-4">
+                <span className="inline-block px-4 py-2 text-xl bg-secondary text-secondary-foreground rounded-full">
                   {grupo.tipo_grupo}
                 </span>
               </div>
-              <h3 className="font-serif text-7xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
+              <h3 className="font-serif text-5xl text-foreground text-balance group-hover:text-primary transition-colors">
                 {grupo.nome}
               </h3>
               
             </div>
           </Link>
         ))}
-      </div>
+      </HorizontalList>
 
       {gruposFiltrados.length === 0 && (
         <div className="text-center py-32">
