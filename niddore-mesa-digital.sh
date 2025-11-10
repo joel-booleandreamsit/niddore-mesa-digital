@@ -188,7 +188,7 @@ install_project() {
             mkdir -p "$backup_root"
 
             # Backup existing database if present
-            if [ -d "$home_dir/.directus/database" ] && [ "$(ls -A \"$home_dir/.directus/database\")" ]; then
+            if [ -d "$home_dir/.directus/database" ] && [ -n "$(ls -A "$home_dir/.directus/database" 2>/dev/null)" ]; then
                 mkdir -p "$backup_root/database"
                 cp -a "$home_dir/.directus/database/." "$backup_root/database/" || true
                 log_success "Backed up existing database to $backup_root/database"
@@ -197,7 +197,7 @@ install_project() {
             fi
 
             # Backup existing uploads if present
-            if [ -d "$home_dir/.directus/uploads" ] && [ "$(ls -A \"$home_dir/.directus/uploads\")" ]; then
+            if [ -d "$home_dir/.directus/uploads" ] && [ -n "$(ls -A "$home_dir/.directus/uploads" 2>/dev/null)" ]; then
                 mkdir -p "$backup_root/uploads"
                 cp -a "$home_dir/.directus/uploads/." "$backup_root/uploads/" || true
                 log_success "Backed up existing uploads to $backup_root/uploads"
