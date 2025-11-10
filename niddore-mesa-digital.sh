@@ -177,15 +177,48 @@ install_project() {
 
     # Copy install directory contents to Directus directories
     if [ -d "install" ]; then
-        log_info "Copying install directory contents to Directus directories..."
-        if [ -d "install/database" ] && [ "$(ls -A install/database)" ]; then
+        log_info "Found install directory. Preparing to copy into Directus directories..."
+
+        # Ask if user wants to overwrite database/uploads; default to No
+        read -p "Do you want to overwrite Directus database and uploads from install? (y/N): " overwrite_du
+        if [[ $overwrite_du =~ ^[Yy]$ ]]; then
+            # Create a timestamped backup directory
+            ts=$(date +%Y%m%d_%H%M%S)
+            backup_root="$home_dir/.directus/backup_$ts"
+            mkdir -p "$backup_root"
+
+            # Backup existing database if present
+            if [ -d "$home_dir/.directus/database" ] && [ "$(ls -A \"$home_dir/.directus/database\")" ]; then
+                mkdir -p "$backup_root/database"
+                cp -a "$home_dir/.directus/database/." "$backup_root/database/" || true
+                log_success "Backed up existing database to $backup_root/database"
+            else
+                log_info "No existing database to back up"
+            fi
+
+            # Backup existing uploads if present
+            if [ -d "$home_dir/.directus/uploads" ] && [ "$(ls -A \"$home_dir/.directus/uploads\")" ]; then
+                mkdir -p "$backup_root/uploads"
+                cp -a "$home_dir/.directus/uploads/." "$backup_root/uploads/" || true
+                log_success "Backed up existing uploads to $backup_root/uploads"
+            else
+                log_info "No existing uploads to back up"
+            fi
+
+            # Perform overwrite copy from install
+            if [ -d "install/database" ] && [ "$(ls -A install/database)" ]; then
             cp -r install/database/* "$home_dir/.directus/database/"
-            log_success "Copied data files from install directory"
-        fi
-        if [ -d "install/uploads" ] && [ "$(ls -A install/uploads)" ]; then
+                log_success "Copied data files from install directory"
+            fi
+            if [ -d "install/uploads" ] && [ "$(ls -A install/uploads)" ]; then
             cp -r install/uploads/* "$home_dir/.directus/uploads/"
-            log_success "Copied upload files from install directory"
+                log_success "Copied upload files from install directory"
+            fi
+        else
+            log_info "Skipping overwrite of Directus database and uploads"
         fi
+
+        # Always copy extensions if present (not backed up by this prompt)
         if [ -d "install/extensions" ] && [ "$(ls -A install/extensions)" ]; then
             cp -r install/extensions/* "$home_dir/.directus/extensions/"
             log_success "Copied extensions from install directory"
