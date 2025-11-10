@@ -29,16 +29,12 @@ export default async function ServicosPage() {
       <BackButton label={labels.back} />
       {/* Header Section */}
       <PageHeader title={labels.services} description={labels.servicesDesc} />
-      
-      {/* Content Section */}
-      <div className="flex-1 px-8 pb-8 overflow-y-auto">
-        <ServicosClient 
-          servicos={servicos}
-          statusOptions={statusOptions}
-          labels={labels}
-          lang={lang}
-        />
-      </div>
+      <ServicosClient 
+        servicos={servicos}
+        statusOptions={statusOptions}
+        labels={labels}
+        lang={lang}
+      />
     </main>
   )
 }

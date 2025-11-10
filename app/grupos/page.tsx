@@ -30,13 +30,11 @@ export default async function GruposPage() {
       <PageHeader title={labels.groups} description={labels.groupsDesc} />
       
       {/* Content Section */}
-      <div className="flex-1 px-8 pb-8 overflow-y-auto">
-        <GruposClient 
-          grupos={grupos}
-          tipos={tipos}
-          labels={labels}
-        />
-      </div>
+      <GruposClient 
+        grupos={grupos}
+        tipos={tipos}
+        labels={labels}
+      />
     </main>
   )
 }
