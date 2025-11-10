@@ -1,4 +1,5 @@
 import { BackButton } from "@/components/back-button"
+import { PageHeader } from "@/components/page-header"
 import { t, getLang } from "@/lib/i18n"
 import fetchEdificios, { assetUrl } from "@/lib/directus"
 import { fetchMateriaisLinksForEdificios } from '@/lib/directus'
@@ -36,27 +37,17 @@ export default async function MateriaisCategoriasPage({ searchParams }: { search
     .map((l: any) => ({ categoriaId: l.categoria.id, edificioId: l.edificio.id }))
 
   return (
-    <main className="h-screen bg-background overflow-hidden flex flex-col">
+    <main className="min-h-screen bg-background overflow-auto">
       <BackButton label={labels.back} />
+      <PageHeader title={tipo === 'Trabalho' ? labels.works : labels.materials} description="Categorias" />
 
-      <div className="relative flex flex-col items-center justify-center px-12 py-8 bg-gradient-to-b from-background via-background/95 to-background/80">
-        <div className="text-center space-y-4">
-          <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl text-foreground tracking-tight text-balance leading-none">
-            {tipo === 'Trabalho' ? labels.works : labels.materials}
-          </h1>
-          <p className="text-2xl md:text-3xl text-primary/80 font-serif italic text-balance">Categorias</p>
-        </div>
-      </div>
-
-      <div className="flex-1 px-8 pb-8 overflow-y-auto">
-        <MateriaisCategoriasClient
-          categorias={categoriasTransformed}
-          edificios={edificiosTransformed}
-          links={linksTransformed}
-          labels={labels}
-          tipo={tipo}
-        />
-      </div>
+      <MateriaisCategoriasClient
+        categorias={categoriasTransformed}
+        edificios={edificiosTransformed}
+        links={linksTransformed}
+        labels={labels}
+        tipo={tipo}
+      />
     </main>
   )
 }
