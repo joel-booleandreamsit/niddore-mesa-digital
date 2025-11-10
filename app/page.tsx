@@ -92,11 +92,11 @@ export default function HomePage() {
       <div className="absolute top-10 right-16 z-10">
         <button
           onClick={() => changeLang(lang === "pt" ? "en" : "pt")}
-          className="px-6 py-4 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 flex items-center justify-center bg-card/90 hover:bg-card text-foreground/90 border-border hover:border-primary/40 hover:scale-[1.02]"
+          className="w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-2xl border-2 "
           aria-label={lang === "pt" ? "Switch to English" : "Mudar para Português"}
           title={lang === "pt" ? "Switch to English" : "Mudar para Português"}
         >
-          <span className="text-4xl">{lang === "pt" ? "🇬🇧" : "🇵🇹"}</span>
+          <span className="text-6xl md:text-7xl lg:text-8xl leading-none">{lang === "pt" ? "🇬🇧" : "🇵🇹"}</span>
         </button>
       </div>
 
