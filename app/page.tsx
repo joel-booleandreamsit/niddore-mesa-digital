@@ -88,31 +88,15 @@ export default function HomePage() {
 
   return (
     <main className="h-screen bg-background overflow-hidden flex flex-col">
-      {/* Language Toggle - Large and Prominent */}
-      <div className="absolute top-10 right-16 z-10 flex gap-6">
+      {/* Language Toggle - Single Flag Button */}
+      <div className="absolute top-10 right-16 z-10">
         <button
-          onClick={() => changeLang("pt")}
-          className={`px-12 py-6 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 flex items-center gap-3 ${
-            lang === "pt" 
-              ? "bg-primary text-primary-foreground border-primary shadow-xl scale-[1.02]" 
-              : "bg-card/90 hover:bg-card text-foreground/90 border-border hover:border-primary/40 hover:scale-[1.02]"
-          }`}
-          aria-label="Português"
+          onClick={() => changeLang(lang === "pt" ? "en" : "pt")}
+          className="px-6 py-4 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 flex items-center justify-center bg-card/90 hover:bg-card text-foreground/90 border-border hover:border-primary/40 hover:scale-[1.02]"
+          aria-label={lang === "pt" ? "Switch to English" : "Mudar para Português"}
+          title={lang === "pt" ? "Switch to English" : "Mudar para Português"}
         >
-          <span className="text-4xl">🇵🇹</span>
-          <span>PT</span>
-        </button>
-        <button
-          onClick={() => changeLang("en")}
-          className={`px-12 py-6 rounded-2xl border-2 text-3xl font-semibold transition-all duration-200 flex items-center gap-3 ${
-            lang === "en" 
-              ? "bg-primary text-primary-foreground border-primary shadow-xl scale-[1.02]" 
-              : "bg-card/90 hover:bg-card text-foreground/90 border-border hover:border-primary/40 hover:scale-[1.02]"
-          }`}
-          aria-label="English"
-        >
-          <span className="text-4xl">🇬🇧</span>
-          <span>EN</span>
+          <span className="text-4xl">{lang === "pt" ? "🇬🇧" : "🇵🇹"}</span>
         </button>
       </div>
 
