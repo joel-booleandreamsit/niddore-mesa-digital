@@ -59,12 +59,16 @@ export default async function GaleriaCategoriaPage({ params }: { params: Promise
       current = await fetchGaleriaCategoriaById(parentId, lang)
     }
 
+    // Description: 'Galeria' plus ancestors (exclude current). Only add separator if there is at least 1 ancestor (i.e., breadcrumbs.length >= 2)
+    const breadcrumbDesc =
+      labels.gallery + (breadcrumbs.length >= 2 ? " > " + breadcrumbs.slice(0, -1).map((b) => b.nome).join(" > ") : "")
+
     return (
       <main className="min-h-screen bg-background overflow-auto">
         <BackButton label={labels.back} />
         <PageHeader
           title={categoriaTransformada.nome}
-          description={labels.gallery + " > " + breadcrumbs.slice(0, -1).map((b) => b.nome).join(" > ")}          
+          description={breadcrumbDesc}          
         />
 
         <div className="flex-1 px-8 pb-8">

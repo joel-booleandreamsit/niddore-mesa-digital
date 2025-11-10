@@ -73,7 +73,7 @@ export default function GaleriaPhotosClient({
           <div className="absolute inset-0 bg-black/50" onClick={close} />
           <div className="absolute inset-0 flex items-center justify-center p-3 md:p-6">
             <div
-              className={`relative w-[96vw] h-[92vh] md:w-[90vw] md:h-[90vh] lg:w-[88vw] lg:h-[90vh] bg-card border-2 border-border rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
+              className={`relative w-[92vw] h-[85vh] md:w-[82vw] md:h-[82vh] lg:w-[80vw] lg:h-[82vh] bg-card border-2 border-border rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
                 entered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
               }`}
               role="dialog"
@@ -88,18 +88,18 @@ export default function GaleriaPhotosClient({
               </button>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 h-full">
-                <div className="bg-muted/20 flex items-center justify-center h-full px-6 md:px-10">
+                <div className="bg-muted/20 flex items-center justify-center h-full">
                   <img
                     src={selected.foto_url_large || selected.foto_url}
                     alt={selected.nome}
                     className="w-full h-full object-contain"
                   />
                 </div>
-                <div className="p-8 md:p-12 space-y-8 h-full overflow-y-auto">
-                  <h3 className="font-serif text-6xl md:text-7xl text-foreground leading-tight">{selected.nome}</h3>
-                  <div className="text-2xl md:text-3xl text-muted-foreground">{breadcrumbs.join(" > ")}</div>
+                <div className="p-8 md:p-12 space-y-10 h-full overflow-y-auto">
+                  <h3 className="font-serif text-7xl md:text-8xl text-foreground leading-tight">{selected.nome}</h3>
+                  <div className="text-3xl md:text-5xl text-muted-foreground">{breadcrumbs.join(" > ")}</div>
                   <div
-                    className="text-xl md:text-2xl leading-relaxed text-foreground/90"
+                    className="text-2xl md:text-4xl leading-relaxed text-foreground/90"
                     dangerouslySetInnerHTML={{ __html: selected.descricao }}
                   />
                 </div>
