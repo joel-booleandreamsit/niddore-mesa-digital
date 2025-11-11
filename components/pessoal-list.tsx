@@ -232,11 +232,11 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
             {data.map(item => (
               <Link key={item.id} href={`/pessoal/${item.id}`} className="grid grid-cols-[8rem_1fr_2fr_10rem] gap-0 items-center px-12 py-8 hover:bg-muted/30 transition-colors">
                 <div>
-                  <img src={item.foto_url} alt={item.nome} className="w-20 h-20 rounded-full object-cover bg-muted border border-border" />
+                  <img src={item.foto_url} alt={item.nome} className="w-26 h-26 rounded-full object-cover bg-muted border border-border" />
                 </div>
                 <div className="text-3xl">{item.numero_processo}</div>
                 <div className="text-3xl">{item.nome || '-'}</div>
-                <div className="text-3xl flex items-center gap-2">{item.docente ? <Check className="text-emerald-500" size={32} /> : <X className="text-rose-500" size={32} />}</div>
+                <div className="text-3xl flex items-center gap-2">{item.docente ? <Check className="text-emerald-500" size={48} /> : <X className="text-rose-500" size={48} />}</div>
               </Link>
             ))}
             {(!loading && data.length === 0) && (
