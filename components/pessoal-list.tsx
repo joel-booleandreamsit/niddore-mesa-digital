@@ -32,6 +32,7 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
   const [docFilter, setDocFilter] = useState<DocenteFilter>("all")
   const [sortKey, setSortKey] = useState<SortKey>("nome-asc")
   const [range, setRange] = useState<[number, number]>([yearBounds.minYear, yearBounds.maxYear])
+  const [rangeDraft, setRangeDraft] = useState<[number, number]>([yearBounds.minYear, yearBounds.maxYear])
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [data, setData] = useState<PessoalItem[]>([])
@@ -149,13 +150,14 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
       </div>
       <div className="mb-10">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-6xl font-bold text-foreground">{range[0]}</span>
-          <span className="text-6xl font-bold text-foreground">{range[1]}</span>
+          <span className="text-6xl font-bold text-foreground">{rangeDraft[0]}</span>
+          <span className="text-6xl font-bold text-foreground">{rangeDraft[1]}</span>
         </div>
         <Slider.Root
           className="relative flex items-center select-none touch-none h-10"
-          value={range}
-          onValueChange={(v) => setRange([v[0], v[1]])}
+          value={rangeDraft}
+          onValueChange={(v) => setRangeDraft([v[0], v[1]])}
+          onValueCommit={(v) => setRange([v[0], v[1]])}
           min={yearBounds.minYear}
           max={yearBounds.maxYear}
           step={1}

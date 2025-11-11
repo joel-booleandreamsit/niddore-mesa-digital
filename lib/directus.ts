@@ -637,7 +637,7 @@ export async function fetchPessoal({
 }: FetchPessoalParams = {}) {
   const filter: any = {}
   if (q && q.trim()) {
-    const parts: any[] = [{ nome: { _contains: q } }]
+    const parts: any[] = [{ nome: { _icontains: q } }]
     const dm = q.match(/\d+/)
     if (dm) {
       const num = Number(dm[0])
@@ -747,46 +747,29 @@ export async function fetchPessoalCount({
     const headers: Record<string, string> = { 'Content-Type': 'application/json' }
     if (DIRECTUS_TOKEN) headers['Authorization'] = `Bearer ${DIRECTUS_TOKEN}`
 
-    // Primary: aggregate count (works reliably across setups)
-    const paramsA = new URLSearchParams()
-    paramsA.append('aggregate[count]', '*')
-    if (Object.keys(filter).length) paramsA.set('filter', JSON.stringify(filter))
-    let resp = await fetch(`${endpoint}?${paramsA.toString()}`, { headers })
-    if (resp.ok) {
-      const jsonA = await resp.json().catch(() => ({} as any))
-      const aggCountRaw = (jsonA as any)?.data?.[0]?.count
-      const aggCount = Number(aggCountRaw)
-      if (Number.isFinite(aggCount)) return aggCount
-    }
-
-    // Fallback 1: meta=filter_count
-    const params = new URLSearchParams()
-    params.set('fields', 'id')
-    params.set('limit', '0')
-    params.append('meta', 'filter_count')
-    if (Object.keys(filter).length) params.set('filter', JSON.stringify(filter))
-    resp = await fetch(`${endpoint}?${params.toString()}`, { headers })
+    // Primary: meta=filter_count (fast) using original nested JSON filter
+    const p = new URLSearchParams()
+    p.set('fields', 'id')
+    p.set('limit', '0')
+    p.append('meta', 'filter_count')
+    if (Object.keys(filter).length) p.set('filter', JSON.stringify(filter))
+    let resp = await fetch(`${endpoint}?${p.toString()}`, { headers })
     if (resp.ok) {
       const json = await resp.json().catch(() => ({} as any))
-      const countRaw = (json as any)?.meta?.filter_count
-      const count = Number(countRaw)
+      const count = Number((json as any)?.meta?.filter_count)
       if (Number.isFinite(count)) return count
     }
 
-    // Fallback 2: meta=total_count
-    const paramsT = new URLSearchParams()
-    paramsT.set('fields', 'id')
-    paramsT.set('limit', '0')
-    paramsT.append('meta', 'total_count')
-    if (Object.keys(filter).length) paramsT.set('filter', JSON.stringify(filter))
-    const respT = await fetch(`${endpoint}?${paramsT.toString()}`, { headers })
-    if (respT.ok) {
-      const jsonT = await respT.json().catch(() => ({} as any))
-      const totalCountRaw = (jsonT as any)?.meta?.total_count
-      const totalCount = Number(totalCountRaw)
-      if (Number.isFinite(totalCount)) return totalCount
+    // Fallback: aggregate count
+    const a = new URLSearchParams()
+    a.append('aggregate[count]', '*')
+    if (Object.keys(filter).length) a.set('filter', JSON.stringify(filter))
+    resp = await fetch(`${endpoint}?${a.toString()}`, { headers })
+    if (resp.ok) {
+      const json = await resp.json().catch(() => ({} as any))
+      const val = Number((json as any)?.data?.[0]?.count)
+      if (Number.isFinite(val)) return val
     }
-
     return 0
   } catch {
     return 0
