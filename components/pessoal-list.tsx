@@ -139,7 +139,7 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
           </div>
 
           {/* Docente filter */}
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-0">
             <label className="block text-3xl text-muted-foreground mb-3">{labels.filterPeople}</label>
             <div className="flex gap-3">
               {([
