@@ -48,7 +48,7 @@ export default async function PessoalDetailPage({ params }: { params: Promise<{ 
       <div className="max-w-[3000px] mx-auto px-10 pb-24">
         {/* Header card */}
         <div className="flex gap-10 items-center mb-12">
-          <img src={fotoUrl} alt={item?.nome} className="w-36 h-36 rounded-full object-cover bg-muted border border-border" />
+          <img src={fotoUrl} alt={item?.nome} className="w-44 h-44 rounded-full object-cover bg-muted border border-border" />
           <div className="text-3xl text-muted-foreground">
             <div><span className="font-medium text-foreground mr-3">{labels.teacher}:</span>{item?.docente ? labels.yes : labels.no}</div>
             <div><span className="font-medium text-foreground mr-3">{labels.lectiveYearsWorked}:</span>{lectiveYearsCount}</div>

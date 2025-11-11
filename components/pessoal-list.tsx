@@ -1,7 +1,8 @@
 "use client"
 
 import * as Slider from "@radix-ui/react-slider"
-import Link from "next/link"
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { ArrowUpDown, Check, X } from "lucide-react"
 
@@ -27,6 +28,8 @@ type SortKey = "nome-asc" | "nome-desc" | "proc-asc" | "proc-desc"
 type DocenteFilter = "all" | "docente" | "nao"
 
 export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
   const [q, setQ] = useState("")
   const [typingQ, setTypingQ] = useState("")
   const [docFilter, setDocFilter] = useState<DocenteFilter>("all")
@@ -49,6 +52,35 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
     return () => clearTimeout(t)
   }, [typingQ])
 
+  // hydrate from URL on mount
+  useEffect(() => {
+    const q0 = searchParams.get('q') || ''
+    const d0 = (searchParams.get('docente') || 'all') as DocenteFilter
+    const s0 = (searchParams.get('sortKey') || 'nome-asc') as SortKey
+    const fy = Number(searchParams.get('fromYear') || yearBounds.minYear)
+    const ty = Number(searchParams.get('toYear') || yearBounds.maxYear)
+    setTypingQ(q0)
+    setDocFilter(['all','docente','nao'].includes(d0) ? d0 : 'all')
+    setSortKey(['nome-asc','nome-desc','proc-asc','proc-desc'].includes(s0) ? s0 : 'nome-asc')
+    if (Number.isFinite(fy) && Number.isFinite(ty)) {
+      setRange([fy, ty] as [number, number])
+      setRangeDraft([fy, ty] as [number, number])
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // reflect state to URL (no scroll)
+  useEffect(() => {
+    const p = new URLSearchParams()
+    if (typingQ) p.set('q', typingQ)
+    if (docFilter !== 'all') p.set('docente', docFilter)
+    p.set('sortKey', sortKey)
+    p.set('fromYear', String(range[0]))
+    p.set('toYear', String(range[1]))
+    const qs = p.toString()
+    router.replace(qs ? `?${qs}` : '?', { scroll: false })
+  }, [typingQ, docFilter, sortKey, range, router])
+
   const docenteParam = useMemo(() => (docFilter === 'all' ? 'all' : docFilter === 'docente' ? 'true' : 'false'), [docFilter])
   const [sort, order] = useMemo(() => {
     switch (sortKey) {
@@ -58,6 +90,16 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
       case "proc-desc": return ["numero_processo", "desc"] as const
     }
   }, [sortKey])
+
+  // Client-side accent-insensitive filter for display only (temporary until server supports unaccent)
+  const normalize = useCallback((s: string) => (s || '').normalize('NFD').replace(/\p{Diacritic}+/gu, '').toLowerCase(), [])
+  const qNorm = useMemo(() => normalize(q), [q, normalize])
+  const visibleData = useMemo(() => {
+    if (!qNorm) return data
+    // if q includes digits only, leave server-side result as-is (process number handled server-side)
+    if (/^\d+$/.test(qNorm)) return data
+    return data.filter(item => normalize(item.nome).includes(qNorm))
+  }, [data, qNorm, normalize])
 
   // fetch single page (replace or append)
   const loadPage = useCallback(async (targetPage: number, mode: 'replace' | 'append') => {
@@ -69,7 +111,8 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
       const params = new URLSearchParams()
       params.set('page', String(targetPage))
       params.set('limit', String(PAGE_SIZE))
-      if (q) params.set('q', q)
+      // send q to server only when numeric (process number); names are filtered client-side with accent-insensitive match
+      if (q && /^\d+$/.test(q.trim())) params.set('q', q.trim())
       params.set('docente', docenteParam)
       if (range[0] != null) params.set('fromYear', String(range[0]))
       if (range[1] != null) params.set('toYear', String(range[1]))
@@ -210,7 +253,7 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
 
       {/* Results + pagination */}
       <div className="flex items-center justify-between mb-6">
-        <div className="text-3xl text-muted-foreground">{labels.results}: {total}</div>
+        <div className="text-3xl text-muted-foreground">{labels.results}: {(/^\d+$/.test(qNorm) || !qNorm) ? total : visibleData.length}</div>
         <div className="h-8" />
       </div>
 
@@ -229,17 +272,17 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
             <div>{labels.teacher}</div>
           </div>
           <div className="divide-y divide-border">
-            {data.map(item => (
+            {visibleData.map(item => (
               <Link key={item.id} href={`/pessoal/${item.id}`} className="grid grid-cols-[8rem_1fr_2fr_10rem] gap-0 items-center px-12 py-8 hover:bg-muted/30 transition-colors">
                 <div>
-                  <img src={item.foto_url} alt={item.nome} className="w-16 h-16 rounded-full object-cover bg-muted border border-border" />
+                  <img src={item.foto_url} alt={item.nome} className="w-20 h-20 rounded-full object-cover bg-muted border border-border" />
                 </div>
                 <div className="text-3xl">{item.numero_processo}</div>
                 <div className="text-3xl">{item.nome || '-'}</div>
-                <div className="text-3xl flex items-center gap-2">{item.docente ? <Check className="text-emerald-500" /> : <X className="text-rose-500" />}</div>
+                <div className="text-3xl flex items-center gap-2">{item.docente ? <Check className="text-emerald-500" size={32} /> : <X className="text-rose-500" size={32} />}</div>
               </Link>
             ))}
-            {(!loading && data.length === 0) && (
+            {(!loading && visibleData.length === 0) && (
               <div className="p-16 text-3xl text-muted-foreground">—</div>
             )}
             {/* infinite loader sentinel */}
