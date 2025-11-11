@@ -45,7 +45,7 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
 
   // debounce search
   useEffect(() => {
-    const t = setTimeout(() => setQ(typingQ), 350)
+    const t = setTimeout(() => setQ(typingQ), 650)
     return () => clearTimeout(t)
   }, [typingQ])
 
