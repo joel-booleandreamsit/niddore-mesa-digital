@@ -652,8 +652,10 @@ export async function fetchPessoal({
     const a0 = fromYear ?? 0
     const a1 = toYear ?? 9999
     filter.anos_lectivos = {
-      Anos_Lectivos_id: {
-        ano_inicio: { _between: [a0, a1] },
+      _some: {
+        Anos_Lectivos_id: {
+          ano_inicio: { _between: [a0, a1] },
+        },
       },
     }
   }
@@ -717,10 +719,11 @@ export async function fetchPessoalCount({
 }: Pick<FetchPessoalParams, 'q' | 'docente' | 'fromYear' | 'toYear'> = {}) {
   const filter: any = {}
   if (q && q.trim()) {
-    const parts: any[] = [{ nome: { _icontains: q } }]
-    const num = Number(q.replace(/\D+/g, ''))
-    if (Number.isFinite(num)) {
-      parts.push({ numero_processo: { _eq: num } })
+    const parts: any[] = [{ nome: { _contains: q } }]
+    const dm = q.match(/\d+/)
+    if (dm) {
+      const num = Number(dm[0])
+      if (Number.isFinite(num)) parts.push({ numero_processo: { _eq: num } })
     }
     filter._or = parts
   }
@@ -731,60 +734,62 @@ export async function fetchPessoalCount({
     const a0 = fromYear ?? 0
     const a1 = toYear ?? 9999
     filter.anos_lectivos = {
-      Anos_Lectivos_id: {
-        ano_inicio: { _between: [a0, a1] },
+      _some: {
+        Anos_Lectivos_id: {
+          ano_inicio: { _between: [a0, a1] },
+        },
       },
     }
   }
 
   try {
-    const res: any = await directus.request(
-      readItems('Pessoal', {
-        fields: ['id'],
-        filter,
-        limit: 0,
-        meta: 'filter_count' as any,
-      } as any)
-    )
-    const meta = (res as any)?.meta
-    if (meta && typeof meta.filter_count === 'number') return meta.filter_count
-    // Fallback simple count if meta unsupported
-    const res2: any = await directus.request(
-      readItems('Pessoal', {
-        fields: ['id'],
-        filter,
-        limit: 1,
-        meta: 'total_count' as any,
-      } as any)
-    )
-    const meta2 = (res2 as any)?.meta
-    if (meta2 && typeof meta2.total_count === 'number') return meta2.total_count
-    const data: any = (res2 as any)?.data || []
-    return Array.isArray(data) ? data.length : 0
-  } catch (e: any) {
-    const msg = String(e?.message || '')
-    if ((msg.includes('_icontains') || msg.includes('_contains')) && q) {
-      // Retry with numeric-only or no q
-      const dm = q.match(/\d+/)
-      const retryFilter: any = { ...filter }
-      delete retryFilter._or
-      if (dm) {
-        const num = Number(dm[0])
-        if (Number.isFinite(num)) retryFilter.numero_processo = { _eq: num }
-      }
-      const res: any = await directus.request(
-        readItems('Pessoal', {
-          fields: ['id'],
-          filter: retryFilter,
-          limit: 0,
-          meta: 'filter_count' as any,
-        } as any)
-      )
-      const meta = (res as any)?.meta
-      if (meta && typeof meta.filter_count === 'number') return meta.filter_count
-      return 0
+    const endpoint = `${DIRECTUS_URL.replace(/\/$/, '')}/items/Pessoal`
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+    if (DIRECTUS_TOKEN) headers['Authorization'] = `Bearer ${DIRECTUS_TOKEN}`
+
+    // Primary: aggregate count (works reliably across setups)
+    const paramsA = new URLSearchParams()
+    paramsA.append('aggregate[count]', '*')
+    if (Object.keys(filter).length) paramsA.set('filter', JSON.stringify(filter))
+    let resp = await fetch(`${endpoint}?${paramsA.toString()}`, { headers })
+    if (resp.ok) {
+      const jsonA = await resp.json().catch(() => ({} as any))
+      const aggCountRaw = (jsonA as any)?.data?.[0]?.count
+      const aggCount = Number(aggCountRaw)
+      if (Number.isFinite(aggCount)) return aggCount
     }
-    throw e
+
+    // Fallback 1: meta=filter_count
+    const params = new URLSearchParams()
+    params.set('fields', 'id')
+    params.set('limit', '0')
+    params.append('meta', 'filter_count')
+    if (Object.keys(filter).length) params.set('filter', JSON.stringify(filter))
+    resp = await fetch(`${endpoint}?${params.toString()}`, { headers })
+    if (resp.ok) {
+      const json = await resp.json().catch(() => ({} as any))
+      const countRaw = (json as any)?.meta?.filter_count
+      const count = Number(countRaw)
+      if (Number.isFinite(count)) return count
+    }
+
+    // Fallback 2: meta=total_count
+    const paramsT = new URLSearchParams()
+    paramsT.set('fields', 'id')
+    paramsT.set('limit', '0')
+    paramsT.append('meta', 'total_count')
+    if (Object.keys(filter).length) paramsT.set('filter', JSON.stringify(filter))
+    const respT = await fetch(`${endpoint}?${paramsT.toString()}`, { headers })
+    if (respT.ok) {
+      const jsonT = await respT.json().catch(() => ({} as any))
+      const totalCountRaw = (jsonT as any)?.meta?.total_count
+      const totalCount = Number(totalCountRaw)
+      if (Number.isFinite(totalCount)) return totalCount
+    }
+
+    return 0
+  } catch {
+    return 0
   }
 }
 
