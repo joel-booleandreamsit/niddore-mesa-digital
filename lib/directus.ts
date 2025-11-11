@@ -670,8 +670,10 @@ export async function fetchPessoal({
         offset: Math.max(0, (page - 1) * limit),
       })
     )
+    console.log("fetchPessoal", data)
     return Array.isArray(data) ? data : []
   } catch (e: any) {
+    console.log("fetchPessoal error", e)
     const msg = String(e?.message || '')
     if ((msg.includes('_icontains') || msg.includes('_contains')) && q) {
       // Retry with a safer filter (numeric-only if possible, else no q)
@@ -694,6 +696,7 @@ export async function fetchPessoal({
         )
         return Array.isArray(data) ? data : []
       } catch {
+        console.log('final retry: drop q entirely')
         // final retry: drop q entirely
         const data = await directus.request(
           readItems('Pessoal', {
@@ -757,8 +760,11 @@ export async function fetchPessoalCount({
     if (resp.ok) {
       const json = await resp.json().catch(() => ({} as any))
       const count = Number((json as any)?.meta?.filter_count)
+      console.log('Primary: filter_count', count)
       if (Number.isFinite(count)) return count
     }
+
+    console.log('Fallback: aggregate count')
 
     // Fallback: aggregate count
     const a = new URLSearchParams()

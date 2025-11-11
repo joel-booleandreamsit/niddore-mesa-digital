@@ -38,6 +38,10 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
   const [data, setData] = useState<PessoalItem[]>([])
   const [loading, setLoading] = useState(false)
   const fetchingRef = useRef(false)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [hasMore, setHasMore] = useState(true)
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
+  const scrollRef = useRef<HTMLDivElement | null>(null)
 
   // debounce search
   useEffect(() => {
@@ -55,14 +59,15 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
     }
   }, [sortKey])
 
-  // fetch
-  const fetchPage = useCallback(async () => {
+  // fetch single page (replace or append)
+  const loadPage = useCallback(async (targetPage: number, mode: 'replace' | 'append') => {
     if (fetchingRef.current) return
     fetchingRef.current = true
-    setLoading(true)
+    if (mode === 'replace') setLoading(true)
+    else setLoadingMore(true)
     try {
       const params = new URLSearchParams()
-      params.set('page', String(page))
+      params.set('page', String(targetPage))
       params.set('limit', String(PAGE_SIZE))
       if (q) params.set('q', q)
       params.set('docente', docenteParam)
@@ -72,33 +77,52 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
       params.set('order', order)
       const res = await fetch(`/api/pessoal?${params.toString()}`)
       const json = await res.json()
-      setData(json.data || [])
-      setTotal(json.total || 0)
+      const next = Array.isArray(json.data) ? json.data : []
+      const newTotal = Number(json.total || 0)
+      setTotal(newTotal)
+      if (mode === 'replace') setData(next)
+      else setData(prev => [...prev, ...next])
+      const reached = targetPage * PAGE_SIZE >= newTotal || next.length < PAGE_SIZE
+      setHasMore(!reached)
     } catch (e) {
       // noop
     } finally {
-      setLoading(false)
+      if (mode === 'replace') setLoading(false)
+      else setLoadingMore(false)
       fetchingRef.current = false
     }
-  }, [page, q, docenteParam, range, sort, order])
+  }, [q, docenteParam, range, sort, order])
 
   useEffect(() => {
     setPage(1)
+    setHasMore(true)
   }, [q, docenteParam, range[0], range[1], sortKey])
 
   useEffect(() => {
-    fetchPage()
-  }, [fetchPage])
+    loadPage(1, 'replace')
+  }, [loadPage, page])
 
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
+  // Observe bottom sentinel to load more
+  useEffect(() => {
+    if (!sentinelRef.current) return
+    const node = sentinelRef.current
+    const observer = new IntersectionObserver((entries) => {
+      const first = entries[0]
+      if (first.isIntersecting && !loading && !loadingMore && hasMore) {
+        const nextPage = Math.floor(data.length / PAGE_SIZE) + 1
+        if (nextPage > 1) {
+          loadPage(nextPage, 'append')
+        }
+      }
+    }, { root: scrollRef.current || null, threshold: 0.1 })
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [data.length, hasMore, loading, loadingMore, loadPage])
+
+  // no pages in infinite mode
 
   return (
-    <div className="max-w-[3000px] mx-auto px-10 pb-24 relative" aria-busy={loading}>
-      {loading && (
-        <div className="fixed inset-0 z-50 bg-background/40 backdrop-blur-sm flex items-center justify-center">
-          <div className="w-16 h-16 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
-        </div>
-      )}
+    <div className="max-w-[3000px] mx-auto px-10 pb-24" aria-busy={loading}>
       {/* Controls */}
       <div className="space-y-10 mt-16 mb-12">
         <div className={`flex flex-wrap items-start gap-6 justify-between ${loading ? 'pointer-events-none opacity-60' : ''}`}>
@@ -186,40 +210,48 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
 
       {/* Results + pagination */}
       <div className="flex items-center justify-between mb-6">
-        <div className="text-3xl text-muted-foreground flex items-center gap-4">{labels.results}: {total} {loading && (<span className="inline-block w-6 h-6 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />)}</div>
-        <div className="flex items-center gap-4">
-          <button disabled={page<=1 || loading} onClick={() => setPage(p => Math.max(1, p-1))} className={`px-6 py-3 text-2xl rounded-lg border ${(page<=1||loading)? 'opacity-50 cursor-not-allowed': 'hover:border-primary'}`}>&lt;</button>
-          <span className="text-3xl">{labels.page} {page} {labels.of} {totalPages}</span>
-          <button disabled={page>=totalPages || loading} onClick={() => setPage(p => Math.min(totalPages, p+1))} className={`px-6 py-3 text-2xl rounded-lg border ${(page>=totalPages||loading)? 'opacity-50 cursor-not-allowed': 'hover:border-primary'}`}>&gt;</button>
-        </div>
+        <div className="text-3xl text-muted-foreground">{labels.results}: {total}</div>
+        <div className="h-8" />
       </div>
 
-      {/* Table */}
-      <div className="bg-card border border-border rounded-2xl overflow-hidden">
-        <div className="grid grid-cols-[8rem_1fr_2fr_10rem] gap-0 items-center bg-muted/30 px-12 py-8 text-3xl text-muted-foreground">
-          <div></div>
-          <div>{labels.processNumber}</div>
-          <div>{labels.name}</div>
-          <div>{labels.teacher}</div>
+      {/* Table scroll area */}
+      <div className="relative max-h-[calc(100vh-28rem)] min-h-[30rem] overflow-y-auto" ref={scrollRef}>
+        {loading && (
+          <div className="absolute inset-0 z-10 bg-background/50 backdrop-blur-[1px] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
+          </div>
+        )}
+        <div className={`bg-card border border-border rounded-2xl overflow-hidden ${loading ? 'pointer-events-none' : ''}`}> 
+          <div className="grid grid-cols-[8rem_1fr_2fr_10rem] gap-0 items-center bg-muted/30 px-12 py-8 text-3xl text-muted-foreground">
+            <div></div>
+            <div>{labels.processNumber}</div>
+            <div>{labels.name}</div>
+            <div>{labels.teacher}</div>
+          </div>
+          <div className="divide-y divide-border">
+            {data.map(item => (
+              <Link key={item.id} href={`/pessoal/${item.id}`} className="grid grid-cols-[8rem_1fr_2fr_10rem] gap-0 items-center px-12 py-8 hover:bg-muted/30 transition-colors">
+                <div>
+                  <img src={item.foto_url} alt={item.nome} className="w-16 h-16 rounded-full object-cover bg-muted border border-border" />
+                </div>
+                <div className="text-3xl">{item.numero_processo}</div>
+                <div className="text-3xl">{item.nome || '-'}</div>
+                <div className="text-3xl flex items-center gap-2">{item.docente ? <Check className="text-emerald-500" /> : <X className="text-rose-500" />}</div>
+              </Link>
+            ))}
+            {(!loading && data.length === 0) && (
+              <div className="p-16 text-3xl text-muted-foreground">—</div>
+            )}
+            {/* infinite loader sentinel */}
+            <div ref={sentinelRef} />
+          </div>
         </div>
-        <div className="divide-y divide-border">
-          {data.map(item => (
-            <Link key={item.id} href={`/pessoal/${item.id}`} className="grid grid-cols-[8rem_1fr_2fr_10rem] gap-0 items-center px-12 py-8 hover:bg-muted/30 transition-colors">
-              <div>
-                <img src={item.foto_url} alt={item.nome} className="w-16 h-16 rounded-full object-cover bg-muted border border-border" />
-              </div>
-              <div className="text-3xl">{item.numero_processo}</div>
-              <div className="text-3xl">{item.nome || '-'}</div>
-              <div className="text-3xl flex items-center gap-2">{item.docente ? <Check className="text-emerald-500" /> : <X className="text-rose-500" />}</div>
-            </Link>
-          ))}
-          {(!loading && data.length === 0) && (
-            <div className="p-16 text-3xl text-muted-foreground">—</div>
-          )}
-          {loading && (
-            <div className="p-16 text-3xl text-muted-foreground">Loading…</div>
-          )}
-        </div>
+        {/* Bottom spinner only during infinite load */}
+        {loadingMore && (
+          <div className="py-6 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
+          </div>
+        )}
       </div>
     </div>
   )
