@@ -215,7 +215,7 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
       </div>
 
       {/* Table scroll area */}
-      <div className="relative max-h-[calc(100vh-28rem)] min-h-[30rem] overflow-y-auto" ref={scrollRef}>
+      <div className="relative h-[calc(100vh-58rem)] min-h-[30rem] overflow-y-auto" ref={scrollRef}>
         {loading && (
           <div className="absolute inset-0 z-10 bg-background/50 backdrop-blur-[1px] flex items-center justify-center">
             <div className="w-12 h-12 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
