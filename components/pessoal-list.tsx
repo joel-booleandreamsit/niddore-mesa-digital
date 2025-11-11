@@ -2,7 +2,7 @@
 
 import * as Slider from "@radix-ui/react-slider"
 import Link from "next/link"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { ArrowUpDown, Check, X } from "lucide-react"
 
 export type PessoalItem = {
@@ -37,6 +37,7 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
   const [total, setTotal] = useState(0)
   const [data, setData] = useState<PessoalItem[]>([])
   const [loading, setLoading] = useState(false)
+  const fetchingRef = useRef(false)
 
   // debounce search
   useEffect(() => {
@@ -56,6 +57,8 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
 
   // fetch
   const fetchPage = useCallback(async () => {
+    if (fetchingRef.current) return
+    fetchingRef.current = true
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -75,6 +78,7 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
       // noop
     } finally {
       setLoading(false)
+      fetchingRef.current = false
     }
   }, [page, q, docenteParam, range, sort, order])
 
@@ -89,10 +93,15 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE))
 
   return (
-    <div className="max-w-[3000px] mx-auto px-10 pb-24">
+    <div className="max-w-[3000px] mx-auto px-10 pb-24 relative" aria-busy={loading}>
+      {loading && (
+        <div className="fixed inset-0 z-50 bg-background/40 backdrop-blur-sm flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
+        </div>
+      )}
       {/* Controls */}
       <div className="space-y-10 mt-16 mb-12">
-        <div className="flex flex-wrap items-center gap-6 justify-between">
+        <div className={`flex flex-wrap items-start gap-6 justify-between ${loading ? 'pointer-events-none opacity-60' : ''}`}>
           {/* Search */}
           <div className="flex-1 min-w-[40rem]">
             <label className="block text-3xl text-muted-foreground mb-3">{labels.search}</label>
@@ -100,7 +109,8 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
               value={typingQ}
               onChange={(e) => setTypingQ(e.target.value)}
               placeholder={labels.searchPlaceholder}
-              className="w-full px-8 py-6 text-3xl rounded-lg border-2 border-border bg-card text-foreground focus:border-primary focus:outline-none transition-all"
+              disabled={loading}
+              className="w-full px-8 py-6 text-3xl rounded-lg border-2 border-border bg-card text-foreground focus:border-primary focus:outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -116,7 +126,8 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
                 <button
                   key={opt.k}
                   onClick={() => setDocFilter(opt.k)}
-                  className={`px-12 py-6 text-3xl rounded-lg border-2 transition-all duration-300 touch-manipulation active:scale-95 ${docFilter===opt.k? 'bg-primary text-primary-foreground border-primary' : 'bg-card text-foreground border-border hover:border-primary'}`}
+                  disabled={loading}
+                  className={`px-12 py-6 text-3xl rounded-lg border-2 transition-all duration-300 touch-manipulation active:scale-95 ${docFilter===opt.k? 'bg-primary text-primary-foreground border-primary' : 'bg-card text-foreground border-border hover:border-primary'} disabled:opacity-60 disabled:cursor-not-allowed`}
                 >
                   {opt.l}
                 </button>
@@ -132,7 +143,8 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
               <select
                 value={sortKey}
                 onChange={(e) => setSortKey(e.target.value as SortKey)}
-                className="pl-20 pr-12 py-6 text-3xl rounded-lg border-2 border-border bg-card text-foreground hover:border-primary focus:border-primary focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
+                disabled={loading}
+                className="pl-20 pr-12 py-6 text-3xl rounded-lg border-2 border-border bg-card text-foreground hover:border-primary focus:border-primary focus:outline-none transition-all duration-300 appearance-none cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <option value="nome-asc">{labels.sortByNameAZ}</option>
                 <option value="nome-desc">{labels.sortByNameZA}</option>
@@ -158,6 +170,7 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
           value={rangeDraft}
           onValueChange={(v) => setRangeDraft([v[0], v[1]])}
           onValueCommit={(v) => setRange([v[0], v[1]])}
+          disabled={loading}
           min={yearBounds.minYear}
           max={yearBounds.maxYear}
           step={1}
@@ -173,11 +186,11 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
 
       {/* Results + pagination */}
       <div className="flex items-center justify-between mb-6">
-        <div className="text-3xl text-muted-foreground">{labels.results}: {total}</div>
+        <div className="text-3xl text-muted-foreground flex items-center gap-4">{labels.results}: {total} {loading && (<span className="inline-block w-6 h-6 rounded-full border-2 border-muted-foreground/30 border-t-muted-foreground animate-spin" />)}</div>
         <div className="flex items-center gap-4">
-          <button disabled={page<=1} onClick={() => setPage(p => Math.max(1, p-1))} className={`px-6 py-3 text-2xl rounded-lg border ${page<=1? 'opacity-50 cursor-not-allowed': 'hover:border-primary'}`}>&lt;</button>
+          <button disabled={page<=1 || loading} onClick={() => setPage(p => Math.max(1, p-1))} className={`px-6 py-3 text-2xl rounded-lg border ${(page<=1||loading)? 'opacity-50 cursor-not-allowed': 'hover:border-primary'}`}>&lt;</button>
           <span className="text-3xl">{labels.page} {page} {labels.of} {totalPages}</span>
-          <button disabled={page>=totalPages} onClick={() => setPage(p => Math.min(totalPages, p+1))} className={`px-6 py-3 text-2xl rounded-lg border ${page>=totalPages? 'opacity-50 cursor-not-allowed': 'hover:border-primary'}`}>&gt;</button>
+          <button disabled={page>=totalPages || loading} onClick={() => setPage(p => Math.min(totalPages, p+1))} className={`px-6 py-3 text-2xl rounded-lg border ${(page>=totalPages||loading)? 'opacity-50 cursor-not-allowed': 'hover:border-primary'}`}>&gt;</button>
         </div>
       </div>
 
