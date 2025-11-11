@@ -602,3 +602,227 @@ export async function fetchMaterialById(id: string | number, lang: string = 'pt'
   return data
 }
 
+// Pessoal (people)
+export async function fetchAnosLectivosYears() {
+  const data = await directus.request(
+    readItems('Anos_Lectivos', {
+      fields: ['ano_inicio', 'ano_fim'],
+      sort: ['ano_inicio'],
+      limit: -1,
+    })
+  )
+  return Array.isArray(data) ? data : []
+}
+
+export type FetchPessoalParams = {
+  page?: number
+  limit?: number
+  q?: string
+  docente?: boolean | null // null => all
+  fromYear?: number | null
+  toYear?: number | null
+  sort?: 'nome' | 'numero_processo'
+  order?: 'asc' | 'desc'
+}
+
+export async function fetchPessoal({
+  page = 1,
+  limit = 20,
+  q,
+  docente = null,
+  fromYear = null,
+  toYear = null,
+  sort = 'nome',
+  order = 'asc',
+}: FetchPessoalParams = {}) {
+  const filter: any = {}
+  if (q && q.trim()) {
+    const parts: any[] = [{ nome: { _contains: q } }]
+    const dm = q.match(/\d+/)
+    if (dm) {
+      const num = Number(dm[0])
+      if (Number.isFinite(num)) parts.push({ numero_processo: { _eq: num } })
+    }
+    filter._or = parts
+  }
+  if (docente !== null) {
+    filter.docente = { _eq: !!docente }
+  }
+  if (fromYear != null || toYear != null) {
+    const a0 = fromYear ?? 0
+    const a1 = toYear ?? 9999
+    filter.anos_lectivos = {
+      Anos_Lectivos_id: {
+        ano_inicio: { _between: [a0, a1] },
+      },
+    }
+  }
+
+  try {
+    const data = await directus.request(
+      readItems('Pessoal', {
+        fields: ['id', 'nome', 'numero_processo', 'docente', 'foto'],
+        filter,
+        sort: [`${order === 'desc' ? '-' : ''}${sort}`],
+        limit,
+        offset: Math.max(0, (page - 1) * limit),
+      })
+    )
+    return Array.isArray(data) ? data : []
+  } catch (e: any) {
+    const msg = String(e?.message || '')
+    if ((msg.includes('_icontains') || msg.includes('_contains')) && q) {
+      // Retry with a safer filter (numeric-only if possible, else no q)
+      const dm = q.match(/\d+/)
+      const retryFilter: any = { ...filter }
+      delete retryFilter._or
+      if (dm) {
+        const num = Number(dm[0])
+        if (Number.isFinite(num)) retryFilter.numero_processo = { _eq: num }
+      }
+      try {
+        const data = await directus.request(
+          readItems('Pessoal', {
+            fields: ['id', 'nome', 'numero_processo', 'docente', 'foto'],
+            filter: retryFilter,
+            sort: [`${order === 'desc' ? '-' : ''}${sort}`],
+            limit,
+            offset: Math.max(0, (page - 1) * limit),
+          })
+        )
+        return Array.isArray(data) ? data : []
+      } catch {
+        // final retry: drop q entirely
+        const data = await directus.request(
+          readItems('Pessoal', {
+            fields: ['id', 'nome', 'numero_processo', 'docente', 'foto'],
+            filter: (() => { const f = { ...filter }; delete (f as any)._or; return f })(),
+            sort: [`${order === 'desc' ? '-' : ''}${sort}`],
+            limit,
+            offset: Math.max(0, (page - 1) * limit),
+          })
+        )
+        return Array.isArray(data) ? data : []
+      }
+    }
+    throw e
+  }
+}
+
+export async function fetchPessoalCount({
+  q,
+  docente = null,
+  fromYear = null,
+  toYear = null,
+}: Pick<FetchPessoalParams, 'q' | 'docente' | 'fromYear' | 'toYear'> = {}) {
+  const filter: any = {}
+  if (q && q.trim()) {
+    const parts: any[] = [{ nome: { _icontains: q } }]
+    const num = Number(q.replace(/\D+/g, ''))
+    if (Number.isFinite(num)) {
+      parts.push({ numero_processo: { _eq: num } })
+    }
+    filter._or = parts
+  }
+  if (docente !== null) {
+    filter.docente = { _eq: !!docente }
+  }
+  if (fromYear != null || toYear != null) {
+    const a0 = fromYear ?? 0
+    const a1 = toYear ?? 9999
+    filter.anos_lectivos = {
+      Anos_Lectivos_id: {
+        ano_inicio: { _between: [a0, a1] },
+      },
+    }
+  }
+
+  try {
+    const res: any = await directus.request(
+      readItems('Pessoal', {
+        fields: ['id'],
+        filter,
+        limit: 0,
+        meta: 'filter_count' as any,
+      } as any)
+    )
+    const meta = (res as any)?.meta
+    if (meta && typeof meta.filter_count === 'number') return meta.filter_count
+    // Fallback simple count if meta unsupported
+    const res2: any = await directus.request(
+      readItems('Pessoal', {
+        fields: ['id'],
+        filter,
+        limit: 1,
+        meta: 'total_count' as any,
+      } as any)
+    )
+    const meta2 = (res2 as any)?.meta
+    if (meta2 && typeof meta2.total_count === 'number') return meta2.total_count
+    const data: any = (res2 as any)?.data || []
+    return Array.isArray(data) ? data.length : 0
+  } catch (e: any) {
+    const msg = String(e?.message || '')
+    if ((msg.includes('_icontains') || msg.includes('_contains')) && q) {
+      // Retry with numeric-only or no q
+      const dm = q.match(/\d+/)
+      const retryFilter: any = { ...filter }
+      delete retryFilter._or
+      if (dm) {
+        const num = Number(dm[0])
+        if (Number.isFinite(num)) retryFilter.numero_processo = { _eq: num }
+      }
+      const res: any = await directus.request(
+        readItems('Pessoal', {
+          fields: ['id'],
+          filter: retryFilter,
+          limit: 0,
+          meta: 'filter_count' as any,
+        } as any)
+      )
+      const meta = (res as any)?.meta
+      if (meta && typeof meta.filter_count === 'number') return meta.filter_count
+      return 0
+    }
+    throw e
+  }
+}
+
+export async function fetchPessoalById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Pessoal', id, {
+      fields: [
+        '*',
+        'foto',
+        // One-to-many PAL records with nested relations
+        'anos_lectivos.id',
+        'anos_lectivos.Anos_Lectivos_id.*',
+        'anos_lectivos.funcao.id',
+        'anos_lectivos.funcao.translations.*',
+        'anos_lectivos.categoria.id',
+        'anos_lectivos.categoria.translations.*',
+        'anos_lectivos.grupo.id',
+        'anos_lectivos.grupo.translations.*',
+        'anos_lectivos.curso.id',
+        'anos_lectivos.curso.translations.*',
+        // M2M disciplinas
+        'anos_lectivos.disciplinas.Disciplinas_id.id',
+        'anos_lectivos.disciplinas.Disciplinas_id.translations.*',
+      ],
+      deep: {
+        anos_lectivos: {
+          funcao: { translations: { _filter: { languages_code: { _eq: lang } } } },
+          categoria: { translations: { _filter: { languages_code: { _eq: lang } } } },
+          grupo: { translations: { _filter: { languages_code: { _eq: lang } } } },
+          curso: { translations: { _filter: { languages_code: { _eq: lang } } } },
+          disciplinas: {
+            Disciplinas_id: {
+              translations: { _filter: { languages_code: { _eq: lang } } },
+            },
+          },
+        },
+      },
+    })
+  )
+  return data
+}
