@@ -27,7 +27,7 @@ export default async function DocumentosCategoriasPage() {
 
       <div className="flex-1 px-8 pb-8 overflow-y-auto">
         <div className="px-20 pb-24 space-y-20 mt-16">
-          <div className="grid grid-cols-4 gap-16">
+          <div className="grid grid-cols-5 gap-16">
             {categoriasTransformadas.map((categoria: any) => (
               <Link
                 key={categoria.id}

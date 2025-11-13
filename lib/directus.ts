@@ -1,4 +1,4 @@
-import { createDirectus, rest, staticToken, readItems, readItem } from '@directus/sdk'
+import { createDirectus, rest, staticToken, readItems, readItem, aggregate } from '@directus/sdk'
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL!
 const DIRECTUS_PUBLIC_URL = process.env.DIRECTUS_PUBLIC_URL || 'http://localhost:8055'
@@ -602,3 +602,196 @@ export async function fetchMaterialById(id: string | number, lang: string = 'pt'
   return data
 }
 
+// Pessoal (people)
+export async function fetchAnosLectivosYears() {
+  const data = await directus.request(
+    readItems('Anos_Lectivos', {
+      fields: ['ano_inicio', 'ano_fim'],
+      sort: ['ano_inicio'],
+      limit: -1,
+    })
+  )
+  return Array.isArray(data) ? data : []
+}
+
+export type FetchPessoalParams = {
+  page?: number
+  limit?: number
+  q?: string
+  docente?: boolean | null // null => all
+  fromYear?: number | null
+  toYear?: number | null
+  sort?: 'nome' | 'numero_processo'
+  order?: 'asc' | 'desc'
+}
+
+export async function fetchPessoal({
+  page = 1,
+  limit = 20,
+  q,
+  docente = null,
+  fromYear = null,
+  toYear = null,
+  sort = 'nome',
+  order = 'asc',
+}: FetchPessoalParams = {}) {
+  // Start with an empty filter that will be built conditionally
+  const filter: any = {
+    _and: []
+  }
+
+  // Add search condition if q is provided
+  if (q && q.trim()) {
+    const parts: any[] = [{ nome: { _icontains: q } }]
+    const dm = q.match(/\d+/)
+    if (dm) {
+      const num = Number(dm[0])
+      if (Number.isFinite(num)) parts.push({ numero_processo: { _eq: num } })
+    }
+    filter._and.push({ _or: parts })
+  }
+
+  // Add docente condition if provided
+  if (docente !== null) {
+    filter._and.push({ docente: { _eq: !!docente } })
+  }
+
+  // Add year range condition if provided
+  if (fromYear != null || toYear != null) {
+    const a0 = fromYear ?? 0
+    const a1 = toYear ?? 9999
+    filter._and.push({
+      anos_lectivos: {        
+        Anos_Lectivos_id: {
+          ano_inicio: { _between: [a0, a1] }
+        }        
+      }
+    })
+  }
+
+  // If no conditions were added, remove the _and wrapper
+  if (filter._and.length === 0) {
+    delete filter._and
+  }
+
+  try {
+    const data = await directus.request(
+      readItems('Pessoal', {
+        fields: ['id', 'nome', 'numero_processo', 'docente', 'foto'],
+        filter,
+        sort: [`${order === 'desc' ? '-' : ''}${sort}`],
+        limit,
+        offset: Math.max(0, (page - 1) * limit),
+      })
+    )
+    
+    return Array.isArray(data) ? data : []
+  } catch (e: any) {
+    console.log("fetchPessoal error", e)
+    // ... rest of your error handling
+    return []
+  }
+}
+
+export async function fetchPessoalCount({
+  q,
+  docente = null,
+  fromYear = null,
+  toYear = null,
+}: Pick<FetchPessoalParams, 'q' | 'docente' | 'fromYear' | 'toYear'> = {}) {
+  // Start with an empty filter that will be built conditionally
+  const filter: any = {
+    _and: []
+  }
+
+  // Add search condition if q is provided
+  if (q && q.trim()) {
+    const parts: any[] = [{ nome: { _icontains: q } }]
+    const dm = q.match(/\d+/)
+    if (dm) {
+      const num = Number(dm[0])
+      if (Number.isFinite(num)) parts.push({ numero_processo: { _eq: num } })
+    }
+    filter._and.push({ _or: parts })
+  }
+
+  // Add docente condition if provided
+  if (docente !== null) {
+    filter._and.push({ docente: { _eq: !!docente } })
+  }
+
+  // Add year range condition if provided
+  if (fromYear != null || toYear != null) {
+    const a0 = fromYear ?? 0
+    const a1 = toYear ?? 9999
+    filter._and.push({
+      anos_lectivos: {        
+        Anos_Lectivos_id: {
+          ano_inicio: { _between: [a0, a1] }
+        }        
+      }
+    })
+  }
+
+  // If no conditions were added, remove the _and wrapper
+  if (filter._and.length === 0) {
+    delete filter._and
+  }
+
+  try {
+    const result = await directus.request(
+      aggregate('Pessoal', {        
+        aggregate: {
+          countDistinct: 'id'
+        },
+        query: {
+          filter: filter
+        }
+      })
+    )
+
+    return result[0]?.countDistinct?.id || 0
+  } catch (e) {
+    console.error("fetchPessoalCount error", e)
+    return 0
+  }
+}
+
+export async function fetchPessoalById(id: string | number, lang: string = 'pt') {
+  const data = await directus.request(
+    readItem('Pessoal', id, {
+      fields: [
+        '*',
+        'foto',
+        // One-to-many PAL records with nested relations
+        'anos_lectivos.id',
+        'anos_lectivos.Anos_Lectivos_id.*',
+        'anos_lectivos.funcao.id',
+        'anos_lectivos.funcao.translations.*',
+        'anos_lectivos.categoria.id',
+        'anos_lectivos.categoria.translations.*',
+        'anos_lectivos.grupo.id',
+        'anos_lectivos.grupo.translations.*',
+        'anos_lectivos.curso.id',
+        'anos_lectivos.curso.translations.*',
+        // M2M disciplinas
+        'anos_lectivos.disciplinas.Disciplinas_id.id',
+        'anos_lectivos.disciplinas.Disciplinas_id.translations.*',
+      ],
+      deep: {
+        anos_lectivos: {
+          funcao: { translations: { _filter: { languages_code: { _eq: lang } } } },
+          categoria: { translations: { _filter: { languages_code: { _eq: lang } } } },
+          grupo: { translations: { _filter: { languages_code: { _eq: lang } } } },
+          curso: { translations: { _filter: { languages_code: { _eq: lang } } } },
+          disciplinas: {
+            Disciplinas_id: {
+              translations: { _filter: { languages_code: { _eq: lang } } },
+            },
+          },
+        },
+      },
+    })
+  )
+  return data
+}
