@@ -661,37 +661,56 @@ export async function fetchPessoal({
   }
 
   try {
-    const endpoint = `${DIRECTUS_URL.replace(/\/$/, '')}/items/Pessoal`
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' }
-    if (DIRECTUS_TOKEN) headers['Authorization'] = `Bearer ${DIRECTUS_TOKEN}`
-
-    // Build query parameters
-    const params = new URLSearchParams()
-    params.set('fields', 'id,nome,numero_processo,docente,foto')
-    params.set('sort', `${order === 'desc' ? '-' : ''}${sort}`)
-    params.set('limit', String(limit))
-    params.set('offset', String(Math.max(0, (page - 1) * limit)))
-    params.append('meta', 'total_count')
-    if (Object.keys(filter).length) {
-      params.set('filter', JSON.stringify(filter))
-    }
-
-    const resp = await fetch(`${endpoint}?${params.toString()}`, { headers })
-    if (!resp.ok) throw new Error('Failed to fetch data')
-
-    const { data, meta } = await resp.json()
-    console.log("fetchPessoal", { data, meta })
-    return {
-      items: Array.isArray(data) ? data : [],
-      total: meta?.total_count || 1000000 //to enable infinite scroll without a filter total when the api gets updated to drop support for meta
-    }
+    const data = await directus.request(
+      readItems('Pessoal', {
+        fields: ['id', 'nome', 'numero_processo', 'docente', 'foto'],
+        filter,
+        sort: [`${order === 'desc' ? '-' : ''}${sort}`],
+        limit,
+        offset: Math.max(0, (page - 1) * limit),
+      })
+    )
+    console.log("fetchPessoal", data)
+    return Array.isArray(data) ? data : []
   } catch (e: any) {
     console.log("fetchPessoal error", e)
-    // ... rest of your error handling remains the same
-    return {
-      items: [],
-      total: 0
+    const msg = String(e?.message || '')
+    if ((msg.includes('_icontains') || msg.includes('_contains')) && q) {
+      // Retry with a safer filter (numeric-only if possible, else no q)
+      const dm = q.match(/\d+/)
+      const retryFilter: any = { ...filter }
+      delete retryFilter._or
+      if (dm) {
+        const num = Number(dm[0])
+        if (Number.isFinite(num)) retryFilter.numero_processo = { _eq: num }
+      }
+      try {
+        const data = await directus.request(
+          readItems('Pessoal', {
+            fields: ['id', 'nome', 'numero_processo', 'docente', 'foto'],
+            filter: retryFilter,
+            sort: [`${order === 'desc' ? '-' : ''}${sort}`],
+            limit,
+            offset: Math.max(0, (page - 1) * limit),
+          })
+        )
+        return Array.isArray(data) ? data : []
+      } catch {
+        console.log('final retry: drop q entirely')
+        // final retry: drop q entirely
+        const data = await directus.request(
+          readItems('Pessoal', {
+            fields: ['id', 'nome', 'numero_processo', 'docente', 'foto'],
+            filter: (() => { const f = { ...filter }; delete (f as any)._or; return f })(),
+            sort: [`${order === 'desc' ? '-' : ''}${sort}`],
+            limit,
+            offset: Math.max(0, (page - 1) * limit),
+          })
+        )
+        return Array.isArray(data) ? data : []
+      }
     }
+    throw e
   }
 }
 
@@ -745,7 +764,7 @@ export async function fetchPessoalCount({
       if (Number.isFinite(count)) return count
     }
 
-    console.log('-------> Fallback: aggregate count')
+    console.log('Fallback: aggregate count')
 
     // Fallback: aggregate count
     const a = new URLSearchParams()
@@ -799,6 +818,5 @@ export async function fetchPessoalById(id: string | number, lang: string = 'pt')
       },
     })
   )
-  console.log("fetchPessoalById", data)
   return data
 }
