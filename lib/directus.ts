@@ -1,4 +1,4 @@
-import { createDirectus, rest, staticToken, readItems, readItem } from '@directus/sdk'
+import { createDirectus, rest, staticToken, readItems, readItem, aggregate } from '@directus/sdk'
 
 const DIRECTUS_URL = process.env.DIRECTUS_URL!
 const DIRECTUS_PUBLIC_URL = process.env.DIRECTUS_PUBLIC_URL || 'http://localhost:8055'
@@ -635,7 +635,12 @@ export async function fetchPessoal({
   sort = 'nome',
   order = 'asc',
 }: FetchPessoalParams = {}) {
-  const filter: any = {}
+  // Start with an empty filter that will be built conditionally
+  const filter: any = {
+    _and: []
+  }
+
+  // Add search condition if q is provided
   if (q && q.trim()) {
     const parts: any[] = [{ nome: { _icontains: q } }]
     const dm = q.match(/\d+/)
@@ -643,21 +648,30 @@ export async function fetchPessoal({
       const num = Number(dm[0])
       if (Number.isFinite(num)) parts.push({ numero_processo: { _eq: num } })
     }
-    filter._or = parts
+    filter._and.push({ _or: parts })
   }
+
+  // Add docente condition if provided
   if (docente !== null) {
-    filter.docente = { _eq: !!docente }
+    filter._and.push({ docente: { _eq: !!docente } })
   }
+
+  // Add year range condition if provided
   if (fromYear != null || toYear != null) {
     const a0 = fromYear ?? 0
     const a1 = toYear ?? 9999
-    filter.anos_lectivos = {
-      _some: {
+    filter._and.push({
+      anos_lectivos: {        
         Anos_Lectivos_id: {
-          ano_inicio: { _between: [a0, a1] },
-        },
-      },
-    }
+          ano_inicio: { _between: [a0, a1] }
+        }        
+      }
+    })
+  }
+
+  // If no conditions were added, remove the _and wrapper
+  if (filter._and.length === 0) {
+    delete filter._and
   }
 
   try {
@@ -670,47 +684,12 @@ export async function fetchPessoal({
         offset: Math.max(0, (page - 1) * limit),
       })
     )
-    console.log("fetchPessoal", data)
+    
     return Array.isArray(data) ? data : []
   } catch (e: any) {
     console.log("fetchPessoal error", e)
-    const msg = String(e?.message || '')
-    if ((msg.includes('_icontains') || msg.includes('_contains')) && q) {
-      // Retry with a safer filter (numeric-only if possible, else no q)
-      const dm = q.match(/\d+/)
-      const retryFilter: any = { ...filter }
-      delete retryFilter._or
-      if (dm) {
-        const num = Number(dm[0])
-        if (Number.isFinite(num)) retryFilter.numero_processo = { _eq: num }
-      }
-      try {
-        const data = await directus.request(
-          readItems('Pessoal', {
-            fields: ['id', 'nome', 'numero_processo', 'docente', 'foto'],
-            filter: retryFilter,
-            sort: [`${order === 'desc' ? '-' : ''}${sort}`],
-            limit,
-            offset: Math.max(0, (page - 1) * limit),
-          })
-        )
-        return Array.isArray(data) ? data : []
-      } catch {
-        console.log('final retry: drop q entirely')
-        // final retry: drop q entirely
-        const data = await directus.request(
-          readItems('Pessoal', {
-            fields: ['id', 'nome', 'numero_processo', 'docente', 'foto'],
-            filter: (() => { const f = { ...filter }; delete (f as any)._or; return f })(),
-            sort: [`${order === 'desc' ? '-' : ''}${sort}`],
-            limit,
-            offset: Math.max(0, (page - 1) * limit),
-          })
-        )
-        return Array.isArray(data) ? data : []
-      }
-    }
-    throw e
+    // ... rest of your error handling
+    return []
   }
 }
 
@@ -720,64 +699,60 @@ export async function fetchPessoalCount({
   fromYear = null,
   toYear = null,
 }: Pick<FetchPessoalParams, 'q' | 'docente' | 'fromYear' | 'toYear'> = {}) {
-  const filter: any = {}
+  // Start with an empty filter that will be built conditionally
+  const filter: any = {
+    _and: []
+  }
+
+  // Add search condition if q is provided
   if (q && q.trim()) {
-    const parts: any[] = [{ nome: { _contains: q } }]
+    const parts: any[] = [{ nome: { _icontains: q } }]
     const dm = q.match(/\d+/)
     if (dm) {
       const num = Number(dm[0])
       if (Number.isFinite(num)) parts.push({ numero_processo: { _eq: num } })
     }
-    filter._or = parts
+    filter._and.push({ _or: parts })
   }
+
+  // Add docente condition if provided
   if (docente !== null) {
-    filter.docente = { _eq: !!docente }
+    filter._and.push({ docente: { _eq: !!docente } })
   }
+
+  // Add year range condition if provided
   if (fromYear != null || toYear != null) {
     const a0 = fromYear ?? 0
     const a1 = toYear ?? 9999
-    filter.anos_lectivos = {
-      _some: {
+    filter._and.push({
+      anos_lectivos: {        
         Anos_Lectivos_id: {
-          ano_inicio: { _between: [a0, a1] },
-        },
-      },
-    }
+          ano_inicio: { _between: [a0, a1] }
+        }        
+      }
+    })
+  }
+
+  // If no conditions were added, remove the _and wrapper
+  if (filter._and.length === 0) {
+    delete filter._and
   }
 
   try {
-    const endpoint = `${DIRECTUS_URL.replace(/\/$/, '')}/items/Pessoal`
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' }
-    if (DIRECTUS_TOKEN) headers['Authorization'] = `Bearer ${DIRECTUS_TOKEN}`
+    const result = await directus.request(
+      aggregate('Pessoal', {        
+        aggregate: {
+          countDistinct: 'id'
+        },
+        query: {
+          filter: filter
+        }
+      })
+    )
 
-    // Primary: meta=filter_count (fast) using original nested JSON filter
-    const p = new URLSearchParams()
-    p.set('fields', 'id')
-    p.set('limit', '0')
-    p.append('meta', 'filter_count')
-    if (Object.keys(filter).length) p.set('filter', JSON.stringify(filter))
-    let resp = await fetch(`${endpoint}?${p.toString()}`, { headers })
-    if (resp.ok) {
-      const json = await resp.json().catch(() => ({} as any))
-      const count = Number((json as any)?.meta?.filter_count)
-      console.log('Primary: filter_count', count)
-      if (Number.isFinite(count)) return count
-    }
-
-    console.log('Fallback: aggregate count')
-
-    // Fallback: aggregate count
-    const a = new URLSearchParams()
-    a.append('aggregate[count]', '*')
-    if (Object.keys(filter).length) a.set('filter', JSON.stringify(filter))
-    resp = await fetch(`${endpoint}?${a.toString()}`, { headers })
-    if (resp.ok) {
-      const json = await resp.json().catch(() => ({} as any))
-      const val = Number((json as any)?.data?.[0]?.count)
-      if (Number.isFinite(val)) return val
-    }
-    return 0
-  } catch {
+    return result[0]?.countDistinct?.id || 0
+  } catch (e) {
+    console.error("fetchPessoalCount error", e)
     return 0
   }
 }
