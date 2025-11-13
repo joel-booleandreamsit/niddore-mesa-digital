@@ -58,7 +58,7 @@ export default async function DocumentosCategoriaPage({ params }: { params: Prom
 
         <div className="flex-1 px-8 pb-8 overflow-y-auto">
           <div className="px-20 pb-24 space-y-20 mt-16">
-            <div className="grid grid-cols-4 gap-16">
+            <div className="grid grid-cols-5 gap-16">
               {documentosTransformados.map((doc: any) => (
                 <Link
                   key={doc.id}
