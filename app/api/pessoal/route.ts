@@ -19,10 +19,7 @@ export async function GET(req: NextRequest) {
   const sort = (searchParams.get('sort') as FetchPessoalParams['sort']) || 'nome'
   const order = (searchParams.get('order') as FetchPessoalParams['order']) || 'asc'
 
-  const [items, total] = await Promise.all([
-    fetchPessoal({ page, limit, q, docente, fromYear, toYear, sort, order }),
-    fetchPessoalCount({ q, docente, fromYear, toYear }),
-  ])
+  const {items, total} = await fetchPessoal({ page, limit, q, docente, fromYear, toYear, sort, order })
 
   // Shape response and include foto_url
   const data = (items || []).map((it: any) => ({
