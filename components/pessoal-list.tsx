@@ -42,10 +42,11 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
   const [hasMore, setHasMore] = useState(true)
   const sentinelRef = useRef<HTMLDivElement | null>(null)
   const scrollRef = useRef<HTMLDivElement | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   // debounce search
   useEffect(() => {
-    const t = setTimeout(() => setQ(typingQ), 650)
+    const t = setTimeout(() => setQ(typingQ), typingQ ? 950 : 2000) // 2s delay when clearing, 950ms when typing
     return () => clearTimeout(t)
   }, [typingQ])
 
@@ -79,9 +80,18 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
       const json = await res.json()
       const next = Array.isArray(json.data) ? json.data : []
       const newTotal = Number(json.total || 0)
-      setTotal(newTotal)
-      if (mode === 'replace') setData(next)
-      else setData(prev => [...prev, ...next])
+      setTotal(newTotal)      
+      if (mode === 'replace') {
+        setData(next)        
+        // Scroll to top when new search is performed (page 1 of new results)
+        if (scrollRef.current) {
+          scrollRef.current.scrollTo({
+            top: 0            
+          })
+        }
+      } else {
+        setData(prev => [...prev, ...next])
+      }
       const reached = targetPage * PAGE_SIZE >= newTotal || next.length < PAGE_SIZE
       setHasMore(!reached)
     } catch (e) {
@@ -129,13 +139,32 @@ export default function PessoalList({ labels, yearBounds }: PessoalListProps) {
           {/* Search */}
           <div className="flex-1 min-w-[40rem]">
             <label className="block text-3xl text-muted-foreground mb-3">{labels.search}</label>
-            <input
-              value={typingQ}
-              onChange={(e) => setTypingQ(e.target.value)}
-              placeholder={labels.searchPlaceholder}
-              disabled={loading}
-              className="w-full px-8 py-6 text-3xl rounded-lg border-2 border-border bg-card text-foreground focus:border-primary focus:outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-            />
+            <div className="relative">
+              <input
+                ref={inputRef}
+                value={typingQ}
+                onChange={(e) => {
+                  setTypingQ(e.target.value)
+                }}
+                placeholder={labels.searchPlaceholder}
+                disabled={loading}
+                className="w-full px-8 py-6 pr-16 text-3xl rounded-lg border-2 border-border bg-card text-foreground focus:border-primary focus:outline-none transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+              />
+              {typingQ && (
+                <button
+                  onClick={() => {
+                    setTypingQ('')
+                    // Focus the input after clearing
+                    setTimeout(() => inputRef.current?.focus(), 0)
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-muted-foreground hover:text-foreground transition-colors focus:outline-none"
+                  aria-label={labels.clearSearch}
+                  disabled={loading}
+                >
+                  <X className="w-10 h-10" />
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Docente filter */}
