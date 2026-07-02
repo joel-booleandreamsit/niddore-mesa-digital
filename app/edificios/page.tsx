@@ -66,7 +66,7 @@ export default async function EdificiosPage() {
     return parts[0] + ', ' + parts[1]
   }
 
-  const items = (data || []).slice(0, 5).map((item: any) => {
+  const items = (data || []).map((item: any) => {
     const nome = item.translations?.[0]?.nome || labels.nameUnavailable
     return {
       id: item.id,

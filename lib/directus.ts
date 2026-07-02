@@ -27,7 +27,12 @@ export default function fetchEdificios(lang: string = 'pt') {
   return directus.request(
     readItems('Edificios', {
       fields: ['*', { translations: ['*']}],
-      sort: ['data_inicio'],
+      sort: ['id'],
+      filter: {
+        status: {
+          _eq: 'Publicado'
+        }
+      },
       deep: {
         translations: {
           _filter: {
