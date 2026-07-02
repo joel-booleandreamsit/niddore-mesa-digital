@@ -1,103 +1,27 @@
-"use client"
-
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import Image from "next/image"
+import { fetchPaginas, assetUrl } from "@/lib/directus"
+import { getLang } from "@/lib/i18n"
+import { LanguageToggle } from "@/components/language-toggle"
 
-function getCookie(name: string) {
-  if (typeof document === "undefined") return null
-  const match = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"))
-  return match ? decodeURIComponent(match[1]) : null
-}
+export const dynamic = 'force-dynamic'
 
-function setCookie(name: string, value: string, maxAgeSeconds = 60 * 60 * 24 * 365) {
-  if (typeof document === "undefined") return
-  document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAgeSeconds}`
-}
+export default async function HomePage() {
+  const lang = await getLang()
+  const data = await fetchPaginas(lang)
 
-export default function HomePage() {
-  const [lang, setLang] = useState<"pt" | "en">("pt")
-
-  // Initialize language from cookie
-  useEffect(() => {
-    const saved = getCookie("lang")
-    if (saved === "pt" || saved === "en") setLang(saved)
-  }, [])
-
-  // Helper to change language and persist cookie
-  function changeLang(next: "pt" | "en") {
-    setLang(next)
-    setCookie("lang", next)   
-  }
-
-  const sections = [
-    {
-      title: lang === "pt" ? "Edifícios" : "Buildings",
-      description: lang === "pt" ? "Instalações ao longo da história" : "Facilities throughout history",
-      href: "/edificios",
-      image: "/images/edificios.jpg",
-    },
-    {
-      title: lang === "pt" ? "Cursos" : "Courses",
-      description: lang === "pt" ? "Disciplinas lecionadas" : "Subjects taught",
-      href: "/cursos",
-      image: "/images/cursos.jpg",
-    },
-    {
-      title: lang === "pt" ? "Publicações" : "Publications",
-      description: lang === "pt" ? "Publicações da escola" : "School publications",
-      href: "/publicacoes",
-      image: "/images/publicacoes.jpg",
-    },
-    {
-      title: lang === "pt" ? "Serviços" : "Services",
-      description: lang === "pt" ? "Serviços oferecidos pela escola" : "Services offered by the school",
-      href: "/servicos",
-      image: "/images/servicos.jpg",
-    },
-    {
-      title: lang === "pt" ? "Grupos" : "Groups",
-      description: lang === "pt" ? "Grupos da escola" : "School groups",
-      href: "/grupos",
-      image: "/images/materiais.jpg",
-    },
-    {
-      title: lang === "pt" ? "Galeria de Fotos" : "Photo Gallery",
-      description: lang === "pt" ? "Memórias visuais da escola" : "Visual memories of the school",
-      href: "/galeria",
-      image: "/images/galeria.jpg",
-    },
-    {
-      title: lang === "pt" ? "Documentos" : "Documents",
-      description: lang === "pt" ? "Categorias de documentos" : "Document categories",
-      href: "/documentos",
-      image: "/images/publicacoes.jpg",
-    },
-    {
-      title: lang === "pt" ? "Alunos" : "Students",
-      description: lang === "pt" ? "Categorias de documentos" : "Document categories",
-      href: "/alunos",
-      image: "/images/publicacoes.jpg",
-    },
-    {
-      title: lang === "pt" ? "Pessoal" : "Workforce",
-      description: lang === "pt" ? "Categorias de documentos" : "Document categories",
-      href: "/pessoal",
-      image: "/images/publicacoes.jpg",
-    },
-  ]
+  const sections = (data || []).map((page: any) => ({
+    title: page.translations?.[0]?.titulo || '',
+    description: page.translations?.[0]?.descricao || '',
+    href: page.href || '/',
+    image: assetUrl(page.imagem) || '/placeholder.svg',
+  }))
 
   return (
     <main className="h-screen bg-background overflow-hidden flex flex-col">
-      {/* Language Toggle - Single Flag Button */}
+      {/* Language Toggle */}
       <div className="absolute top-10 right-16 z-10">
-        <button
-          onClick={() => changeLang(lang === "pt" ? "en" : "pt")}
-          className="w-28 h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-2xl border-2 "
-          aria-label={lang === "pt" ? "Switch to English" : "Mudar para Português"}
-          title={lang === "pt" ? "Switch to English" : "Mudar para Português"}
-        >
-          <span className="text-6xl md:text-7xl lg:text-8xl leading-none">{lang === "pt" ? "🇬🇧" : "🇵🇹"}</span>
-        </button>
+        <LanguageToggle currentLang={lang} />
       </div>
 
       {/* Hero Section - Compact */}
@@ -113,7 +37,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Navigation Grid - Now with 7 sections */}
+      {/* Navigation Grid */}
       <div className="flex-1 px-16 pt-8 pb-16">
         <div className="h-full grid grid-cols-3 grid-rows-3 gap-16">
           {sections.map((section) => (
@@ -123,10 +47,11 @@ export default function HomePage() {
               className="group relative rounded-2xl overflow-hidden touch-manipulation transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] hover:shadow-2xl"
             >
               <div className="absolute inset-0">
-                <img
-                  src={section.image || "/placeholder.svg"}
+                <Image
+                  src={section.image}
                   alt={section.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/40 group-hover:from-black/50 group-hover:via-black/30 group-hover:to-black/20 transition-all duration-500" />
               </div>
