@@ -19,7 +19,7 @@ services:
   libretranslate:
     image: libretranslate/libretranslate:v1.7.3
     ports:
-      - "5000:5000"
+      - "5001:5000"
     environment:
       - LT_LOAD_ONLY=${LIBRETRANSLATE_LANGUAGES:-pt,en}
       - LT_DISABLE_WEB_UI=${LIBRETRANSLATE_DISABLE_UI:-false}
