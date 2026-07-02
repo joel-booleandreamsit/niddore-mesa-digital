@@ -46,6 +46,24 @@ export default function fetchEdificios(lang: string = 'pt') {
   )
 }
 
+export function fetchPaginas(lang: string = 'pt') {
+  return directus.request(
+    readItems('Paginas', {
+      fields: ['*', { translations: ['*']}],
+      sort: ['ordem'],
+      deep: {
+        translations: {
+          _filter: {
+            languages_code: {
+              _eq: lang
+            }
+          }
+        }
+      }
+    })
+  )
+}
+
 export function fetchEdificioById(id: string | number, lang: string = 'pt') {
 	return directus.request(
 		readItem('Edificios', id, {
