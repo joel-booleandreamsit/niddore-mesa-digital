@@ -35,7 +35,7 @@ export default async function GaleriaCategoriaPage({ params }: { params: Promise
     const subcategoriasTransformadas = subcategorias.map((item: any) => ({
       ...item,
       nome: item.translations?.[0]?.nome || labels.nameUnavailable,
-      foto_url: item.imagem ? assetUrl(item.imagem, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
+      foto_url: item.imagem ? assetUrl(item.imagem, "format=webp") : '/placeholder.svg',
     }))
 
     const fotosData = await fetchGaleriaFotos(parseInt(id), lang)
@@ -45,8 +45,8 @@ export default async function GaleriaCategoriaPage({ params }: { params: Promise
       nome: item.translations?.[0]?.nome || item.translations?.[0]?.breve_descricao || labels.nameUnavailable,
       breve: item.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
       descricao: item.translations?.[0]?.descricao || labels.descriptionUnavailable,
-      foto_url: item.foto ? assetUrl(item.foto, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
-      foto_url_large: item.foto ? assetUrl(item.foto, "fit=cover&width=1200&height=900&format=webp") : '/placeholder.svg',
+      foto_url: item.foto ? assetUrl(item.foto, "format=webp") : '/placeholder.svg',
+      foto_url_large: item.foto ? assetUrl(item.foto, "format=webp") : '/placeholder.svg',
     }))
 
     // Build breadcrumbs up to the root

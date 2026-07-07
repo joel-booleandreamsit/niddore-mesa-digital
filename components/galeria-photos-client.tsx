@@ -56,14 +56,9 @@ export default function GaleriaPhotosClient({
               <img
                 src={foto.foto_url}
                 alt={foto.nome}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
               />
-            </div>
-            <div className="p-10 space-y-6 mb-10">
-              <h3 className="font-serif text-5xl text-foreground text-balance group-hover:text-primary transition-colors leading-tight">
-                {foto.nome}
-              </h3>
-            </div>
+            </div>            
           </button>
         ))}
       </div>
@@ -93,7 +88,7 @@ export default function GaleriaPhotosClient({
                   <img
                     src={selected.foto_url_large || selected.foto_url}
                     alt={selected.nome}
-                    className="w-full h-full object-contain"
+                    className="object-contain w-full max-h-[82vh]"
                   />
                 </div>
                 <div className="p-8 md:p-12 space-y-10 h-full overflow-y-auto">
