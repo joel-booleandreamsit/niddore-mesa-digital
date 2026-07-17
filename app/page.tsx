@@ -27,7 +27,7 @@ export default async function HomePage() {
       {/* Hero Section - Compact */}
       <div className="relative flex flex-col items-center justify-center px-12 pt-32 pb-8 bg-gradient-to-b from-background via-background/95 to-background/80">
         <div className="text-center space-y-4">
-          <h1 className="text-7xl md:text-8xl lg:text-9xl text-foreground tracking-normal text-balance leading-none" style={{ fontFamily: 'DearScript, cursive', fontWeight: 'normal', letterSpacing: '16px' }}>
+          <h1 className="text-7xl md:text-8xl lg:text-9xl text-foreground tracking-normal text-balance leading-none" style={{ fontFamily: 'DearScript', fontWeight: 'normal', fontSize: '200px' }}>
             Domingos Rebelo
           </h1>
           <p className="pt-6 text-2xl md:text-6xl text-primary/80 font-serif italic text-balance">{lang === "pt" ? "Escola Secundária" : "Secondary School"}</p>
