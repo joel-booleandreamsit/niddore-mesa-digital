@@ -361,7 +361,7 @@ export async function fetchGrupos(lang: string = 'pt') {
 export async function fetchGrupoById(id: string | number, lang: string = 'pt') {
   const data = await directus.request(
     readItem('Grupos', id, {
-      fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id.*'],
+      fields: ['*', 'translations.*', 'foto_capa', 'foto_capa_interior', 'fotos_galeria.directus_files_id.*'],
       deep: {
         fotos_galeria: {
           _limit: 250

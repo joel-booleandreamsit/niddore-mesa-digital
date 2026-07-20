@@ -58,8 +58,7 @@ export function ImageCarousel({ images, alt, className = "" }: ImageCarouselProp
                     <video
                       className="w-full h-full object-cover transition-all duration-500 hover:scale-105"
                       loop
-                      playsInline
-                      autoPlay
+                      playsInline                      
                       preload="metadata"
                       poster={image.posterUrl}
                       aria-label={image.title || `${alt} - Vídeo ${index + 1}`}
