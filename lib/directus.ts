@@ -363,6 +363,9 @@ export async function fetchGrupoById(id: string | number, lang: string = 'pt') {
     readItem('Grupos', id, {
       fields: ['*', 'translations.*', 'foto_capa', 'fotos_galeria.directus_files_id.*'],
       deep: {
+        fotos_galeria: {
+          _limit: 250
+        },
         translations: {
           _filter: {
             languages_code: {

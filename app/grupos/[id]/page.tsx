@@ -20,7 +20,7 @@ export default async function GrupoDetalhePage({ params }: { params: Promise<{ i
       nome: grupo.translations?.[0]?.nome || labels.nameUnavailable,
       descricao: grupo.translations?.[0]?.descricao || labels.descriptionUnavailable,
       tipo_grupo: grupo.tipo_grupo_translated || grupo.tipo_grupo || labels.typeUnavailable,
-      foto_capa: grupo.foto_capa ? assetUrl(grupo.foto_capa, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
+      foto_capa: grupo.foto_capa ? assetUrl(grupo.foto_capa, "format=webp") : '/placeholder.svg',
       fotos_galeria: (() => {
         const g: any = (grupo as any).fotos_galeria
         if (!g) return []
