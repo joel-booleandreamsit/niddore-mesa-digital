@@ -21,6 +21,7 @@ export default function GaleriaPhotosClient({
 }) {
   const [openId, setOpenId] = useState<string | number | null>(null)
   const [entered, setEntered] = useState(false)
+  const [view, setView] = useState<'flipbook' | 'grid'>('flipbook')
   const flipBookRef = useRef<any>(null)
 
   const selected = useMemo(() => fotos.find((f) => f.id === openId) || null, [fotos, openId])
@@ -78,30 +79,85 @@ export default function GaleriaPhotosClient({
   ))
 
   return (
-    <div className="p-40 w-full h-full overflow-hidden">
-      <div className="flex items-center justify-center">
-        <div className="shadow-[0_60px_80px_rgba(0,0,0,0.5),0_30px_50px_rgba(0,0,0,0.3)]">
-          <HTMLFlipBook
-            ref={flipBookRef}
-            width={1800}
-            height={1300}
-            size="fixed"
-            drawShadow={true}
-            maxShadowOpacity={1}
-            flippingTime={1000}
-            usePortrait={false}
-            startPage={0}
-            swipeDistance={50}
-            showCover={false}
-            mobileScrollSupport={false}
-            disableFlipByClick={false}
-            useMouseEvents={true}
-            autoSize={false}
-          >
-            {pages}
-          </HTMLFlipBook>
-        </div>
-    </div>
+    <div className="w-full h-screen flex flex-col overflow-hidden">
+      {/* View Toggle Toolbar */}
+      <div className="flex-shrink-0 flex items-center justify-end gap-4 px-8 py-4 bg-background/95 backdrop-blur-sm border-b border-border z-50">
+        <button
+          onClick={() => setView('flipbook')}
+          className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+            view === 'flipbook'
+              ? 'bg-primary text-primary-foreground'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          }`}
+        >
+          Flipbook
+        </button>
+        <button
+          onClick={() => setView('grid')}
+          className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+            view === 'grid'
+              ? 'bg-primary text-primary-foreground'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          }`}
+        >
+          Grid
+        </button>
+      </div>
+
+      {/* Content Area */}
+      <div className="flex-1 overflow-hidden">
+        {/* Flipbook View */}
+        {view === 'flipbook' && (
+          <div className="p-40 w-full h-full overflow-hidden">
+            <div className="flex items-center justify-center">
+            <div className="shadow-[0_5px_80px_rgba(0,0,0,0.5),0_10px_50px_rgba(0,0,0,0.3)]">
+              <HTMLFlipBook
+                ref={flipBookRef}
+                width={1800}
+                height={1300}
+                size="fixed"
+                drawShadow={true}
+                maxShadowOpacity={1}
+                flippingTime={1000}
+                usePortrait={false}
+                startPage={0}
+                swipeDistance={50}
+                showCover={false}
+                mobileScrollSupport={false}
+                disableFlipByClick={false}
+                useMouseEvents={true}
+                autoSize={false}
+              >
+                {pages}
+              </HTMLFlipBook>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Grid View */}
+        {view === 'grid' && (
+          <div className="h-full overflow-y-auto px-8 py-8">
+            <div className="grid grid-cols-4 xl:grid-cols-5 gap-16 pb-8">
+              {fotos.map((foto) => (
+                <button
+                  key={foto.id}
+                  onClick={() => setOpenId(foto.id)}
+                  className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98 text-left"
+                >
+                  <div className="aspect-[4/3] overflow-hidden bg-muted">
+                    <img
+                      src={foto.foto_url}
+                      alt={foto.nome}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Detail Modal */}
       {selected && (
