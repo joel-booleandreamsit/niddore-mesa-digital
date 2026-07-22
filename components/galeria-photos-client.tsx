@@ -1,6 +1,8 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
+import HTMLFlipBook from "react-pageflip-enhanced"
+import { Book, Grid3x3 } from "lucide-react"
 
 type Foto = {
   id: string | number
@@ -20,6 +22,8 @@ export default function GaleriaPhotosClient({
 }) {
   const [openId, setOpenId] = useState<string | number | null>(null)
   const [entered, setEntered] = useState(false)
+  const [view, setView] = useState<'flipbook' | 'grid'>('flipbook')
+  const flipBookRef = useRef<any>(null)
 
   const selected = useMemo(() => fotos.find((f) => f.id === openId) || null, [fotos, openId])
 
@@ -43,41 +47,142 @@ export default function GaleriaPhotosClient({
     setTimeout(() => setOpenId(null), 200)
   }
 
+  // Create pages for flipbook (each photo is a page)
+  const pages = fotos.map((foto) => (
+    <div
+      key={foto.id}
+      className="demo-page bg-white border-r-4 border-l-4 border-amber-900/30 shadow-2xl overflow-hidden"
+      style={{ 
+        backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 10%, rgba(0,0,0,0) 90%, rgba(0,0,0,0.05) 100%)'
+      }}
+    >
+      <div className="h-full flex flex-col p-6 overflow-hidden">
+        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-amber-50 to-white rounded-lg shadow-inner overflow-hidden">
+          <img
+            src={foto.foto_url}
+            alt={foto.nome}
+            className="w-full h-full object-contain cursor-pointer hover:scale-105 transition-transform duration-300"
+            onClick={(e) => {
+              e.stopPropagation()
+              setOpenId(foto.id)
+            }}
+          />
+        </div>
+        <div className="mt-4 text-center space-y-2">
+          <h3 className="font-serif text-4xl text-gray-800 truncate">{foto.nome}</h3>
+          <div 
+            className="text-3xl text-gray-600 leading-relaxed line-clamp-1"
+            dangerouslySetInnerHTML={{ __html: foto.descricao }}
+          />
+        </div>
+      </div>
+    </div>
+  ))
+
   return (
-    <div>
-      <div className="grid grid-cols-4 xl:grid-cols-5 gap-16">
-        {fotos.map((foto) => (
-          <button
-            key={foto.id}
-            onClick={() => setOpenId(foto.id)}
-            className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98 text-left"
-          >
-            <div className="aspect-[4/3] overflow-hidden bg-muted">
-              <img
-                src={foto.foto_url}
-                alt={foto.nome}
-                className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-              />
-            </div>            
-          </button>
-        ))}
+    <div className="w-full h-full flex flex-col overflow-hidden">
+      {/* View Toggle Toolbar */}
+      <div className="flex-shrink-0 flex items-center justify-end gap-4 px-8 py-4 bg-background/95 backdrop-blur-sm border-b border-border z-50">
+        <button
+          onClick={() => setView('flipbook')}
+          className={`p-4 rounded-lg transition-all duration-200 ${
+            view === 'flipbook'
+              ? 'bg-primary text-primary-foreground'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          }`}
+          aria-label="Flipbook view"
+        >
+          <Book className="w-12 h-12" />
+        </button>
+        <button
+          onClick={() => setView('grid')}
+          className={`p-4 rounded-lg transition-all duration-200 ${
+            view === 'grid'
+              ? 'bg-primary text-primary-foreground'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80'
+          }`}
+          aria-label="Grid view"
+        >
+          <Grid3x3 className="w-12 h-12" />
+        </button>
       </div>
 
+      {/* Content Area */}
+
+      {/* Flipbook View */}
+        {view === 'flipbook' && (
+
+        <div className="flex-1 overflow-hidden">
+          <div className="p-30 w-full h-full overflow-hidden">
+            <div className="flex items-center justify-center">
+              <div className="shadow-[0_5px_80px_rgba(0,0,0,0.5),0_10px_50px_rgba(0,0,0,0.3)]">
+                <HTMLFlipBook
+                  ref={flipBookRef}
+                  width={1800}
+                  height={1300}
+                  size="fixed"
+                  drawShadow={true}
+                  maxShadowOpacity={1}
+                  flippingTime={1000}
+                  usePortrait={false}
+                  startPage={0}
+                  swipeDistance={50}
+                  showCover={false}
+                  mobileScrollSupport={false}
+                  disableFlipByClick={false}
+                  useMouseEvents={true}
+                  autoSize={false}
+                >
+                  {pages}
+                </HTMLFlipBook>
+              </div>
+            </div>
+          </div>
+        </div>
+        )}
+
+      
+
+        {/* Grid View */}
+        {view === 'grid' && (
+
+          <div className="absolute top-120 left-0 right-0 bottom-0 overflow-y-auto px-32 py-18">
+            <div className="grid grid-cols-4 xl:grid-cols-5 gap-16 pb-8">
+              {fotos.map((foto) => (
+                <button
+                  key={foto.id}
+                  onClick={() => setOpenId(foto.id)}
+                  className="group bg-card border-2 border-border rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 touch-manipulation active:scale-98 text-left"
+                >
+                  <div className="aspect-[4/3] overflow-hidden bg-muted">
+                    <img
+                      src={foto.foto_url}
+                      alt={foto.nome}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+          
+        )}
+      
+      {/* Detail Modal */}
       {selected && (
-        <div className="fixed inset-0 z-50">
-          <div className="absolute inset-0 bg-black/50" />
-          <div className="absolute inset-0 flex items-center justify-center p-3 md:p-6" onClick={close}>
+        <div className="fixed inset-0 z-[100]">
+          <div className="absolute inset-0 bg-black/70" onClick={close} />
+          <div className="absolute inset-0 flex items-center justify-center p-3 md:p-6 pointer-events-none">
             <div
-              className={`relative w-[92vw] h-[85vh] md:w-[82vw] md:h-[82vh] lg:w-[80vw] lg:h-[82vh] bg-card border-2 border-border rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 ${
+              className={`relative w-[92vw] h-[85vh] md:w-[82vw] md:h-[82vh] lg:w-[80vw] lg:h-[82vh] bg-card border-2 border-border rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 pointer-events-auto ${
                 entered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
               }`}
               role="dialog"
               aria-modal="true"
-              onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={close}
-                className="absolute top-4 right-4 text-5xl leading-none px-4 py-2 rounded hover:text-primary"
+                className="absolute top-4 right-4 text-5xl leading-none px-4 py-2 rounded hover:text-primary z-10 bg-card/80"
                 aria-label="Close"
               >
                 ×
