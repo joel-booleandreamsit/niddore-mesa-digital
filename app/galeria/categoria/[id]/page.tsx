@@ -104,7 +104,6 @@ export default async function GaleriaCategoriaPage({ params }: { params: Promise
 
             {fotosTransformadas.length > 0 && (
               <div className="space-y-10">
-                <h2 className="font-serif text-5xl text-foreground">{labels.photos || "Fotos"}</h2>
                 <GaleriaPhotosClient
                   fotos={fotosTransformadas}
                   breadcrumbs={breadcrumbs.map((b) => b.nome)}

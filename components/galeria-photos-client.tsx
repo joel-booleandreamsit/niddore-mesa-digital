@@ -66,41 +66,42 @@ export default function GaleriaPhotosClient({
             }}
           />
         </div>
-        <div className="mt-4 text-center">
-          <h3 className="font-serif text-xl text-gray-800 truncate">{foto.nome}</h3>
+        <div className="mt-4 text-center space-y-2">
+          <h3 className="font-serif text-4xl text-gray-800 truncate">{foto.nome}</h3>
+          <div 
+            className="text-3xl text-gray-600 leading-relaxed line-clamp-1"
+            dangerouslySetInnerHTML={{ __html: foto.descricao }}
+          />
         </div>
       </div>
     </div>
   ))
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-amber-100 via-orange-50 to-amber-100 overflow-hidden">
-      {/* Flipbook Container */}
-      <div className="w-full h-full flex items-center justify-center">
-        <HTMLFlipBook
-          ref={flipBookRef}
-          width={800}
-          height={600}
-          size="stretch"
-          minWidth={400}
-          maxWidth={window.innerWidth - 40}
-          minHeight={300}
-          maxHeight={window.innerHeight - 40}
-          drawShadow={true}
-          flippingTime={1000}
-          usePortrait={false}
-          startPage={0}
-          swipeDistance={50}
-          showCover={false}
-          mobileScrollSupport={true}
-          className="w-full h-full"
-          disableFlipByClick={false}
-          useMouseEvents={true}
-          autoSize={true}
-        >
-          {pages}
-        </HTMLFlipBook>
-      </div>
+    <div className="p-40 w-full h-full overflow-hidden">
+      <div className="flex items-center justify-center">
+        <div className="shadow-[0_60px_80px_rgba(0,0,0,0.5),0_30px_50px_rgba(0,0,0,0.3)]">
+          <HTMLFlipBook
+            ref={flipBookRef}
+            width={1800}
+            height={1300}
+            size="fixed"
+            drawShadow={true}
+            maxShadowOpacity={1}
+            flippingTime={1000}
+            usePortrait={false}
+            startPage={0}
+            swipeDistance={50}
+            showCover={false}
+            mobileScrollSupport={false}
+            disableFlipByClick={false}
+            useMouseEvents={true}
+            autoSize={false}
+          >
+            {pages}
+          </HTMLFlipBook>
+        </div>
+    </div>
 
       {/* Detail Modal */}
       {selected && (
