@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import HTMLFlipBook from "react-pageflip-enhanced"
+import { Book, Grid3x3 } from "lucide-react"
 
 type Foto = {
   id: string | number
@@ -84,23 +85,25 @@ export default function GaleriaPhotosClient({
       <div className="flex-shrink-0 flex items-center justify-end gap-4 px-8 py-4 bg-background/95 backdrop-blur-sm border-b border-border z-50">
         <button
           onClick={() => setView('flipbook')}
-          className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+          className={`p-4 rounded-lg transition-all duration-200 ${
             view === 'flipbook'
               ? 'bg-primary text-primary-foreground'
               : 'bg-muted text-muted-foreground hover:bg-muted/80'
           }`}
+          aria-label="Flipbook view"
         >
-          Flipbook
+          <Book className="w-12 h-12" />
         </button>
         <button
           onClick={() => setView('grid')}
-          className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+          className={`p-4 rounded-lg transition-all duration-200 ${
             view === 'grid'
               ? 'bg-primary text-primary-foreground'
               : 'bg-muted text-muted-foreground hover:bg-muted/80'
           }`}
+          aria-label="Grid view"
         >
-          Grid
+          <Grid3x3 className="w-12 h-12" />
         </button>
       </div>
 
