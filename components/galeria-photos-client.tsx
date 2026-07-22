@@ -80,7 +80,7 @@ export default function GaleriaPhotosClient({
   ))
 
   return (
-    <div className="w-full h-screen flex flex-col overflow-hidden">
+    <div className="w-full h-full flex flex-col overflow-hidden">
       {/* View Toggle Toolbar */}
       <div className="flex-shrink-0 flex items-center justify-end gap-4 px-8 py-4 bg-background/95 backdrop-blur-sm border-b border-border z-50">
         <button
@@ -108,39 +108,45 @@ export default function GaleriaPhotosClient({
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 overflow-hidden">
-        {/* Flipbook View */}
+
+      {/* Flipbook View */}
         {view === 'flipbook' && (
-          <div className="p-40 w-full h-full overflow-hidden">
+
+        <div className="flex-1 overflow-hidden">
+          <div className="p-30 w-full h-full overflow-hidden">
             <div className="flex items-center justify-center">
-            <div className="shadow-[0_5px_80px_rgba(0,0,0,0.5),0_10px_50px_rgba(0,0,0,0.3)]">
-              <HTMLFlipBook
-                ref={flipBookRef}
-                width={1800}
-                height={1300}
-                size="fixed"
-                drawShadow={true}
-                maxShadowOpacity={1}
-                flippingTime={1000}
-                usePortrait={false}
-                startPage={0}
-                swipeDistance={50}
-                showCover={false}
-                mobileScrollSupport={false}
-                disableFlipByClick={false}
-                useMouseEvents={true}
-                autoSize={false}
-              >
-                {pages}
-              </HTMLFlipBook>
+              <div className="shadow-[0_5px_80px_rgba(0,0,0,0.5),0_10px_50px_rgba(0,0,0,0.3)]">
+                <HTMLFlipBook
+                  ref={flipBookRef}
+                  width={1800}
+                  height={1300}
+                  size="fixed"
+                  drawShadow={true}
+                  maxShadowOpacity={1}
+                  flippingTime={1000}
+                  usePortrait={false}
+                  startPage={0}
+                  swipeDistance={50}
+                  showCover={false}
+                  mobileScrollSupport={false}
+                  disableFlipByClick={false}
+                  useMouseEvents={true}
+                  autoSize={false}
+                >
+                  {pages}
+                </HTMLFlipBook>
               </div>
             </div>
           </div>
+        </div>
         )}
+
+      
 
         {/* Grid View */}
         {view === 'grid' && (
-          <div className="h-full overflow-y-auto px-8 py-8">
+
+          <div className="absolute top-120 left-0 right-0 bottom-0 overflow-y-auto px-32 py-18">
             <div className="grid grid-cols-4 xl:grid-cols-5 gap-16 pb-8">
               {fotos.map((foto) => (
                 <button
@@ -159,9 +165,9 @@ export default function GaleriaPhotosClient({
               ))}
             </div>
           </div>
+          
         )}
-      </div>
-
+      
       {/* Detail Modal */}
       {selected && (
         <div className="fixed inset-0 z-[100]">
