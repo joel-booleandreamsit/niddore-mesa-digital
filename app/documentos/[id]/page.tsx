@@ -31,7 +31,7 @@ export default async function DocumentoDetalhePage({ params }: { params: Promise
       nome: documento.translations?.[0]?.nome || labels.nameUnavailable,
       descricao: documento.translations?.[0]?.descricao || labels.contentUnavailable,
       data_fmt: formatDate(documento.data),
-      capa_url: documento.capa ? assetUrl(documento.capa, "fit=cover&width=1600&height=2133&format=webp") : '/placeholder.svg',
+      capa_url: documento.capa ? assetUrl(documento.capa, "format=webp") : '/placeholder.svg',
       autores: autoresNomes,
       categoria_nome: documento.categoria?.translations?.[0]?.nome || null,
     }

@@ -21,7 +21,7 @@ export default async function MaterialDetalhePage({ params, searchParams }: { pa
 
     const nome = material.translations?.[0]?.nome || labels.nameUnavailable
     const descricao = material.translations?.[0]?.descricao || ''
-    const capa = material.capa ? assetUrl(material.capa, "fit=cover&width=1600&height=2133&format=webp") : '/placeholder.svg'
+    const capa = material.capa ? assetUrl(material.capa, "format=webp") : '/placeholder.svg'
     const categoriaNome = material.categoria?.translations?.[0]?.nome || null
 
     return (

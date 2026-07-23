@@ -16,7 +16,7 @@ export default async function GruposPage() {
     ...item,
     nome: item.translations?.[0]?.nome || labels.nameUnavailable,
     tipo_grupo: item.tipo_grupo_translated || item.tipo_grupo || labels.typeUnavailable,
-    foto_capa: item.foto_capa ? assetUrl(item.foto_capa, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
+    foto_capa: item.foto_capa ? assetUrl(item.foto_capa, "format=webp") : '/placeholder.svg',
   }))
 
   // Generate dynamic filters based on tipo_grupo

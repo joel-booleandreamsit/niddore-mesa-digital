@@ -19,7 +19,7 @@ export default async function GaleriaPage() {
   const categoriasTransformadas = categorias.map((item: any) => ({
     ...item,
     nome: item.translations?.[0]?.nome || labels.nameUnavailable,
-    foto_url: item.imagem ? assetUrl(item.imagem, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
+    foto_url: item.imagem ? assetUrl(item.imagem, "format=webp") : '/placeholder.svg',
   }))
 
   return (

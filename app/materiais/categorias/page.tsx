@@ -24,7 +24,7 @@ export default async function MateriaisCategoriasPage({ searchParams }: { search
   const categoriasTransformed = categorias.map((c: any) => ({
     id: c.id,
     nome: c.translations?.[0]?.nome || labels.nameUnavailable,
-    foto_url: c.imagem ? assetUrl(c.imagem, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
+    foto_url: c.imagem ? assetUrl(c.imagem, "format=webp") : '/placeholder.svg',
   }))
 
   const edificiosTransformed = edificios.map((e: any) => ({

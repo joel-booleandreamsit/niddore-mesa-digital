@@ -20,7 +20,7 @@ export default async function GaleriaDetalhePage({ params }: { params: Promise<{
       descricao: foto.translations?.[0]?.descricao || labels.descriptionUnavailable,
       categoria_nome: foto.categoria?.translations?.[0]?.nome || labels.categoryUnavailable,
       categoria_id: foto.categoria?.id || null,
-      foto_url: foto.foto ? assetUrl(foto.foto, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
+      foto_url: foto.foto ? assetUrl(foto.foto, "format=webp") : '/placeholder.svg',
     }
 
     // Build breadcrumb chain up to root: Root > ... > Category > Foto

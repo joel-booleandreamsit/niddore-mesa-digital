@@ -48,7 +48,7 @@ export default async function DocumentosCategoriaPage({ params }: { params: Prom
       nome: doc.translations?.[0]?.nome || labels.nameUnavailable,
       breve_descricao: doc.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
       data_fmt: formatDate(doc.data),
-      capa_url: doc.capa ? assetUrl(doc.capa, "fit=cover&width=400&height=300&format=webp") : '/placeholder.svg',
+      capa_url: doc.capa ? assetUrl(doc.capa, "format=webp") : '/placeholder.svg',
     }))
 
     return (

@@ -22,7 +22,7 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
       descricao: servico.translations?.[0]?.descricao || labels.descriptionUnavailable,
       data_inicio: servico.data_inicio || null,
       data_fim: servico.data_fim || null,
-      foto_capa: servico.foto_capa ? assetUrl(servico.foto_capa, "fit=cover&width=1200&height=800&format=webp") : '/placeholder.svg',
+      foto_capa: servico.foto_capa ? assetUrl(servico.foto_capa, "format=webp") : '/placeholder.svg',
       fotos_galeria: (() => {
         const g: any = (servico as any).fotos_galeria
         if (!g) return []
@@ -40,7 +40,7 @@ export default async function ServicoDetalhePage({ params }: { params: Promise<{
             const isVideo = (mime && mime.startsWith('video/')) || (filename && filename.toLowerCase().endsWith('.mp4'))
             const url = isVideo
               ? assetUrl(candidateId)
-              : assetUrl(candidateId, "fit=cover&format=webp")
+              : assetUrl(candidateId, "format=webp")
             return { id: candidateId, url, title, description, type: isVideo ? 'video' : 'image' as const }
           })
           .filter(Boolean) as any[]

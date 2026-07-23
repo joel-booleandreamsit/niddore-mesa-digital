@@ -41,7 +41,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
           const isVideo = (mime && mime.startsWith('video/')) || (filename && filename.toLowerCase().endsWith('.mp4'))
           const src = isVideo
             ? assetUrl(candidateId)
-            : assetUrl(candidateId, "fit=cover&width=2000&height=1400&format=webp")
+            : assetUrl(candidateId, "format=webp")
           return {
             src,
             type: isVideo ? 'video' : 'image',
@@ -163,7 +163,7 @@ export default async function EdificioDetalhePage({ params }: { params: { id: st
               <div className="sticky top-8 space-y-10">
                 <div className="aspect-[3/2] rounded-2xl overflow-hidden shadow-2xl">
                   <img
-                    src={assetUrl((translatedEdificio as any).imagem || (translatedEdificio as any).foto_capa, "fit=cover&width=1600&height=1200&format=webp")}
+                    src={assetUrl((translatedEdificio as any).imagem || (translatedEdificio as any).foto_capa, "format=webp")}
                     alt={translatedEdificio.nome}
                     className="w-full h-full object-cover"
                   />

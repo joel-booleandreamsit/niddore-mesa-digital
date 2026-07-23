@@ -92,7 +92,7 @@ export default async function EdificiosPage() {
             >
               <div className="overflow-hidden bg-muted h-[62vh]">
                 <Image
-                  src={assetUrl(edificio.foto, 'fit=cover&width=1200&height=1600&quality=85')}
+                  src={assetUrl(edificio.foto, 'format=webp')}
                   alt={edificio.nome}
                   width={1200}
                   height={1600}

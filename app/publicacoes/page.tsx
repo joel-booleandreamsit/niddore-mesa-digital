@@ -18,7 +18,7 @@ export default async function PublicacoesPage() {
     descricao: item.translations?.[0]?.breve_descricao || labels.descriptionUnavailable,
     tipo: item.tipo_publicacao_translated || item.tipo_publicacao || labels.typeUnavailable,
     ano: item.ano_publicacao || new Date().getFullYear(),
-    capa: item.capa ? assetUrl(item.capa, "fit=cover&width=400&height=600&format=webp") : '/placeholder.svg',
+    capa: item.capa ? assetUrl(item.capa, "format=webp") : '/placeholder.svg',
     autores: item.autores?.map((autor: any) => autor.Autores_id?.nome).filter(Boolean) || [labels.authorUnavailable]
   }))
 
