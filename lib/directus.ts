@@ -330,7 +330,6 @@ export async function fetchGrupos(lang: string = 'pt') {
   const data = await directus.request(
     readItems('Grupos', {
       fields: ['*', 'translations.nome', 'foto_capa'],
-      sort: ['translations.nome'],
       deep: {
         translations: {
           _filter: {
@@ -343,19 +342,45 @@ export async function fetchGrupos(lang: string = 'pt') {
     })
   )
 
+  // Custom sort: grupos with ordem first (sorted by ordem, then by name), then grupos without ordem (sorted by name)
+  const sortedData = data.sort((a: any, b: any) => {
+    const aHasOrdem = a.ordem !== null && a.ordem !== undefined
+    const bHasOrdem = b.ordem !== null && b.ordem !== undefined
+
+    if (aHasOrdem && bHasOrdem) {
+      if (a.ordem !== b.ordem) {
+        return a.ordem - b.ordem
+      }
+      // Same ordem, sort by name
+      const aName = a.translations?.[0]?.nome || ''
+      const bName = b.translations?.[0]?.nome || ''
+      return aName.localeCompare(bName)
+    }
+    if (aHasOrdem && !bHasOrdem) {
+      return -1
+    }
+    if (!aHasOrdem && bHasOrdem) {
+      return 1
+    }
+    // Both don't have ordem, sort by name
+    const aName = a.translations?.[0]?.nome || ''
+    const bName = b.translations?.[0]?.nome || ''
+    return aName.localeCompare(bName)
+  })
+
   // Only fetch translations if language is not Portuguese
   if (lang !== 'pt') {
-    const uniqueTipos = [...new Set(data.map((item: any) => item.tipo_grupo).filter(Boolean))]
-    const translationMap = await getTranslations(uniqueTipos, lang)    
+    const uniqueTipos = [...new Set(sortedData.map((item: any) => item.tipo_grupo).filter(Boolean))]
+    const translationMap = await getTranslations(uniqueTipos, lang)
 
     // Apply translations to the data
-    return data.map((item: any) => ({
+    return sortedData.map((item: any) => ({
       ...item,
       tipo_grupo_translated: translationMap.get(item.tipo_grupo) || item.tipo_grupo
     }))
-  }  
+  }
 
-  return data
+  return sortedData
 }
 
 export async function fetchGrupoById(id: string | number, lang: string = 'pt') {
